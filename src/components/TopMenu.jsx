@@ -1,29 +1,40 @@
-import React from 'react';
+import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import SearchModal from './SearchModal'
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 
 import am_kfet from '../assets/am_kfet.jpg';
 
+
 function TopMenu() {
 
-  return(
+  const [searchShow, setSearchShow] = useState(false);
+
+  return (
     <>
       <Navbar variant="light" bg="light" expand="lg">
         <Container>
           <Navbar.Brand as={Link} to="/">
             <img
-              src= {am_kfet}
+              src={am_kfet}
               alt="AM Kfet"
-              width= "50px"
-              height= "50px"
-              className="d-inline-block align-top"
+              width="30px"
+              height="30px"
+              className=""
             />
             K'fet
           </Navbar.Brand>
-          <Nav.Link as={Link} to="/pg">PG</Nav.Link>
+
+          <Button variant="primary" onClick={() => { setSearchShow(true) }}>
+            Rechercher un PG (Alt+p)
+          </Button>
+
+          <SearchModal show={searchShow} onHide={() => setSearchShow(false)} />
+
           <Navbar.Toggle aria-controls="basig-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -34,7 +45,7 @@ function TopMenu() {
       </Navbar>
       <Outlet />
     </>
-    );
+  );
 }
 
 
