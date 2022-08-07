@@ -1,17 +1,29 @@
-import React from 'react'
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import PG from '../components/PG';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-class Home extends React.Component {
+import PG from '../components/PgCard';
+import GeneralHistory from '../components/GeneralHistory';
 
-  render () {
-    return(
-      <div>
-        <h2>PG</h2>
+function Home(props) {
 
-      </div>
-    )
-  }
+  return (
+    <Container fluid className="w-100" style={{ borderRadius: '1rem' }}>
+      <Row>
+        <Col sm={8}>
+          <PG />
+          <div>stats générales</div>
+        </Col>
+        <Col sm={4} className="p-4">
+          <GeneralHistory />
+        </Col>
+      </Row>
+    </Container>
+  )
+
 }
 
 export default Home;
