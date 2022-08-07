@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useRefreshToken from './useRefreshToken';
 import useAuth from './useAuth';
 
-const useAxiosPrivate = () =>  {
+const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const { auth } = useAuth();
 
@@ -27,6 +27,7 @@ const useAxiosPrivate = () =>  {
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
+          sessionStorage.setItem('access', newAccessToken);
           prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
@@ -38,7 +39,7 @@ const useAxiosPrivate = () =>  {
       axiosPrivate.interceptors.request.eject(requestIntercept);
       axiosPrivate.interceptors.response.eject(responseIntercept);
     }
-  },[auth, refresh])
+  }, [auth, refresh])
 
   return axiosPrivate;
 }
