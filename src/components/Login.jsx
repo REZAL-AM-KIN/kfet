@@ -43,6 +43,7 @@ const Login = () => {
       navigate("/");
     }
     userRef.current.focus();
+    // eslint-disable-next-line
   }, [])
 
   // empty the error msg if the user changes user or pwd
@@ -56,9 +57,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(LOGIN_URL,
-        JSON.stringify({username:user, password:pwd}),
+        JSON.stringify({ username: user, password: pwd }),
         {
-          headers: { 'Content-type': 'application/json'},
+          headers: { 'Content-type': 'application/json' },
           // withCredentials = envoie le cookie, je crois que ça fonctionne pas
           withCredentials: true
         }
@@ -68,7 +69,7 @@ const Login = () => {
       const refresh = response?.data?.refresh;
       sessionStorage.setItem("access", access);
       sessionStorage.setItem("refresh", refresh);
-      setAuth({ user, access, refresh});
+      setAuth({ user, access, refresh });
       setUser('');
       setPwd('');
       // on renvoie a l'endroit ou il était si il s'est fait dégager
@@ -90,17 +91,17 @@ const Login = () => {
     }
   }
 
-  return(
-    <section className="vh-100" style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover"}}>
+  return (
+    <section className="vh-100" style={{ backgroundImage: `url(${bkgImg})`, backgroundSize: "cover" }}>
       <Container className="py-5 h-100">
-        <Row className="d-felx justify-content-center align-items-center h-100">
+        <Row className="d-flex justify-content-center align-items-center h-100">
           <Col xl={10}>
-            <Card style={{borderRadius: '1rem'}}>
+            <Card style={{ borderRadius: '1rem' }}>
               <Row className="g-0">
 
                 <Col md={6} lg={5} className="d-none d-md-block">
                   {/*image*/}
-                  <Image src={left_image} fluid alt="login form" style={{borderRadius: "1rem 0 0 1rem", Width: "100%", height: "100%"}}/>
+                  <Image src={left_image} fluid alt="login form" style={{ borderRadius: "1rem 0 0 1rem", Width: "100%", height: "100%" }} />
                 </Col>
 
                 <Col md={6} lg={7} className="d-flex align-item-center">
@@ -111,7 +112,7 @@ const Login = () => {
                         <span className="h1 fw-bold mb-0">K'fet</span>
                       </div>
 
-                      <h5 className="fw-normal mb-3 pb-3" style={{letterSpacing: "1px"}}>Se Connecter</h5>
+                      <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: "1px" }}>Se Connecter</h5>
 
                       <div className="form-outline mb-4" >
                         <input
@@ -147,7 +148,7 @@ const Login = () => {
 
                       {/*TODO, redirect*/}
                       <a className="small text-muted" href="#!">a faire oubli</a>
-                      <Alert variant="danger" ref={errRef} show={errMsg?true:false}>{errMsg}</Alert>
+                      <Alert variant="danger" ref={errRef} show={errMsg ? true : false}>{errMsg}</Alert>
                     </form>
                   </Card.Body>
                 </Col>
