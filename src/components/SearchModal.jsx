@@ -36,6 +36,8 @@ function SearchModal(props) {
 
   console.log('calculating consommatuer filter');
   // we filter the consommateur list so it only remains the suggestion and we don't need to process the entire thing
+  // TODO: it processes 2 times each render. only need to process after each update of search
+  // piste : reducers??
   let filteredConsommateur = consommateurList.filter((line) => {
     let search_fields = ["nom", "bucque", "fams", "prenom", "proms"];
     let result = false;

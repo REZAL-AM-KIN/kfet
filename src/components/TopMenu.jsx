@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import useKeyboardShortcut from '../hooks/keypresslib/useKeyboardShortcut';
 import SearchModal from './SearchModal'
 
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,6 +14,8 @@ import am_kfet from '../assets/am_kfet.jpg';
 function TopMenu() {
 
   const [searchShow, setSearchShow] = useState(false);
+  // bind to alt p
+  useKeyboardShortcut(["Alt", "p"], () => { setSearchShow(true) });
 
   return (
     <>
