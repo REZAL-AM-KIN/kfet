@@ -21,10 +21,11 @@ function PG(props) {
   const [solde, setSolde] = useState("");
   const [dep, setDep] = useState("");
 
-  const URL = props.pgId ? "consommateurs/" + props.pgId + "/" : "utilisateur/";
 
   useEffect(() => {
+    console.log("pg update");
     // make the api call for pg info:
+    const URL = props.pgId ? "consommateurs/" + props.pgId + "/" : "utilisateur/";
     const controller = new AbortController();
     const getUser = async () => {
       try {
@@ -51,13 +52,13 @@ function PG(props) {
       controller.abort();
     }
     // eslint-disable-next-line
-  }, [props.pgId]);
+  }, [props.pgId, props.requireUpdate]);
 
 
   const goodCard = () => {
     // return a card with all info about the pg
     return (
-      <Container fluid className="w-100 h-75 p-4">
+      <Container fluid className="p-4">
         <Card style={{ borderRadius: '1rem' }} bg={"light"} border={+(solde) >= 0 ? "success" : "danger"} text={+(solde) >= 0 ? "success" : "danger"} >
           <Card.Body className="">
             <Row>

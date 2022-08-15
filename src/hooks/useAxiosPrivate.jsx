@@ -24,7 +24,7 @@ const useAxiosPrivate = () => {
       // if the token is expired, we go here
       async (error) => {
         const prevRequest = error?.config;
-        if (error?.response?.status === 403 && !prevRequest?.sent) {
+        if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
           sessionStorage.setItem('access', newAccessToken);

@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Table from 'react-bootstrap/Table';
+import Card from 'react-bootstrap/Card';
 
-function GeneralHistory(props) {
+
+function History(props) {
   const axiosPrivate = useAxiosPrivate();
 
   const [result, setResult] = useState([]);
 
-  const URL = "history/" + (props.pgId ? (props.pgId + "/") : "");
 
   useEffect(() => {
+    console.log("history update");
+    const URL = "history/" + props.pgId + "/";
     const controller = new AbortController();
     const getHistory = async () => {
       try {
@@ -26,29 +29,42 @@ function GeneralHistory(props) {
       controller.abort();
     }
     // eslint-disable-next-line
-  }, [props.pgId])
+  }, [props.pgId, props.requireUpdate])
+
+
+  var currentDate = new Date();
 
   const lines = result.map((line, key) => {
+    var date = new Date(line.date_evenement);
     return (
-      <Row key={key}>
-        <Col>{line.date_evenement}</Col>
-        <Col>{line.nom_evenement}</Col>
-        <Col>{line.prix_evenement}€</Col>
-        <Col>groupe débucqueur par (débucqueur)</Col>
-      </Row>
+      <tr key={key}>
+        <td className="fs-6">{line.nom_evenement}</td>
+        <td className="fs-6">{line.prix_evenement}€</td>
+        <td>{line.entite_evenement} ({line.initiateur_evenement})</td>
+        <td className="fs-6">{date.toLocaleString("fr-fr", { month: "long", day: "numeric", hour: "numeric", minute: "numeric" })}</td>
+      </tr>
     )
   });
 
   return (
-    <div>
-      <div>history!</div>
-      {lines}
-
-      <div>id: {props.pgId || "pas de pg"}</div>
-    </div >
+    <Container fluid className="p-0">
+      <Table striped bordered className="p-0">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Entité</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lines}
+        </tbody>
+      </Table>
+    </Container>
   )
 }
 
 
 
-export default GeneralHistory;
+export default History;
