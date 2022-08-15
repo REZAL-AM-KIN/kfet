@@ -21,6 +21,9 @@ function Produits(props) {
   const [transactionDone, setTransactionDone] = useState();
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [showRechargeModal, setShowRechargeModal] = useState(false);
+  const [methodes, setMethodes] = useState([]);
+  const [methode, setMethode] = useState({});
+  const [montant, setMontant] = useState();
 
 
   useKeyboardShortcut(["Alt", "x"], () => { handleQuitter() });
@@ -60,6 +63,19 @@ function Produits(props) {
     setSelectedCategorie(props.permissions.ipIdentification[0])
     // eslint-disable-next-line
   }, [result]);
+
+
+
+
+  const optionMethode = async () => {
+    try {
+      const response = await axiosPrivate.options("recharges/");
+      setMethodes(response?.data?.actions?.POST?.methode?.choices);
+      console.log(methodes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   //////////////////
@@ -125,19 +141,6 @@ function Produits(props) {
     }
   }
 
-  const RechargeModal = () => {
-    return (
-      <Modal show={showRechargeModal} size="lg" centered onHide={() => setShowRechargeModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Recharger un PG TODO PG NAME</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          TODO BODY RECHARGE
-        </Modal.Body>
-      </Modal >
-    )
-  }
-
 
   //////////////////
   //   Handler    //
@@ -171,10 +174,38 @@ function Produits(props) {
 
   const handleRecharger = () => {
     console.log("RECHARGE")
+    optionMethode()
+
+    setShowRechargeModal(true);
 
 
 
+  };
 
+  const handleRechargerSubmit = (e) => {
+    e.preventDefault();
+
+    const createRecharge = async () => {
+      try {
+        const response = await axiosPrivate.post("recharges/",
+          JSON.stringify({
+            cible_bucquage: props.pgId,
+            montant: montant,
+            methode: methode
+          }),
+          {
+            headers: { 'Content-type': 'application/json' },
+            withCredentials: true
+          });
+        setTransactionDone(response);
+        //trigger update after result
+        props.setRequireUpdate(!props.requireUpdate);
+      } catch (error) {
+        setTransactionDone(error?.response);
+      }
+    }
+    createRecharge();
+    setShowTransactionModal(true);
   };
 
   //////////////////
@@ -206,6 +237,29 @@ function Produits(props) {
       </Col>
 
       <TransactionStateModal />
+
+      <Modal show={showRechargeModal} size="lg" centered onHide={() => setShowRechargeModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Recharger un PG TODO PG NAME</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleRechargerSubmit}>
+            <label htmlFor="montant"> </label>
+            <input
+              type="text"
+              id="montant"
+              placeholder="ex: 76€"
+              value={montant}
+              onChange={(e) => { setMontant(e.target.value); }} />
+
+            <select id="methode" value={methode} onChange={(e) => { setMethode(e.target.value); }} required>
+              {methodes.map((methode, key) => {
+                return (<option value={methode.value} key={key}>{methode.display_name}</option>)
+              })}
+            </select>
+          </form>
+        </Modal.Body>
+      </Modal >
 
     </Container >
 
