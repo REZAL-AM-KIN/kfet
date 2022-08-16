@@ -22,7 +22,7 @@ const LOGIN_URL = 'token/';
 
 const Login = () => {
   // set the context cookie? non utilisé actuellement
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,7 +39,7 @@ const Login = () => {
   // focus on the use input refferenced by userRef when the component mounts
   // and checks if the user isn't already connected
   useEffect(() => {
-    if (sessionStorage.getItem("refresh") && sessionStorage.getItem("access")) {
+    if (auth.refresh && auth.access) {
       navigate("/");
     }
     userRef.current.focus();
@@ -60,8 +60,6 @@ const Login = () => {
         JSON.stringify({ username: user, password: pwd }),
         {
           headers: { 'Content-type': 'application/json' },
-          // withCredentials = envoie le cookie, je crois que ça fonctionne pas
-          withCredentials: true
         }
       );
       // on enregistre les tokens dans les cookies et dans le sessionStorage
@@ -69,7 +67,7 @@ const Login = () => {
       const refresh = response?.data?.refresh;
       sessionStorage.setItem("access", access);
       sessionStorage.setItem("refresh", refresh);
-      setAuth({ user, access, refresh });
+      setAuth({ access, refresh });
       setUser('');
       setPwd('');
       // on renvoie a l'endroit ou il était si il s'est fait dégager

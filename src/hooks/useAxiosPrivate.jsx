@@ -13,7 +13,7 @@ const useAxiosPrivate = () => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       config => {
         if (!config.headers['Authorization']) {
-          config.headers['Authorization'] = `Bearer ${sessionStorage.getItem('access')}`;
+          config.headers['Authorization'] = `Bearer ${auth?.access}`;
         }
         return config;
       }, (error) => Promise.reject(error)
@@ -27,7 +27,6 @@ const useAxiosPrivate = () => {
         if (error?.response?.status === 401 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
-          sessionStorage.setItem('access', newAccessToken);
           prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }
