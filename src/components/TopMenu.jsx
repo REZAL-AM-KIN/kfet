@@ -43,7 +43,7 @@ function TopMenu() {
           </Nav>
         </Navbar.Collapse>
 
-        <SearchModal show={searchShow} onHide={() => setSearchShow(false)} />
+        <SearchModal show={searchShow} setshow={setSearchShow} />
       </Navbar>
       <Outlet />
     </>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 import Container from 'react-bootstrap/Container';
@@ -7,11 +8,11 @@ import Card from 'react-bootstrap/Card';
 
 
 function History(props) {
+  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
-
   const [result, setResult] = useState([]);
-
   const URL = "history/";
+
 
   useEffect(() => {
     const controller = new AbortController();
@@ -57,7 +58,7 @@ function History(props) {
       <tr key={key}>
         <td className="fs-6">{line.nom_evenement} par {line.entite_evenement} ({line.initiateur_evenement})</td>
         <td className="fs-6">{line.prix_evenement}€</td>
-        <td onClick={() => window.location.href = "/pg/" + line.cible_evenement.id}>
+        <td onClick={() => { navigate("/pg/" + line.cible_evenement.id) }}>
           <Card style={{ borderRadius: '1rem' }} bg={"light"} border={+(line.cible_evenement.solde) >= 0 ? "success" : "danger"} text={+(line.cible_evenement.solde) >= 0 ? "success" : "danger"} >
             <Card.Body>
               <Card.Title className="md-fs-1 fw-bold lh-1 text-nowrap">{line.cible_evenement.bucque} {line.cible_evenement.fams}</Card.Title>
