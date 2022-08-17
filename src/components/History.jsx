@@ -3,7 +3,6 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
-import Card from 'react-bootstrap/Card';
 
 
 function History(props) {
@@ -31,8 +30,6 @@ function History(props) {
     // eslint-disable-next-line
   }, [props.pgId, props.requireUpdate])
 
-
-  var currentDate = new Date();
 
   const lines = result.map((line, key) => {
     var date = new Date(line.date_evenement);
