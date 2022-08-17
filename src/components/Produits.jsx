@@ -35,7 +35,6 @@ function Produits(props) {
 
 
   useKeyboardShortcut(["Alt", "x"], () => { handleQuitter() });
-  useKeyboardShortcut(["Enter"], () => { handleDebucquer() });
   useKeyboardShortcut(["Alt", "l"], () => { setShowQrModal(true) });
 
 
@@ -157,9 +156,9 @@ function Produits(props) {
     navigate('/');
   };
 
-  const handleDebucquer = () => {
-    // if a product is selected
-    if (typeof selectedProduit !== "undefined") {
+  const handleDebucquer = (e) => {
+    // if the key pressed is ENTER and a product is selected
+    if (e.key === "Enter" && typeof selectedProduit !== "undefined") {
       const createBucquage = async () => {
         try {
           const response = await axiosPrivate.post("bucquages/",
@@ -247,7 +246,7 @@ function Produits(props) {
       <Col md={6} className="me-4">
         <Container className="mb-2">
           <Row>
-            <select onChange={(e) => { setSelectedProduit(e.target.value) }} value={selectedProduit} autoFocus size={10} >
+            <select onChange={(e) => { setSelectedProduit(e.target.value) }} onKeyPress={handleDebucquer} value={selectedProduit} autoFocus size={10} >
               <ProduitsList />
             </select>
           </Row>
