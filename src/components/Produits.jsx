@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useKeyboardShortcut from '../hooks/keypresslib/useKeyboardShortcut';
@@ -18,19 +18,25 @@ function Produits(props) {
   // produits display
   const [categories, setCategories] = useState([]);
   const [selectedCategorie, setSelectedCategorie] = useState();
-  const [selectedProduit, setSelectedProduit] = useState(0);
+  const [selectedProduit, setSelectedProduit] = useState();
   // recharge
   const [showRechargeModal, setShowRechargeModal] = useState(false);
   const [methodes, setMethodes] = useState([]);
   const [methode, setMethode] = useState({});
-  const [montant, setMontant] = useState("");
+  const montantRechargeRef = useRef();
+  // lydia
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [qrcode, setQrcode] = useState("");
+  const montantQrRef = useRef();
 
+  const [montant, setMontant] = useState("");
   const [transactionDone, setTransactionDone] = useState();
   const [showTransactionModal, setShowTransactionModal] = useState(false);
 
 
   useKeyboardShortcut(["Alt", "x"], () => { handleQuitter() });
   useKeyboardShortcut(["Enter"], () => { handleDebucquer() });
+  useKeyboardShortcut(["Alt", "l"], () => { setShowQrModal(true) });
 
 
   useEffect(() => {
@@ -63,7 +69,7 @@ function Produits(props) {
     setCategories(cat);
     // if the ip is registered once, it is still in a list and it's the first element
     // if the ip is registered multiple times, we take the first one
-    setSelectedCategorie(props.permissions.ipIdentification[0])
+    setSelectedCategorie(props.permissions.ipIdentification[0] || cat[0])
     // eslint-disable-next-line
   }, [result]);
 
@@ -152,7 +158,8 @@ function Produits(props) {
   };
 
   const handleDebucquer = () => {
-    if (selectedProduit !== 0) {
+    // if a product is selected
+    if (typeof selectedProduit !== "undefined") {
       const createBucquage = async () => {
         try {
           const response = await axiosPrivate.post("bucquages/",
@@ -173,6 +180,7 @@ function Produits(props) {
   };
 
   const handleRecharger = () => {
+    // load all the recharge methodes and show the modal
     optionMethode()
     setShowRechargeModal(true);
   };
@@ -198,7 +206,36 @@ function Produits(props) {
     }
     createRecharge();
     setShowTransactionModal(true);
+    // reset the fields
+    setMontant("");
   };
+
+  const handleQrSubmit = (e) => {
+    e.preventDefault();
+    setShowQrModal(false);
+
+    const createQr = async () => {
+      try {
+        const response = await axiosPrivate.post("rechargeslydia/",
+          JSON.stringify({
+            cible_id: props.pgId,
+            montant: montant,
+            qrcode: qrcode
+          }));
+        setTransactionDone(response);
+        //trigger update after result
+        props.setRequireUpdate(!props.requireUpdate);
+      } catch (error) {
+        setTransactionDone(error?.response);
+      }
+    }
+    createQr();
+    setShowTransactionModal(true);
+    // reset the fields
+    setMontant("");
+    setQrcode("");
+  }
+
 
   //////////////////
   //   Render     //
@@ -220,17 +257,17 @@ function Produits(props) {
       <Col md={4}>
         <Stack gap={1} className="">
           <Button onClick={() => { handleDebucquer() }}>Débucquer (Entrée)</Button>
-          <Button >Scan QR (Alt+L)</Button>
+          <Button onClick={() => { setShowQrModal(true) }}>Scan QR (Alt+L)</Button>
           <RechargeButton />
           <Button >annuler??</Button>
-          <Button onClick={() => { handleQuitter() }} type="button">Quitter (Alt+X)</Button>
+          <Button onClick={() => { handleQuitter() }}>Quitter (Alt+X)</Button>
           <CategorieList />
         </Stack>
       </Col>
 
       <TransactionStateModal />
 
-      <Modal show={showRechargeModal} size="lg" centered onHide={() => setShowRechargeModal(false)}>
+      <Modal show={showRechargeModal} size="lg" centered onHide={() => setShowRechargeModal(false)} onEntered={() => { montantRechargeRef.current.focus() }}>
         <Modal.Header closeButton>
           <Modal.Title>Recharger un PG TODO PG NAME</Modal.Title>
         </Modal.Header>
@@ -242,6 +279,7 @@ function Produits(props) {
               id="montant"
               placeholder="ex: 76€"
               value={montant}
+              ref={montantRechargeRef}
               onChange={(e) => { setMontant(e.target.value); }}
               required />
             <select id="methode" value={methode} onChange={(e) => { setMethode(e.target.value); }} required>
@@ -249,6 +287,33 @@ function Produits(props) {
                 return (<option value={methode.value} key={key}>{methode.display_name}</option>)
               })}
             </select>
+            <Button type="submit">Valider</Button>
+          </form>
+        </Modal.Body>
+      </Modal >
+
+      <Modal show={showQrModal} size="lg" centered onHide={() => setShowQrModal(false)} onEntered={() => { montantQrRef.current.focus() }}>
+        <Modal.Header closeButton>
+          <Modal.Title>Scanner un PG TODO PG NAME</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleQrSubmit}>
+            <label htmlFor="montant">Montant</label>
+            <input
+              type="text"
+              id="montant"
+              placeholder="ex: 76€"
+              value={montant}
+              ref={montantQrRef}
+              onChange={(e) => { setMontant(e.target.value); }}
+              required />
+            <input
+              type="text"
+              id="qrcode"
+              placeholder="QR Code"
+              value={qrcode}
+              onChange={(e) => { setQrcode(e.target.value); }}
+              required />
             <Button type="submit">Valider</Button>
           </form>
         </Modal.Body>
