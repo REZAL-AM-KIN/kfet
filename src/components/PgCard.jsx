@@ -23,7 +23,7 @@ function PG(props) {
 
 
   useEffect(() => {
-    console.log("pg update");
+    console.log("UPDATE: PG");
     // make the api call for pg info:
     const URL = props.pgId ? "consommateurs/" + props.pgId + "/" : "utilisateur/";
     const controller = new AbortController();

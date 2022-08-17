@@ -13,7 +13,7 @@ function History(props) {
 
 
   useEffect(() => {
-    console.log("history update");
+    console.log("UPDATE: History");
     const URL = "history/" + props.pgId + "/";
     const controller = new AbortController();
     const getHistory = async () => {

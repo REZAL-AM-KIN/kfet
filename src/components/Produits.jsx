@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useKeyboardShortcut from '../hooks/keypresslib/useKeyboardShortcut';
 
@@ -11,19 +12,21 @@ import Stack from 'react-bootstrap/Stack';
 
 
 function Produits(props) {
+  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const [result, setResult] = useState([]);
-
+  // produits display
   const [categories, setCategories] = useState([]);
   const [selectedCategorie, setSelectedCategorie] = useState();
   const [selectedProduit, setSelectedProduit] = useState(0);
-
-  const [transactionDone, setTransactionDone] = useState();
-  const [showTransactionModal, setShowTransactionModal] = useState(false);
+  // recharge
   const [showRechargeModal, setShowRechargeModal] = useState(false);
   const [methodes, setMethodes] = useState([]);
   const [methode, setMethode] = useState({});
-  const [montant, setMontant] = useState();
+  const [montant, setMontant] = useState("");
+
+  const [transactionDone, setTransactionDone] = useState();
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
 
 
   useKeyboardShortcut(["Alt", "x"], () => { handleQuitter() });
@@ -64,14 +67,12 @@ function Produits(props) {
     // eslint-disable-next-line
   }, [result]);
 
-
-
-
   const optionMethode = async () => {
     try {
       const response = await axiosPrivate.options("recharges/");
       setMethodes(response?.data?.actions?.POST?.methode?.choices);
-      console.log(methodes);
+      // 2nd method is chosen by default (Espèces)
+      setMethode(response?.data?.actions?.POST?.methode?.choices[1].value);
     } catch (error) {
       console.log(error);
     }
@@ -147,12 +148,11 @@ function Produits(props) {
   //////////////////
 
   const handleQuitter = () => {
-    window.location.href = "/";
+    navigate('/');
   };
 
   const handleDebucquer = () => {
     if (selectedProduit !== 0) {
-      console.log("submit pg: " + props.pgId + " produit: " + selectedProduit);
       const createBucquage = async () => {
         try {
           const response = await axiosPrivate.post("bucquages/",
@@ -173,30 +173,22 @@ function Produits(props) {
   };
 
   const handleRecharger = () => {
-    console.log("RECHARGE")
     optionMethode()
-
     setShowRechargeModal(true);
-
-
-
   };
 
   const handleRechargerSubmit = (e) => {
     e.preventDefault();
+    setShowRechargeModal(false);
 
     const createRecharge = async () => {
       try {
         const response = await axiosPrivate.post("recharges/",
           JSON.stringify({
-            cible_bucquage: props.pgId,
+            cible_id: props.pgId,
             montant: montant,
             methode: methode
-          }),
-          {
-            headers: { 'Content-type': 'application/json' },
-            withCredentials: true
-          });
+          }));
         setTransactionDone(response);
         //trigger update after result
         props.setRequireUpdate(!props.requireUpdate);
@@ -244,19 +236,20 @@ function Produits(props) {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleRechargerSubmit}>
-            <label htmlFor="montant"> </label>
+            <label htmlFor="montant">Montant</label>
             <input
               type="text"
               id="montant"
               placeholder="ex: 76€"
               value={montant}
-              onChange={(e) => { setMontant(e.target.value); }} />
-
+              onChange={(e) => { setMontant(e.target.value); }}
+              required />
             <select id="methode" value={methode} onChange={(e) => { setMethode(e.target.value); }} required>
               {methodes.map((methode, key) => {
                 return (<option value={methode.value} key={key}>{methode.display_name}</option>)
               })}
             </select>
+            <Button type="submit">Valider</Button>
           </form>
         </Modal.Body>
       </Modal >
