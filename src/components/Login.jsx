@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import axios from '../auth/axios';
@@ -21,8 +20,6 @@ import bkgImg from '../assets/101516.jpg'; // TODO: image du pian'sss
 const LOGIN_URL = 'token/';
 
 const Login = () => {
-  // set the context cookie? non utilisé actuellement
-  const { setAuth } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,8 +57,6 @@ const Login = () => {
         JSON.stringify({ username: user, password: pwd }),
         {
           headers: { 'Content-type': 'application/json' },
-          // withCredentials = envoie le cookie, je crois que ça fonctionne pas
-          withCredentials: true
         }
       );
       // on enregistre les tokens dans les cookies et dans le sessionStorage
@@ -69,7 +64,6 @@ const Login = () => {
       const refresh = response?.data?.refresh;
       sessionStorage.setItem("access", access);
       sessionStorage.setItem("refresh", refresh);
-      setAuth({ user, access, refresh });
       setUser('');
       setPwd('');
       // on renvoie a l'endroit ou il était si il s'est fait dégager
