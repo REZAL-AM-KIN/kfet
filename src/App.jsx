@@ -1,11 +1,9 @@
 import {Route, Routes,} from 'react-router-dom';
 
-import RequireAuth from './old/components/RequireAuth';
+import RequireAuth from './components/RequireAuth';
 
-import TopMenu from './old/components/TopMenu';
 import Login from './pages/Login';
-import Home from './old/pages/home';
-import PG from './old/pages/PG';
+import PG from './pages/PG';
 import Test from './Test';
 
 function App() {
@@ -17,8 +15,8 @@ function App() {
 
                 {/*privates routes*/}
                 <Route element={<RequireAuth/>}>
-                    <Route path="/" element={<TopMenu/>}>
-                        <Route path="/" element={<Home/>}/>
+                    <Route path="/" > {/* element={<TopMenu/>}>*/}
+                        <Route path="/" element={<PG/>}/>
                         <Route path="pg/:pgId" element={<PG/>}/>
                         <Route path="test" element={<Test/>}/>
                     </Route>
