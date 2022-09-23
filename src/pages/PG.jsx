@@ -4,6 +4,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import PgCard from '../components/PgCard';
+import History from "../components/History";
 
 function PG() {
     // current displayed pgId from url
@@ -14,8 +15,11 @@ function PG() {
     const axiosPrivate = useAxiosPrivate();
     const [permissions, setPermissions] = useState({});
 
-    const [data, setData] = useState({});
+    const [pgData, setPgData] = useState({});
     const [err, setErr] = useState("");
+
+    const [history, setHistory] = useState([]);
+
 
     useEffect(() => {
         const controller = new AbortController();
@@ -46,7 +50,7 @@ function PG() {
             try {
                 const response = await axiosPrivate.get(URL);
                 if (response.data) {
-                    setData(response.data);
+                    setPgData(response.data);
                 } else {
                     setErr("Pas de PG activé correspondant");
                 }
@@ -63,13 +67,36 @@ function PG() {
     }, [pgId]);
 
 
+
+    useEffect(() => {
+        console.log("UPDATE: History");
+        const URL = "history/" + pgId + "/";
+        const controller = new AbortController();
+        const getHistory = async () => {
+            try {
+                const response = await axiosPrivate.get(URL);
+                setHistory(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getHistory()
+        return () => {
+            controller.abort();
+        }
+        // eslint-disable-next-line
+    }, [pgId])
+
+
+
     return (
         <div style={{backgroundColor: "pink"}}>
             <nav>Navbar</nav>
             <br/>
             <br/>
             <br/>
-            <PgCard data={data} err={err} style={{backgroundColor: "green"}}/>
+            <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
+            <History history={history}/>
         </div>
 
     );

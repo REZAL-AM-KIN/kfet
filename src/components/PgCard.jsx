@@ -7,9 +7,9 @@ export default function PgCard(props) {
     var style = {borderWidth: "0.2em", borderRadius: "0.6em"};
 
     if (props.data.solde > 0) {
-        style = { ...style, backgroundColor: "green", borderColor: "green"};
+        style = {...style, backgroundColor: "green", borderColor: "blue"};
     } else {
-        style = { ...style, backgroundColor: "red", borderColor: "mediumvioletred"};
+        style = {...style, backgroundColor: "red", borderColor: "mediumvioletred"};
     }
 
     const GoodCard = () => {
@@ -31,10 +31,9 @@ export default function PgCard(props) {
         );
     }
 
-    return (
-        <>
-            <GoodCard/>
-            <BadCard/>
-        </>
-    );
+    if (props.err) {
+        return BadCard();
+    } else {
+        return GoodCard();
+    }
 }
