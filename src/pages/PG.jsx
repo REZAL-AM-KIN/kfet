@@ -1,83 +1,105 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 import PgCard from '../components/PgCard';
-import History from '../components/History';
-import Produits from '../components/Produits';
+import History from "../components/History";
 
 function PG() {
+    // current displayed pgId from url
+    let params = useParams();
+    const pgId = params.pgId;
 
-  let params = useParams();
-  const pgId = params.pgId;
+    // here we get user's permissions and render get it to outlet
+    const axiosPrivate = useAxiosPrivate();
+    const [permissions, setPermissions] = useState({});
 
-  const [requireUpdate, setRequireUpdate] = useState(false); // just flick it to trigger update of the component
+    const [pgData, setPgData] = useState({});
+    const [err, setErr] = useState("");
 
-  // here we get user's permissions and render get it to outlet
-  const axiosPrivate = useAxiosPrivate();
-  const [permissions, setPermissions] = useState({});
-  const URL = "permissions/";
+    const [history, setHistory] = useState([]);
 
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const getPermissions = async () => {
-      try {
-        const response = await axiosPrivate.get(URL);
-        setPermissions(response.data);
-      } catch (error) {
-        if (error?.response?.status !== 403) {
-          console.log(error);
+    useEffect(() => {
+        const controller = new AbortController();
+        const getPermissions = async () => {
+            try {
+                const response = await axiosPrivate.get("permissions/");
+                setPermissions(response.data);
+            } catch (error) {
+                if (error?.response?.status !== 403) {
+                    console.log("Error getting logged user's permissions ", error);
+                }
+            }
         }
-      }
-    }
-    getPermissions()
-    return () => {
-      controller.abort();
-    }
-    // eslint-disable-next-line
-  }, [pgId])
+        getPermissions()
+        return () => {
+            controller.abort();
+        }
+        // eslint-disable-next-line
+    }, [pgId])
+    console.log(permissions);
 
-  console.log(permissions);
+    useEffect(() => {
+        console.log("UPDATE: PG");
+        // make the api call for pg info:
+        const URL = pgId ? "consommateurs/" + pgId + "/" : "utilisateur/";
+        const controller = new AbortController();
+        const getUser = async () => {
+            try {
+                const response = await axiosPrivate.get(URL);
+                if (response.data) {
+                    setPgData(response.data);
+                } else {
+                    setErr("Pas de PG activé correspondant");
+                }
+            } catch (error) {
+                setErr(error.message);
+                console.log("Error getting consommateur", error);
+            }
+        }
+        getUser();
+        return () => {
+            controller.abort();
+        }
+        // eslint-disable-next-line
+    }, [pgId]);
 
 
 
-  if (Object.keys(permissions).length !== 0) {
-    // Page ADMIN
+    useEffect(() => {
+        console.log("UPDATE: History");
+        const URL = "history/" + pgId + "/";
+        const controller = new AbortController();
+        const getHistory = async () => {
+            try {
+                const response = await axiosPrivate.get(URL);
+                setHistory(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getHistory()
+        return () => {
+            controller.abort();
+        }
+        // eslint-disable-next-line
+    }, [pgId])
+
+
+
     return (
-      <Container fluid className="w-100" style={{ borderRadius: '1rem' }}>
-        <Row>
-          <Col md={7}>
-            <PgCard pgId={pgId} requireUpdate={requireUpdate} />
-            <Produits pgId={pgId} permissions={permissions} requireUpdate={requireUpdate} setRequireUpdate={setRequireUpdate} />
-          </Col>
-          <Col md={5} className="p-2">
-            <History pgId={pgId} requireUpdate={requireUpdate} />
-          </Col>
-        </Row>
-      </Container>
-    )
-  } else {
-    // PAGE NORMS
-    return (
-      <Container fluid className="w-100" style={{ borderRadius: '1rem' }}>
-        <Row>
-          <Col md={7}>
-            <PgCard pgId={pgId} />
-            <div>PAGE PG</div>
-          </Col>
-          <Col md={5} className="p-2">
-            <History pgId={pgId} />
-          </Col>
-        </Row>
-      </Container>
-    )
-  }
+        <div style={{backgroundColor: "pink"}}>
+            <nav>Navbar</nav>
+            <br/>
+            <br/>
+            <br/>
+            <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
+            <History history={history}/>
+        </div>
 
+    );
 }
 
 export default PG;
