@@ -3,17 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "../auth/axios";
 
 // style
-import {
-    TextInput,
-    PasswordInput,
-    Anchor,
-    Paper,
-    Title,
-    Text,
-    Container,
-    Group,
-    Button,
-} from '@mantine/core';
+import {Anchor, Button, Container, Group, Paper, PasswordInput, Text, TextInput, Title,} from '@mantine/core';
 
 // images
 import bkgImg from '../assets/101516.jpg';
@@ -88,8 +78,8 @@ const Login = () => {
     }
 
     return (
-        <section style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover"}}>
-            <Container size={420} my={40}>
+        <div style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover", height:"100vh"}}>
+            <Container size={420} pt={35}>
                 <Title
                     align="center"
                     sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
@@ -116,8 +106,11 @@ const Login = () => {
                 </Paper>
                 <div ref={errRef}>{errMsg}</div>
             </Container>
-        </section>
+        </div>
     );
 }
 
 export default Login;
+
+/*
+ */
