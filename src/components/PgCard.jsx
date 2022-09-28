@@ -4,7 +4,7 @@ import {Paper, Text} from "@mantine/core";
 export default function PgCard(props) {
     // data = {bucque, fams.... }
 
-    var style = {borderWidth: "0.2em", borderRadius: "0.6em"};
+    var style = {...props.style, borderWidth: "0.2em", borderRadius: "0.6em"};
 
     if (props.data.solde > 0) {
         style = {...style, backgroundColor: "green", borderColor: "blue"};
