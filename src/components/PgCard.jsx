@@ -4,12 +4,12 @@ import {Paper, Text} from "@mantine/core";
 export default function PgCard(props) {
     // data = {bucque, fams.... }
 
-    var style = {...props.style, borderWidth: "0.2em", borderRadius: "0.6em"};
+    var style = {borderWidth: "0.2em", borderRadius: "0.6em", ...props.style};
 
     if (props.data.solde > 0) {
-        style = {...style, backgroundColor: "green", borderColor: "blue"};
+        style = {backgroundColor: "green", borderColor: "blue", ...style};
     } else {
-        style = {...style, backgroundColor: "red", borderColor: "mediumvioletred"};
+        style = {backgroundColor: "red", borderColor: "mediumvioletred", ...style};
     }
 
     const GoodCard = () => {
