@@ -28,7 +28,7 @@ L'objeectif de ce projet est de refaire entièrement le front Kfet
 | Les produits sont listés par entité                                                                                         |          5 | ~          |
 | une option est disponible pour pouvoir changer d’entité si perms                                                            |          5 | ~          |
 | une permission existe pour pouvoir débuquer en negat’sss                                                                    |          3 | ~          |
-| Selection via scan de code barre (a la v2.5.4 alors) (deux code de sélection par produit (le speed select et le code barre) |          2 |            |
+| Selection via scan de code barre                                                                                            |          2 |            |
 | Pouvoir annuler un débuquage                                                                                                |          4 |            |
 
 ## Pouvoir recharger
