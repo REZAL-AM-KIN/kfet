@@ -3,17 +3,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import axios from "../auth/axios";
 
 // style
-import {
-    TextInput,
-    PasswordInput,
-    Anchor,
-    Paper,
-    Title,
-    Text,
-    Container,
-    Group,
-    Button,
-} from '@mantine/core';
+import {Alert, Anchor, Button, Container, Group, Paper, PasswordInput, Text, TextInput, Title,} from '@mantine/core';
+import {IconAlertCircle} from '@tabler/icons';
 
 // images
 import bkgImg from '../assets/101516.jpg';
@@ -88,19 +79,20 @@ const Login = () => {
     }
 
     return (
-        <section style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover"}}>
-            <Container size={420} my={40}>
+        <div style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover", height:"100vh"}}>
+            <Container size={420} pt={35}>
                 <Title
                     align="center"
                     sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
                 >
                     Welcome back!
                 </Title>
-                <Text color="dimmed" size="sm" align="center" mt={5}>
+                <Text color="black" size="sm" align="center" mt={5}>
                     Tu n'as pas de Compte? Utilise ton compte Niki!
                 </Text>
+                <Alert ref={errRef} style={{display:errMsg?"block":"none"}} icon={<IconAlertCircle size={16} />} color={"red"} radius="lg">{errMsg}</Alert>
 
-                <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+                <Paper component="form" withBorder shadow="md" p={30} mt={30} radius="md">
                     <TextInput value={user} onChange={(e) => setUser(e.target.value)} label="Username" ref={userRef}
                                placeholder="Username" required/>
                     <PasswordInput value={pwd} onChange={(e) => setPwd(e.target.value)} label="Password"
@@ -110,14 +102,16 @@ const Login = () => {
                             Forgot password?
                         </Anchor>
                     </Group>
-                    <Button fullWidth mt="xl" onClick={handleSubmit}>
+                    <Button type="submit" fullWidth mt="xl" onClick={handleSubmit}>
                         Sign in
                     </Button>
                 </Paper>
-                <div ref={errRef}>{errMsg}</div>
             </Container>
-        </section>
+        </div>
     );
 }
 
 export default Login;
+
+/*
+ */

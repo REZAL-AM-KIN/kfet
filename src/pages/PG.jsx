@@ -90,7 +90,7 @@ function PG() {
 
 
     return (
-        <div style={{backgroundColor: "pink"}}>
+        <div style={{backgroundColor: "pink", height:"100vh"}}>
             <nav>Navbar</nav>
             <br/>
             <br/>
