@@ -23,9 +23,17 @@ export default function PgCard(props) {
         );
     }
 
+    const SmallCard = () => {
+        return (
+            <Paper shadow="sm" radius="lg" p="xs" style={style} withBorder>
+                <Text>{props.data.bucque} {props.data.fams}</Text>
+            </Paper>
+        );
+    }
+
     const BadCard = () => {
         return (
-            <Paper style={{...style, backgroundColor: "red", borderColor: "mediumvioletred"}} withBorder>
+            <Paper style={{...style, backgroundColor: "red", borderColor: "mediumvioletred"}}  withBorder>
                 <Text> bite </Text>
             </Paper>
         );
@@ -33,7 +41,10 @@ export default function PgCard(props) {
 
     if (props.err) {
         return BadCard();
+    } else if (props.small) {
+        return SmallCard();
     } else {
         return GoodCard();
     }
+
 }
