@@ -1,8 +1,12 @@
 import {Link} from "react-router-dom";
+import {Stack, Text} from "@mantine/core"
 
 const Home = () => {
   return(
-    <Link to="/pg/1">PG 1</Link>
+      <Stack>
+        <Text >Exemple Home</Text>
+        <Text>Ligne 2</Text>
+      </Stack>
   );
 }
 
