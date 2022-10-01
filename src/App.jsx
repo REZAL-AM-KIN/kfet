@@ -18,8 +18,7 @@ function App() {
     const pathWithoutNav = ["/login"]
 
     const withNavBar = (path) => {
-
-        return !pathWithoutNav.includes(pathname)
+        return !pathWithoutNav.includes(path)
     }
 
     /*<AppShell
@@ -31,9 +30,11 @@ function App() {
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
 
-            {withNavBar? <NavigationBar width={navBarWidth}/> : ""}
-            <Container style={{
-                marginLeft: isSmallDevice? 0: navBarWidth,
+            {withNavBar(pathname) ? <NavigationBar width={navBarWidth}/> : ""}
+            <Container fluid={true} style={{
+                margin: "0",
+                padding: "0",
+                marginLeft: (isSmallDevice || !withNavBar(pathname))? 0: navBarWidth,
                 paddingLeft: "0"
             }}>
 

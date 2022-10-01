@@ -7,7 +7,7 @@ import {
     Stack,
     Text,
     Burger,
-    Affix, Drawer, useMantineTheme
+    Affix, Drawer, useMantineTheme, Group, TextInput
 } from "@mantine/core";
 import {
     IconBuildingStore,
@@ -16,6 +16,7 @@ import {
 } from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
+import Logout from "../auth/logout";
 
 const useStyles = createStyles((theme) => ({
 
@@ -85,7 +86,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                             onClick={() => setNavBarOpened((o) => !o)}
                             style={{
                                 position: "absolute",
-                                zIndex: 1000
+                                zIndex: 1000 // On s'assure que le burger soit toujours au dessus.
                             }}
                         >
                         </Burger>
@@ -100,6 +101,15 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                                     .background},
                             closeButton: { color: "white", iconSize: 80} }}
                     >
+                        <Group>
+                            <IconUserSearch size={38} stroke={1.5}/>
+                            <TextInput width="80%"></TextInput>
+                        </Group>
+
+                        <Stack justify="space-between" sx={(theme) => ({ height: "80%" })}>
+                            <Text>test</Text>
+                            <Text>ede</Text>
+                        </Stack>
 
                     </Drawer>
                 </Fragment>
@@ -131,7 +141,7 @@ const NormalNavBar = ({links})=> {
                 </Navbar.Section>
                 <Navbar.Section>
                     <Stack justify="center" spacing={0}>
-                        <NavbarLink icon={IconLogout} label="Logout" shortcut="ALT+O" />
+                        <NavbarLink icon={IconLogout} label="Logout" shortcut="ALT+O" {...Logout()} />
                     </Stack>
                 </Navbar.Section>
             </Navbar>
