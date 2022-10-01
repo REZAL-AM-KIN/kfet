@@ -1,10 +1,21 @@
-import {createStyles, Center, Navbar, Tooltip, UnstyledButton, Stack, Text, MediaQuery, Burger} from "@mantine/core";
+import {
+    createStyles,
+    Center,
+    Navbar,
+    Tooltip,
+    UnstyledButton,
+    Stack,
+    Text,
+    Burger,
+    Affix, Drawer, useMantineTheme
+} from "@mantine/core";
 import {
     IconBuildingStore,
     IconListDetails, IconLogout, IconToolsKitchen2,
     IconUserSearch
 } from "@tabler/icons";
 import {Fragment, useState} from "react";
+import {useMediaQuery} from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
 
@@ -49,12 +60,85 @@ function NavbarLink({ icon: Icon, label, shortcut, active, onClick }) {
     );
 }
 
+
 const mockdata = [
     { icon : IconBuildingStore, label: "Debucqage", shortcut: "ALT+D"},
     { icon: IconListDetails, label: 'Editer les produits', shortcut: "ALT+E" },
     { icon: IconToolsKitchen2, label: "fin'ss", shortcut: "ALT+F" },
 
 ];
+
+/*
+Mobile Nav Bar
+
+ */
+const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+
+    if (isSmallDevice) {
+        return (
+                <Fragment>
+                    <Affix position={{top: 10, left: 10}}>
+                        <Burger
+                            opened={navBarOpened}
+                            onClick={() => setNavBarOpened((o) => !o)}
+                            style={{
+                                position: "absolute",
+                                zIndex: 1000
+                            }}
+                        >
+                        </Burger>
+                    </Affix>
+
+                    <Drawer
+                        opened={navBarOpened}
+                        onClose={() => {setNavBarOpened(false)}}
+                        closeButtonLabel="Close drawer"
+                        styles={{
+                            drawer: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
+                                    .background},
+                            closeButton: { color: "white", iconSize: 80} }}
+                    >
+
+                    </Drawer>
+                </Fragment>
+        );
+    }
+}
+
+const NormalNavBar = ({links})=> {
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+
+    if(!isSmallDevice){
+    return (
+            <Navbar height="100vh"
+                    width={{base: 80}}
+                    p="md"
+                    sx={(theme) => ({
+                        backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
+                            .background,
+                    })}
+                    fixed={true}>
+                <Center>
+                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" shortcut="ALT+P"></NavbarLink>
+                </Center>
+                <Navbar.Section grow mt={50}>
+                    <Stack justify="center" spacing={0}>
+                        {links}
+                    </Stack>
+                </Navbar.Section>
+                <Navbar.Section>
+                    <Stack justify="center" spacing={0}>
+                        <NavbarLink icon={IconLogout} label="Logout" shortcut="ALT+O" />
+                    </Stack>
+                </Navbar.Section>
+            </Navbar>
+    );
+    }
+
+}
 
 const NavigationBar = () => {
     const [opened, setOpened] = useState(false);
@@ -72,48 +156,9 @@ const NavigationBar = () => {
 
     return (
         <Fragment>
-            <MediaQuery largerThan="sm" styles={{display: "none"}}>
-                <Burger
-                    opened={opened}
-                    onClick={() => setOpened((o) => !o)}
-                    style= {{
-
-                        zIndex: 1000
-                    }}
-                >
-                </Burger>
-            </MediaQuery>
-            <Navbar height="100vh"
-                    width={{ xs:10, lg: 80 , base: 80}}
-                    p="md"
-                    sx={(theme) => ({
-                        backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                            .background,
-                    })}
-                    hiddenBreakpoint="lg"
-                    hidden={!opened}>
-                <Center>
-                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" shortcut="ALT+P"></NavbarLink>
-                </Center>
-                <Navbar.Section grow mt={50}>
-                    <Stack justify="center" spacing={0}>
-                        {links}
-                    </Stack>
-                </Navbar.Section>
-                <Navbar.Section>
-                    <Stack justify="center" spacing={0}>
-                        <NavbarLink icon={IconLogout} label="Logout" shortcut="ALT+O" />
-                    </Stack>
-                </Navbar.Section>
-            </Navbar>
-
-
+            <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} links={links}/>
+            <NormalNavBar links={links}/>
         </Fragment>
-
-        //Burger to open navbar
-
-
-
     );
 }
 

@@ -7,41 +7,59 @@ import PG from './pages/PG';
 import Test from './Test';
 import Home from "./pages/Home";
 import NavigationBar from "./components/NavigationBar";
-import {AppShell, Burger, MantineProvider} from "@mantine/core";
-import {useState} from "react";
+import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
 
 function App() {
     const { pathname } = useLocation();
+    const navBarWidth= 80
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const pathWithoutNav = ["/login"]
 
+    const withNavBar = (path) => {
 
+        return !pathWithoutNav.includes(pathname)
+    }
 
+    /*<AppShell
+        padding={0}
+        navbar={pathname !== '/login' ? <NavigationBar  /> : null}
+    >
+    </AppShell>
+     */
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
-            <AppShell
-                padding={0}
-                navbar={pathname !== '/login' ? <NavigationBar  /> : null}
-            >
-                <Routes>
-                    <Route path="/">
-                        {/*public routes*/}
-                        <Route path="login" element={<Login/>}/>
 
-                        {/*privates routes*/}
-                        <Route element={<RequireAuth/>}>
+            {withNavBar? <NavigationBar width={navBarWidth}/> : ""}
+            <Container style={{
+                marginLeft: isSmallDevice? 0: navBarWidth,
+                paddingLeft: "0"
+            }}>
 
-                            <Route path="/" element={<Home/>}/>
-                            <Route path="pg/:pgId" element={<PG/>}/>
-                            <Route path="test" element={<Test/>}/>
+            <Routes>
+                <Route path="/">
+                    {/*public routes*/}
+                    <Route path="login" element={<Login/>}/>
 
-                        </Route>
+                    {/*privates routes*/}
+                    <Route element={<RequireAuth/>}>
 
-                        {/* 404*/}
-                        {/* TODO:*/}
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="pg/:pgId" element={<PG/>}/>
+                        <Route path="test" element={<Test/>}/>
+
                     </Route>
-                </Routes>
-            </AppShell>
+
+                    {/* 404*/}
+                    {/* TODO:*/}
+                </Route>
+            </Routes>
+            </Container>
+
         </MantineProvider>
     );
+
 }
 
 export default App;

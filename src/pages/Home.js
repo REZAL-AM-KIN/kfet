@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+
 import {Stack, Text} from "@mantine/core"
 
 const Home = () => {
@@ -6,6 +6,19 @@ const Home = () => {
       <Stack>
         <Text >Exemple Home</Text>
         <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text><Text>Ligne 2</Text><Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text><Text>Ligne 2</Text><Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
+          <Text>Ligne 2</Text>
       </Stack>
   );
 }
