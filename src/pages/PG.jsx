@@ -5,6 +5,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 import PgCard from '../components/PgCard';
 import History from "../components/History";
+import {Container} from "@mantine/core";
 
 function PG({setPage}) {
     useEffect(()=>{setPage("Debucquage")})
@@ -90,13 +91,12 @@ function PG({setPage}) {
     }, [pgId])
 
 
-
     return (
-        <div style={{backgroundColor: "pink", height:"100vh"}}>
+        <Container fluid style={{backgroundColor: "pink", height:"100vh"}}>
+            <div style={{fontSize:0}}>Usefull Text</div>
             <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
             <History history={history}/>
-        </div>
-
+        </Container>
     );
 }
 
