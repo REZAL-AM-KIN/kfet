@@ -6,25 +6,25 @@ export default function PgCard({data, err, small}, props) {
 
     const theme = useMantineTheme();
 
-    var style = {borderWidth: "0.2em", borderRadius: "0.6em", ...props.style};
+    var style = {borderWidth:".2em", ...props.style};
 
     if (data.solde > 0) {
-        style = {backgroundColor: "blue", borderColor: "blue", ...style};
+        style = {backgroundColor: theme.colors.green[6], borderColor: theme.colors.green[8], ...style};
     } else {
-        style = {backgroundColor: "red", borderColor: "mediumvioletred", ...style};
+        style = {backgroundColor: theme.colors.red[6], borderColor: theme.colors.red[9], ...style};
     }
 
     const GoodCard = () => {
         return (
-            <Paper shadow="sm" radius="lg" p="xs" sx={style} withBorder>
+            <Paper m={"lg"} shadow="sm" radius="lg" p="sm" sx={style} withBorder>
                 <Grid>
                     <Grid.Col span={8}>
-                        <Text size={45} style={{lineHeight:1.1}}>{data.bucque} {data.fams}</Text>
+                        <Text size={45} style={{lineHeight:1}}>{data.bucque} {data.fams}</Text>
                         <Text size={20} color={theme.colors.gray[9]} style={{lineHeight:1}}>{data.nom} {data.prenom}</Text>
                         <Text size={20}>{data.commentaire}</Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Text size={35} align="right">{data.solde}€</Text>
+                        <Text size={35} align="right" >{data.solde}€</Text>
                     </Grid.Col>
                 </Grid>
             </Paper>
