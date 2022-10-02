@@ -79,7 +79,7 @@ const Login = () => {
     }
 
     return (
-        <div style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover", height:"100vh"}}>
+        <div style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover", height:"100vh", width:"100%"}}>
             <Container size={420} pt={35}>
                 <Title
                     align="center"

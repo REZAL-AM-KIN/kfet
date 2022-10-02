@@ -6,7 +6,9 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import PgCard from '../components/PgCard';
 import History from "../components/History";
 
-function PG() {
+function PG({setPage}) {
+    useEffect(()=>{setPage("Debucquage")})
+
     // current displayed pgId from url
     let params = useParams();
     const pgId = params.pgId;

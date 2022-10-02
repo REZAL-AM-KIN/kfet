@@ -7,14 +7,14 @@ export default function PgCard(props) {
     var style = {borderWidth: "0.2em", borderRadius: "0.6em", ...props.style};
 
     if (props.data.solde > 0) {
-        style = {backgroundColor: "green", borderColor: "blue", ...style};
+        style = {backgroundColor: "blueish", borderColor: "blue", ...style};
     } else {
         style = {backgroundColor: "red", borderColor: "mediumvioletred", ...style};
     }
 
     const GoodCard = () => {
         return (
-            <Paper shadow="sm" radius="lg" p="xs" style={style} withBorder>
+            <Paper shadow="sm" radius="lg" p="xs" sx={style} withBorder>
                 <Text>{props.data.bucque} {props.data.fams}</Text>
                 <Text>{props.data.nom} {props.data.prenom}</Text>
                 <Text>{props.data.commentaire}</Text>
@@ -23,9 +23,17 @@ export default function PgCard(props) {
         );
     }
 
+    const SmallCard = () => {
+        return (
+            <Paper shadow="sm" radius="lg" p="xs" sx={style} withBorder>
+                <Text>{props.data.bucque} {props.data.fams}</Text>
+            </Paper>
+        );
+    }
+
     const BadCard = () => {
         return (
-            <Paper style={{...style, backgroundColor: "red", borderColor: "mediumvioletred"}} withBorder>
+            <Paper sx={{...style, backgroundColor:"red" , borderColor: "mediumvioletred"}}  withBorder>
                 <Text> bite </Text>
             </Paper>
         );
@@ -33,7 +41,10 @@ export default function PgCard(props) {
 
     if (props.err) {
         return BadCard();
+    } else if (props.small) {
+        return SmallCard();
     } else {
         return GoodCard();
     }
+
 }
