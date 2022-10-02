@@ -3,7 +3,7 @@ import PgCard from "./PgCard";
 import {useNavigate} from "react-router-dom";
 
 
-function History({history, general}) {
+function History({history, general, style}) {
 
     const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ function History({history, general}) {
         return (
             <tr key={key}>
                 {general
-                    ?<td>{line.nom_evenement} par {line.entite_evenement} ({line.initiateur_evenement})</td>
+                    ?<td>{line.nom_evenement} par {line.initiateur_evenement}</td>
                     :<td>{line.nom_evenement}</td>
                 }
                 <td>{line.prix_evenement}€</td>
@@ -33,7 +33,7 @@ function History({history, general}) {
     });
 
     return (
-        <Table striped>
+        <Table striped style={style}>
             <thead>
                 <tr>
                     <th>Produit</th>
