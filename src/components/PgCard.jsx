@@ -6,7 +6,7 @@ export default function PgCard({data, err, small, onClick}, props) {
 
     const theme = useMantineTheme();
 
-    var style = {borderWidth:".2em", ...props.style};
+    var style = {borderWidth: ".2em", ...props.style};
 
     if (data.solde > 0) {
         style = {backgroundColor: theme.colors.green[6], borderColor: theme.colors.green[8], ...style};
@@ -16,15 +16,22 @@ export default function PgCard({data, err, small, onClick}, props) {
 
     const GoodCard = () => {
         return (
-            <Paper m={"lg"} shadow="sm" radius="lg" p="sm" sx={style} withBorder onClick={onClick}>
+            <Paper m={"lg"}
+                   shadow="sm"
+                   radius="lg"
+                   p="sm"
+                   sx={style}
+                   withBorder
+                   onClick={onClick}>
                 <Grid>
                     <Grid.Col span={8}>
-                        <Text size={45} style={{lineHeight:1}}>{data.bucque} {data.fams}</Text>
-                        <Text size={20} color={theme.colors.gray[9]} style={{lineHeight:1}}>{data.nom} {data.prenom}</Text>
+                        <Text size={45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
+                        <Text size={20} color={theme.colors.gray[9]}
+                              style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
                         <Text size={20}>{data.commentaire}</Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Text size={35} align="right" >{data.solde}€</Text>
+                        <Text size={35} align="right">{data.solde}€</Text>
                     </Grid.Col>
                 </Grid>
             </Paper>
@@ -33,8 +40,13 @@ export default function PgCard({data, err, small, onClick}, props) {
 
     const SmallCard = () => {
         return (
-            <Paper shadow="sm" radius="lg" p="xs" sx={style} withBorder>
-                <Text>{data.bucque} {data.fams}</Text>
+            <Paper shadow="sm"
+                   radius="lg"
+                   p="xs"
+                   style={{width: "fit-content", ...style}}
+                   withBorder
+                   onClick={onClick}>
+                <Text style={{lineHeight: .8}}>{data.bucque} {data.fams}</Text>
             </Paper>
         );
     }
@@ -49,7 +61,7 @@ export default function PgCard({data, err, small, onClick}, props) {
 
     if (err) {
         return BadCard();
-    } else if (props.small) {
+    } else if (small) {
         return SmallCard();
     } else {
         return GoodCard();
