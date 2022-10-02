@@ -17,6 +17,15 @@ import {
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
 import Logout from "../auth/logout";
+import {Link} from "react-router-dom";
+
+
+const mockdata = [
+    { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage", shortcut: "ALT+D"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
+    { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "ALT+E" },
+    { icon: IconToolsKitchen2, label: "fin'ss", pageName: "Finss", link:"/finss", shortcut: "ALT+F" },
+
+];
 
 const useStyles = createStyles((theme) => ({
 
@@ -42,32 +51,34 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-function NavbarLink({ icon: Icon, label, shortcut, active, onClick }) {
-
+function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
     const { classes, cx } = useStyles();
 
     return (
         <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
-            <div>
-                <UnstyledButton  onClick={onClick} className={cx(classes.link, {[classes.active]: active})}>
-                    <Stack align="center" spacing="0">
-                        <Icon size={34} stroke={1.5}/>
-                        <Text size="8px">{shortcut}</Text>
-                    </Stack>
-                </UnstyledButton>
-
-            </div>
+            <UnstyledButton
+                component={(link!==undefined)? Link : undefined}
+                to={link}
+                onClick={onClick}
+                className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
+            >
+                <Stack align="center" spacing="0">
+                    <Icon size={34} stroke={1.5}/>
+                    <Text size="8px">{shortcut}</Text>
+                </Stack>
+            </UnstyledButton>
         </Tooltip>
     );
 }
 
+function LogOutLink(){
+    return(
+        //On spécifie un pageName mais pas de currentPage car il ne s'agit pas d'un affichage en mode "Onglet"
+    <NavbarLink icon={IconLogout} label="Logout" pageName="Logout" shortcut="ALT+O" {...Logout()} />
+    );
+}
 
-const mockdata = [
-    { icon : IconBuildingStore, label: "Debucqage", shortcut: "ALT+D"},
-    { icon: IconListDetails, label: 'Editer les produits', shortcut: "ALT+E" },
-    { icon: IconToolsKitchen2, label: "fin'ss", shortcut: "ALT+F" },
 
-];
 
 /*
 Mobile Nav Bar
@@ -116,12 +127,12 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
 
 }
 
-const NormalNavBar = ({links})=> {
+const NormalNavBar = ({links, width})=> {
 
 
     return (
             <Navbar height="100vh"
-                    width={{base: 80}}
+                    width={{base: width}}
                     p="md"
                     sx={(theme) => ({
                         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
@@ -129,7 +140,7 @@ const NormalNavBar = ({links})=> {
                     })}
                     fixed={true}>
                 <Center>
-                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" shortcut="ALT+P"></NavbarLink>
+                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" pageName="" shortcut="ALT+P"></NavbarLink>
                 </Center>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
@@ -138,7 +149,7 @@ const NormalNavBar = ({links})=> {
                 </Navbar.Section>
                 <Navbar.Section>
                     <Stack justify="center" spacing={0}>
-                        <NavbarLink icon={IconLogout} label="Logout" shortcut="ALT+O" {...Logout()} />
+                       <LogOutLink/>
                     </Stack>
                 </Navbar.Section>
             </Navbar>
@@ -147,20 +158,18 @@ const NormalNavBar = ({links})=> {
 
 }
 
-const NavigationBar = () => {
+const NavigationBar = ({width, page}) => {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
     const [opened, setOpened] = useState(false);
 
-    const [active, setActive] = useState(2);
 
-    const links = mockdata.map((link, index) => (
+    const links = mockdata.map((link) => (
         <NavbarLink
             {...link}
             key={link.label}
-            active={index === active}
-            onClick={() => setActive(index)}
+            currentPage={page}
         />
     ));
 
@@ -169,7 +178,7 @@ const NavigationBar = () => {
             {isSmallDevice?
                 <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} links={links}/>
                 :
-                <NormalNavBar links={links}/>
+                <NormalNavBar width={width} links={links}/>
             }
         </Fragment>
     );

@@ -1,7 +1,10 @@
 
 import {Stack, Text} from "@mantine/core"
+import {useEffect} from "react";
 
-const Home = () => {
+const Home = ({setPage}) => {
+  useEffect(()=>{setPage("Home")})
+
   return(
       <Stack>
         <Text >Exemple Homehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</Text>
