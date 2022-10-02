@@ -1,15 +1,15 @@
 import {Grid, Paper, Text, useMantineTheme} from "@mantine/core";
 
 
-export default function PgCard({data, err, small, onClick}, props) {
+export default function PgCard({data, err, small, onClick, style}) {
     // data = {bucque, fams.... }
 
     const theme = useMantineTheme();
 
-    var style = {borderWidth: ".2em", ...props.style};
+    style = {borderWidth: ".2em", ...style};
 
     if (data.solde > 0) {
-        style = {backgroundColor: theme.colors.green[6], borderColor: theme.colors.green[8], ...style};
+        style = {backgroundColor: theme.colors.green[5], borderColor: theme.colors.green[8], ...style};
     } else {
         style = {backgroundColor: theme.colors.red[6], borderColor: theme.colors.red[9], ...style};
     }
