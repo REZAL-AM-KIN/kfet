@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'http://127.0.0.1:8282/api/'
+import {BASE_URL} from '../settings'
 
 export default axios.create({
   baseURL: BASE_URL

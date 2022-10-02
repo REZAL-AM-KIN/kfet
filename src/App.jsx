@@ -21,19 +21,17 @@ function App() {
         return !pathWithoutNav.includes(path)
     }
 
-    /*<AppShell
-        padding={0}
-        navbar={pathname !== '/login' ? <NavigationBar  /> : null}
-    >
-    </AppShell>
-     */
+
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
 
             {withNavBar(pathname) ? <NavigationBar width={navBarWidth}/> : ""}
-            <Container fluid={true} style={{
-                margin: "0",
+            <Container fluid={true} // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
+                       style={{
+                margin: "0", //On s'assure qu'il n'y a aucune bordure de type margin ou padding
                 padding: "0",
+                           // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
+                           // de la nav bar sur le container
                 marginLeft: (isSmallDevice || !withNavBar(pathname))? 0: navBarWidth,
                 paddingLeft: "0"
             }}>

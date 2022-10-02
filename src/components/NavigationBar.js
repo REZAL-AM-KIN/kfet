@@ -74,10 +74,8 @@ Mobile Nav Bar
 
  */
 const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
-    const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+        const theme = useMantineTheme()
 
-    if (isSmallDevice) {
         return (
                 <Fragment>
                     <Affix position={{top: 10, left: 10}}>
@@ -101,27 +99,26 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                                     .background},
                             closeButton: { color: "white", iconSize: 80} }}
                     >
+                        {/*Code juste pour exemple*/}
                         <Group>
                             <IconUserSearch size={38} stroke={1.5}/>
                             <TextInput width="80%"></TextInput>
                         </Group>
 
-                        <Stack justify="space-between" sx={(theme) => ({ height: "80%" })}>
+                        <Stack justify="space-between" sx={()=> ({ height: "80%" })}>
                             <Text>test</Text>
                             <Text>ede</Text>
                         </Stack>
-
+                        {/* */}
                     </Drawer>
                 </Fragment>
         );
-    }
+
 }
 
 const NormalNavBar = ({links})=> {
-    const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
-    if(!isSmallDevice){
+
     return (
             <Navbar height="100vh"
                     width={{base: 80}}
@@ -146,11 +143,14 @@ const NormalNavBar = ({links})=> {
                 </Navbar.Section>
             </Navbar>
     );
-    }
+
 
 }
 
 const NavigationBar = () => {
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+
     const [opened, setOpened] = useState(false);
 
     const [active, setActive] = useState(2);
@@ -166,8 +166,11 @@ const NavigationBar = () => {
 
     return (
         <Fragment>
-            <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} links={links}/>
-            <NormalNavBar links={links}/>
+            {isSmallDevice?
+                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} links={links}/>
+                :
+                <NormalNavBar links={links}/>
+            }
         </Fragment>
     );
 }
