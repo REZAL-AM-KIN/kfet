@@ -1,23 +1,8 @@
-import {
-    createStyles,
-    Center,
-    Navbar,
-    Tooltip,
-    UnstyledButton,
-    Stack,
-    Text,
-    Burger,
-    Affix, Drawer, useMantineTheme, Group, TextInput
-} from "@mantine/core";
-import {
-    IconBuildingStore,
-    IconListDetails, IconLogout, IconToolsKitchen2,
-    IconUserSearch
-} from "@tabler/icons";
+import {Affix, Burger, Center, Drawer, Group, Navbar, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
+import {IconBuildingStore, IconListDetails, IconToolsKitchen2, IconUserSearch} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
-import Logout from "../auth/logout";
-import {Link} from "react-router-dom";
+import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
 
 
 const mockdata = [
@@ -27,56 +12,7 @@ const mockdata = [
 
 ];
 
-const useStyles = createStyles((theme) => ({
 
-    link: {
-        width: 50,
-        height: 50,
-        borderRadius: theme.radius.md,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: theme.white,
-
-        '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
-        },
-    },
-
-    active: {
-        '&, &:hover': {
-            backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
-        },
-    },
-}));
-
-function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
-    const { classes, cx } = useStyles();
-
-    return (
-        <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
-            <UnstyledButton
-                component={(link!==undefined)? Link : undefined}
-                to={link}
-                onClick={onClick}
-                className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
-            >
-                <Stack align="center" spacing="0">
-                    <Icon size={34} stroke={1.5}/>
-                    <Text size="8px">{shortcut}</Text>
-                </Stack>
-            </UnstyledButton>
-        </Tooltip>
-    );
-}
-
-function LogOutLink(){
-    return(
-        //On spécifie un pageName mais pas de currentPage car il ne s'agit pas d'un affichage en mode "Onglet"
-    <NavbarLink icon={IconLogout} label="Logout" pageName="Logout" shortcut="ALT+O" {...Logout()} />
-    );
-}
 
 
 
@@ -86,6 +22,8 @@ Mobile Nav Bar
  */
 const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
         const theme = useMantineTheme()
+
+
 
         return (
                 <Fragment>
@@ -129,7 +67,6 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
 
 const NormalNavBar = ({links, width})=> {
 
-
     return (
             <Navbar height="100vh"
                     width={{base: width}}
@@ -140,7 +77,7 @@ const NormalNavBar = ({links, width})=> {
                     })}
                     fixed={true}>
                 <Center>
-                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" pageName="" shortcut="ALT+P"></NavbarLink>
+                    <NormalSearchPgButton/>
                 </Center>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
