@@ -1,15 +1,27 @@
 import {Table} from "@mantine/core";
+import PgCard from "./PgCard";
+import {useNavigate} from "react-router-dom";
 
 
-function History(props) {
+function History({history, general}) {
 
-    const lines = props.history.map((line, key) => {
-        var date = new Date(line.date_evenement);
+    const navigate = useNavigate();
+
+    const lines = history.map((line, key) => {
+        let date = new Date(line.date_evenement);
         return (
             <tr key={key}>
-                <td>{line.nom_evenement}</td>
+                {general
+                    ?<td>{line.nom_evenement} par {line.entite_evenement} ({line.initiateur_evenement})</td>
+                    :<td>{line.nom_evenement}</td>
+                }
                 <td>{line.prix_evenement}€</td>
-                <td>{line.entite_evenement} ({line.initiateur_evenement})</td>
+                {general
+                    ?<td><PgCard data={line.cible_evenement}
+                                 small
+                                 onClick={()=>navigate("/pg/"+line.cible_evenement.id)}/>
+                    </td>
+                    :<td>{line.entite_evenement} ({line.initiateur_evenement})</td>}
                 <td>{date.toLocaleString("fr-fr", {
                     month: "long",
                     day: "numeric",
@@ -26,7 +38,7 @@ function History(props) {
                 <tr>
                     <th>Produit</th>
                     <th>Prix</th>
-                    <th>Entité</th>
+                    {general?<th>PG</th>:<th>Entité</th>}
                     <th>Date</th>
                 </tr>
             </thead>
