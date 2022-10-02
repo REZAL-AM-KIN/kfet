@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
+import History from "../components/History";
 
 const Home = ({setPage}) => {
   useEffect(()=>{setPage("Home")});
@@ -12,15 +13,15 @@ const Home = ({setPage}) => {
   const axiosPrivate = useAxiosPrivate();
   const [pgData, setPgData] = useState({});
   const [err, setErr] = useState("");
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     console.log("UPDATE: PG");
     // make the api call for pg info:
-    const URL = "utilisateur/";
     const controller = new AbortController();
     const getUser = async () => {
       try {
-        const response = await axiosPrivate.get(URL);
+        const response = await axiosPrivate.get("utilisateur/");
         if (response.data) {
           setPgData(response.data);
         } else {
@@ -35,13 +36,28 @@ const Home = ({setPage}) => {
     return () => {
       controller.abort();
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [axiosPrivate]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const getHistory = async () => {
+      try {
+        const response = await axiosPrivate.get("history/");
+        setHistory(response.data.results);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getHistory()
+    return () => {
+      controller.abort();
+    }
+  }, [axiosPrivate])
 
   return(
       <Stack>
         <PgCard data={pgData} err={err} onClick={()=>navigate("/pg/"+pgData.id)}/>
-
+        <History history={history} general/>
       </Stack>
   );
 }
