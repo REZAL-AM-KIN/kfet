@@ -1,12 +1,12 @@
 import axios from 'axios';
-const BASE_URL = 'http://127.0.0.1:8000/api/'
 
+console.log(process.env.REACT_APP_BASE_URL)
 export default axios.create({
-  baseURL: BASE_URL
+  baseURL: process.env.REACT_APP_BASE_URL
 });
 
 export const axiosPrivate = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: { 'Content-Type': 'Application/json' },
 
 });
