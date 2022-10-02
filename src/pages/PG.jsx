@@ -93,10 +93,6 @@ function PG({setPage}) {
 
     return (
         <div style={{backgroundColor: "pink", height:"100vh"}}>
-            <nav>Navbar</nav>
-            <br/>
-            <br/>
-            <br/>
             <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
             <History history={history}/>
         </div>

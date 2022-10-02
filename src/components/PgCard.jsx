@@ -1,7 +1,7 @@
 import {Grid, Paper, Text, useMantineTheme} from "@mantine/core";
 
 
-export default function PgCard({data, err, small}, props) {
+export default function PgCard({data, err, small, onClick}, props) {
     // data = {bucque, fams.... }
 
     const theme = useMantineTheme();
@@ -16,7 +16,7 @@ export default function PgCard({data, err, small}, props) {
 
     const GoodCard = () => {
         return (
-            <Paper m={"lg"} shadow="sm" radius="lg" p="sm" sx={style} withBorder>
+            <Paper m={"lg"} shadow="sm" radius="lg" p="sm" sx={style} withBorder onClick={onClick}>
                 <Grid>
                     <Grid.Col span={8}>
                         <Text size={45} style={{lineHeight:1}}>{data.bucque} {data.fams}</Text>

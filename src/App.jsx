@@ -1,14 +1,14 @@
 import {Route, Routes, useLocation,} from 'react-router-dom';
+import {useState} from "react";
 
 import RequireAuth from './components/RequireAuth';
+import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
 
 import Login from './pages/Login';
 import PG from './pages/PG';
 import Home from "./pages/Home";
 import NavigationBar from "./components/NavigationBar";
-import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
-import {useState} from "react";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 
