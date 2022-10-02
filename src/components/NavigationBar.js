@@ -1,8 +1,9 @@
-import {Affix, Burger, Center, Drawer, Group, Navbar, Stack, Text, TextInput, useMantineTheme} from "@mantine/core";
-import {IconBuildingStore, IconListDetails, IconToolsKitchen2, IconUserSearch} from "@tabler/icons";
+import {Affix, Burger, Center, Drawer, Navbar, Stack, Text, useMantineTheme} from "@mantine/core";
+import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
 import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
+import SearchPg from "./SearchPg";
 
 
 const mockdata = [
@@ -22,8 +23,6 @@ Mobile Nav Bar
  */
 const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
         const theme = useMantineTheme()
-
-
 
         return (
                 <Fragment>
@@ -49,10 +48,9 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                             closeButton: { color: "white", iconSize: 80} }}
                     >
                         {/*Code juste pour exemple*/}
-                        <Group>
-                            <IconUserSearch size={38} stroke={1.5}/>
-                            <TextInput width="80%"></TextInput>
-                        </Group>
+                        <Center>
+                            <SearchPg setActive={setNavBarOpened}/>
+                        </Center>
 
                         <Stack justify="space-between" sx={()=> ({ height: "80%" })}>
                             <Text>test</Text>

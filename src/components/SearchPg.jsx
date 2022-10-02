@@ -77,13 +77,16 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
 
     return (
         <Autocomplete
+
             data={data}
             itemComponent={AutoCompleteItem}
+            limit={8}
             onItemSubmit={onItemSubmit}
             placeholder="Rechercher un PG"
             nothingFound="Aucun PG trouvé :("
             styles={{
                 input: {
+                    width: "100%",
                     borderRadius: 9,
                     borderStyle: "none",
                     borderWidth: 2,
