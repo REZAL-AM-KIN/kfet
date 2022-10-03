@@ -1,18 +1,18 @@
 import {Grid, Paper, Text, useMantineTheme} from "@mantine/core";
 
 
-export default function PgCard({data, err, small, onClick, style}) {
+export default function PgCard({data, small, onClick, style}) {
     // data = {bucque, fams.... }
 
     const theme = useMantineTheme();
 
     style = {borderWidth: ".2em", ...style};
     if (onClick) {
-        style = {"&:hover":{backgroundColor:theme.colors.green[3]}, ...style};
+        style = {"&:hover":{backgroundColor:theme.colors.green[1]}, ...style};
     }
 
     if (data.solde > 0) {
-        style = {backgroundColor: theme.colors.green[4], borderColor: theme.colors.green[8], ...style};
+        style = {backgroundColor: theme.colors.green[3], borderColor: theme.colors.green[6], ...style};
     } else {
         style = {backgroundColor: theme.colors.red[6], borderColor: theme.colors.red[9], ...style};
     }
@@ -56,13 +56,13 @@ export default function PgCard({data, err, small, onClick, style}) {
 
     const BadCard = () => {
         return (
-            <Paper sx={{...style, backgroundColor: "red", borderColor: "mediumvioletred"}} withBorder>
-                <Text> bite </Text>
+            <Paper sx={{...style, backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[8]}} withBorder>
+                <Text> Une Erreur est survenue </Text>
             </Paper>
         );
     }
 
-    if (err) {
+    if (!data) {
         return BadCard();
     } else if (small) {
         return SmallCard();
