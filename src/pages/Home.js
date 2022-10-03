@@ -1,4 +1,4 @@
-import {Stack} from "@mantine/core"
+import {Grid} from "@mantine/core"
 import {useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -55,10 +55,15 @@ const Home = ({setPage}) => {
   }, [axiosPrivate])
 
   return(
-      <Stack>
-        <PgCard data={pgData} err={err} onClick={()=>navigate("/pg/"+pgData.id)}/>
-        <History history={history} general/>
-      </Stack>
+      <Grid>
+        <Grid.Col md={6}>
+          <PgCard data={pgData} err={err} onClick={()=>navigate("/pg/"+pgData.id)}/>
+          <div>GRAPHE</div>
+        </Grid.Col>
+        <Grid.Col md={6} p={"xl"}>
+          <History history={history} general/>
+        </Grid.Col>
+      </Grid>
   );
 }
 
