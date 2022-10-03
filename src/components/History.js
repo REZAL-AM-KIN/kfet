@@ -32,8 +32,11 @@ function History({history, general, style}) {
         )
     });
 
+    // TODO: Timeline element to select days?
+    // TODO: Carousel to display days?
+
     return (
-        <Table striped style={style}>
+        <Table striped highlightOnHover sx={{borderRadius:"1em", ...style}}>
             <thead>
                 <tr>
                     <th>Produit</th>
