@@ -1,4 +1,4 @@
-import {createStyles, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
+import {createStyles, Popover, Stack, Text, Tooltip, UnstyledButton} from "@mantine/core";
 import {Link} from "react-router-dom";
 import {IconLogout, IconUserSearch} from "@tabler/icons";
 import Logout from "../auth/logout";
@@ -64,8 +64,6 @@ export function NormalSearchPgButton() {
 
     const ref = useClickOutside(() => setActive(false));
 
-
-
     const Icon =IconUserSearch
     const label="Rechercher un pg"
     const shortcut="ALT+P"
@@ -78,6 +76,7 @@ export function NormalSearchPgButton() {
     }
 
     const SearchPgButton = forwardRef((props, ref) =>(
+
         <Tooltip
             label={label}
             opened={active ? false : undefined}

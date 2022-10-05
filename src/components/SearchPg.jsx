@@ -4,6 +4,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
 import {showNotification} from "@mantine/notifications";
 import {IconX} from "@tabler/icons";
+import {getHotkeyHandler} from "@mantine/hooks";
 
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
         <div ref={ref} {...others}>
@@ -25,7 +26,7 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
 );
 
 const SearchPg = ({refForOutsideClick, setActive})=>{
-    //TODO: Faire fonctionner l'echap pour fermer le popover
+
 
     const theme = useMantineTheme()
 
@@ -77,10 +78,9 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
 
     return (
         <Autocomplete
-
             data={data}
             itemComponent={AutoCompleteItem}
-            limit={8}
+            limit={6}
             onItemSubmit={onItemSubmit}
             placeholder="Rechercher un PG"
             nothingFound="Aucun PG trouvé :("
@@ -104,6 +104,9 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
             ref={refForOutsideClick} //on passe en ref le useOutSideClick pour fermer la popover lorsqu'on clique en dehors du champ
+            onKeyDown={getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
+                ['escape', ()=>setActive(false)],       //En appuyant sur escape.
+            ])}
         />
 
 
