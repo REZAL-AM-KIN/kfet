@@ -1,10 +1,10 @@
 import {createStyles, Popover, Stack, Text, Tooltip, UnstyledButton} from "@mantine/core";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {IconLogout, IconUserSearch} from "@tabler/icons";
-import Logout from "../auth/logout";
+import  {handleLogout} from "../auth/logout";
 import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
-import {useClickOutside} from "@mantine/hooks";
+import {useClickOutside, useHotkeys} from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
 
@@ -31,6 +31,13 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
+
+    const navigate = useNavigate()
+
+    //Si aucun shortcut n'est spécifié, on associé la key "" à la fonction {} (on fait rien quoi)
+    const shortcutAssoc =  (shortcut !== undefined)? [shortcut, ()=>navigate(link)] : ["",()=>{}];
+    useHotkeys([shortcutAssoc]);
+
     const { classes, cx } = useStyles();
 
     return (
@@ -43,7 +50,7 @@ export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClic
             >
                 <Stack align="center" spacing="0">
                     <Icon size={34} stroke={1.5}/>
-                    <Text size="8px">{shortcut}</Text>
+                    <Text size="10px">{shortcut}</Text>
                 </Stack>
             </UnstyledButton>
         </Tooltip>
@@ -51,9 +58,28 @@ export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClic
 }
 
 export function LogOutLink(){
+    const { classes, cx } = useStyles();
+
+    const label = "Déconnexion"
+    const Icon = IconLogout
+    const shortcut = "alt+O"
+
+    useHotkeys([[shortcut, handleLogout]])
+
+
     return(
-        //On spécifie un pageName mais pas de currentPage car il ne s'agit pas d'un affichage en mode "Onglet"
-        <NavbarLink icon={IconLogout} label="Logout" pageName="Logout" shortcut="ALT+O" {...Logout()} />
+
+        <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+            <UnstyledButton
+                onClick={handleLogout}
+                className={cx(classes.link)}
+            >
+                <Stack align="center" spacing="0">
+                    <Icon size={34} stroke={1.5}/>
+                    <Text size="10px">{shortcut}</Text>
+                </Stack>
+            </UnstyledButton>
+        </Tooltip>
     );
 }
 
@@ -66,9 +92,11 @@ export function NormalSearchPgButton() {
 
     const Icon =IconUserSearch
     const label="Rechercher un pg"
-    const shortcut="ALT+P"
+    const shortcut="alt+P"
 
     const [active, setActive] = useState(false)
+
+    useHotkeys([[shortcut, onClick]])
 
 
     function onClick(){
@@ -91,7 +119,7 @@ export function NormalSearchPgButton() {
             >
                 <Stack align="center" spacing="0">
                     <Icon size={34} stroke={1.5}/>
-                    <Text size="8px">{shortcut}</Text>
+                    <Text size="10px">{shortcut}</Text>
                 </Stack>
             </UnstyledButton>
         </Tooltip>
