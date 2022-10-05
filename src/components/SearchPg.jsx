@@ -96,6 +96,13 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                     }
                 }
             }}
+            filter={(value, item) =>
+                item.value.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.nom.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.prenom.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.proms.toLowerCase().includes(value.toLowerCase().trim())
+            }
             ref={refForOutsideClick} //on passe en ref le useOutSideClick pour fermer la popover lorsqu'on clique en dehors du champ
         />
 
