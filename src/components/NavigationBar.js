@@ -1,4 +1,4 @@
-import {Affix, Burger, Center, Drawer, Navbar, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
 import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
@@ -9,11 +9,9 @@ import SearchPg from "./SearchPg";
 const mockdata = [
     { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
     { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "alt+E" },
-    { icon: IconToolsKitchen2, label: "fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
+    { icon: IconToolsKitchen2, label: "Fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
 
 ];
-
-
 
 
 
@@ -21,8 +19,18 @@ const mockdata = [
 Mobile Nav Bar
 
  */
-const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
+const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>{
         const theme = useMantineTheme()
+
+        linksData = linksData.filter(link => link.pageName!=="Debucquage")
+        const links = linksData.map((link) => (
+            <NavbarLink
+                {...link}
+                key={link.label}
+                currentPage={currentPage}
+                onClick={()=>setNavBarOpened(false)}
+            />
+        ));
 
         return (
                 <Fragment>
@@ -46,24 +54,36 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                             drawer: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
                                     .background},
                             closeButton: { color: "white", iconSize: 80} }}
+                        lockScroll
                     >
-                        {/*Code juste pour exemple*/}
-                        <Center>
+                        <Container fluid>
                             <SearchPg setActive={setNavBarOpened}/>
-                        </Center>
+                        </Container>
+                        <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>
+                            <Stack align="center" spacing="xs">
+                                {links}
+                            </Stack>
 
-                        <Stack justify="space-between" sx={()=> ({ height: "80%" })}>
-                            <Text>test</Text>
-                            <Text>ede</Text>
+                            <Center>
+                                <LogOutLink/>
+                            </Center>
                         </Stack>
-                        {/* */}
+
                     </Drawer>
                 </Fragment>
         );
 
 }
 
-const NormalNavBar = ({links, width})=> {
+const NormalNavBar = ({linksData, width}, currentPage)=> {
+
+    const links = linksData.map((link) => (
+        <NavbarLink
+            {...link}
+            key={link.label}
+            currentPage={currentPage}
+        />
+    ));
 
     return (
             <Navbar height="100vh"
@@ -100,20 +120,14 @@ const NavigationBar = ({width, page}) => {
     const [opened, setOpened] = useState(false);
 
 
-    const links = mockdata.map((link) => (
-        <NavbarLink
-            {...link}
-            key={link.label}
-            currentPage={page}
-        />
-    ));
+
 
     return (
         <Fragment>
             {isSmallDevice?
-                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} links={links}/>
+                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} linksData={mockdata} currentPage={page}/>
                 :
-                <NormalNavBar width={width} links={links}/>
+                <NormalNavBar width={width} linksData={mockdata} currentPage={page}/>
             }
         </Fragment>
     );
