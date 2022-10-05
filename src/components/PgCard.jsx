@@ -7,14 +7,18 @@ export default function PgCard({data, small, onClick, style}) {
     const theme = useMantineTheme();
 
     style = {borderWidth: ".2em", ...style};
+
     if (onClick) {
+        // TODO: just change the gradient, not the color (don't make it green if it was red)
         style = {"&:hover":{backgroundColor:theme.colors.green[1]}, ...style};
     }
 
     if (data.solde > 0) {
         style = {backgroundColor: theme.colors.green[3], borderColor: theme.colors.green[6], ...style};
+
     } else {
-        style = {backgroundColor: theme.colors.red[6], borderColor: theme.colors.red[9], ...style};
+        style = {backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[7], ...style};
+
     }
 
     const GoodCard = () => {
@@ -49,7 +53,7 @@ export default function PgCard({data, small, onClick, style}) {
                    sx={style}
                    withBorder
                    onClick={onClick}>
-                <Text style={{lineHeight: .8}}>{data.bucque} {data.fams}</Text>
+                <Text sx={{lineHeight:".9em"}}>{data.bucque} {data.fams}</Text>
             </Paper>
         );
     }
@@ -57,7 +61,7 @@ export default function PgCard({data, small, onClick, style}) {
     const BadCard = () => {
         return (
             <Paper sx={{...style, backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[8]}} withBorder>
-                <Text> Une Erreur est survenue </Text>
+                <Text>Une Erreur est survenue !</Text>
             </Paper>
         );
     }
