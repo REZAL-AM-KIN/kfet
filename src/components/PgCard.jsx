@@ -1,4 +1,4 @@
-import {Grid, Paper, Text, useMantineTheme} from "@mantine/core";
+import {Grid, Paper, Text, Group, useMantineTheme} from "@mantine/core";
 
 
 export default function PgCard({data, small, onClick, style}) {
@@ -53,7 +53,11 @@ export default function PgCard({data, small, onClick, style}) {
                    sx={style}
                    withBorder
                    onClick={onClick}>
-                <Text sx={{lineHeight:".9em"}}>{data.bucque} {data.fams}</Text>
+                <Group position="apart">
+                    <Text sx={{lineHeight:".9em"}}>{data.bucque}</Text>
+                    <Text sx={{lineHeight:".9em"}}>{data.fams}</Text>
+                </Group>
+
             </Paper>
         );
     }
