@@ -1,5 +1,5 @@
-import {Grid, Title} from "@mantine/core"
-import {useEffect, useState} from "react";
+import {Grid, Tabs} from "@mantine/core"
+import {useCallback, useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
@@ -64,6 +64,23 @@ const Home = ({setPage}) => {
       }
   });
 
+  const [activeTab, setActiveTab] = useState("1");
+  const [embla, setEmbla] = useState(null);
+
+  const handleScroll = useCallback(() => {
+    if (!embla) return;
+    setActiveTab(embla.slidesInView(true)[0].toString());
+
+
+  }, [embla]);
+
+  useEffect(() => {
+    if (embla) {
+      embla.on('select', handleScroll);
+      handleScroll();
+    }
+  }, [embla, handleScroll]);
+
   return(
       <Grid gutter={0}>
         <Grid.Col md={6}>
@@ -71,8 +88,13 @@ const Home = ({setPage}) => {
           <div>GRAPHE</div>
         </Grid.Col>
         <Grid.Col md={6} p={"xl"}>
-          <Title>Historique</Title>
-          <Carousel height="60%" loop >
+          <Tabs value={activeTab} onTabChange={(e)=>{setActiveTab(e); embla.scrollTo(Number(e))}}>
+            <Tabs.List grow>
+              <Tabs.Tab value="0">Historique Général</Tabs.Tab>
+              <Tabs.Tab value="1">Historique Perso</Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+          <Carousel loop getEmblaApi={setEmbla}>
             <Carousel.Slide>
               <History history={history} general/>
             </Carousel.Slide>
