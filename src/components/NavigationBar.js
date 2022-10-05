@@ -1,82 +1,19 @@
-import {
-    createStyles,
-    Center,
-    Navbar,
-    Tooltip,
-    UnstyledButton,
-    Stack,
-    Text,
-    Burger,
-    Affix, Drawer, useMantineTheme, Group, TextInput
-} from "@mantine/core";
-import {
-    IconBuildingStore,
-    IconListDetails, IconLogout, IconToolsKitchen2,
-    IconUserSearch
-} from "@tabler/icons";
+import {Affix, Burger, Center, Drawer, Navbar, Stack, Text, useMantineTheme} from "@mantine/core";
+import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
-import Logout from "../auth/logout";
-import {Link} from "react-router-dom";
+import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
+import SearchPg from "./SearchPg";
 
 
 const mockdata = [
-    { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage", shortcut: "ALT+D"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
-    { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "ALT+E" },
-    { icon: IconToolsKitchen2, label: "fin'ss", pageName: "Finss", link:"/finss", shortcut: "ALT+F" },
+    { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
+    { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "alt+E" },
+    { icon: IconToolsKitchen2, label: "fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
 
 ];
 
-const useStyles = createStyles((theme) => ({
 
-    link: {
-        width: 50,
-        height: 50,
-        borderRadius: theme.radius.md,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: theme.white,
-
-        '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
-        },
-    },
-
-    active: {
-        '&, &:hover': {
-            backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
-        },
-    },
-}));
-
-function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
-    const { classes, cx } = useStyles();
-
-    return (
-        <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
-            <UnstyledButton
-                component={(link!==undefined)? Link : undefined}
-                to={link}
-                onClick={onClick}
-                className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
-            >
-                <Stack align="center" spacing="0">
-                    <Icon size={34} stroke={1.5}/>
-                    <Text size="8px">{shortcut}</Text>
-                </Stack>
-            </UnstyledButton>
-        </Tooltip>
-    );
-}
-
-function LogOutLink(){
-    return(
-        //On spécifie un pageName mais pas de currentPage car il ne s'agit pas d'un affichage en mode "Onglet"
-    <NavbarLink icon={IconLogout} label="Logout" pageName="Logout" shortcut="ALT+O" {...Logout()} />
-    );
-}
 
 
 
@@ -111,10 +48,9 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
                             closeButton: { color: "white", iconSize: 80} }}
                     >
                         {/*Code juste pour exemple*/}
-                        <Group>
-                            <IconUserSearch size={38} stroke={1.5}/>
-                            <TextInput width="80%"></TextInput>
-                        </Group>
+                        <Center>
+                            <SearchPg setActive={setNavBarOpened}/>
+                        </Center>
 
                         <Stack justify="space-between" sx={()=> ({ height: "80%" })}>
                             <Text>test</Text>
@@ -129,7 +65,6 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, links})=>{
 
 const NormalNavBar = ({links, width})=> {
 
-
     return (
             <Navbar height="100vh"
                     width={{base: width}}
@@ -140,7 +75,7 @@ const NormalNavBar = ({links, width})=> {
                     })}
                     fixed={true}>
                 <Center>
-                    <NavbarLink icon ={IconUserSearch} label="Rechercher un pg" pageName="" shortcut="ALT+P"></NavbarLink>
+                    <NormalSearchPgButton/>
                 </Center>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
