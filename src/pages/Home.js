@@ -36,7 +36,8 @@ const Home = ({setPage}) => {
     return () => {
       controller.abort();
     }
-  }, [axiosPrivate]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -53,7 +54,8 @@ const Home = ({setPage}) => {
     return () => {
       controller.abort();
     }
-  }, [axiosPrivate])
+    // eslint-disable-next-line
+  }, [])
 
   // populate pg history
   history.forEach((line)=>{
@@ -70,7 +72,7 @@ const Home = ({setPage}) => {
         </Grid.Col>
         <Grid.Col md={6} p={"xl"}>
           <Title>Historique</Title>
-          <Carousel height="60%" withIndicators loop>
+          <Carousel height="60%" loop >
             <Carousel.Slide>
               <History history={history} general/>
             </Carousel.Slide>
