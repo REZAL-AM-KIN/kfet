@@ -6,6 +6,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 import PgCard from '../components/PgCard';
 import History from "../components/History";
 import {Container} from "@mantine/core";
+import errorNotif from "../components/ErrorNotif";
 
 function PG({setPage}) {
     useEffect(()=>{setPage("Debucquage")})
@@ -19,7 +20,6 @@ function PG({setPage}) {
     const [permissions, setPermissions] = useState({});
 
     const [pgData, setPgData] = useState({});
-    const [err, setErr] = useState("");
 
     const [history, setHistory] = useState([]);
 
@@ -33,6 +33,7 @@ function PG({setPage}) {
             } catch (error) {
                 if (error?.response?.status !== 403) {
                     console.log("Error getting logged user's permissions ", error);
+                    errorNotif("Permissions", error.message);
                 }
             }
         }
@@ -47,7 +48,7 @@ function PG({setPage}) {
     useEffect(() => {
         console.log("UPDATE: PG");
         // make the api call for pg info:
-        const URL = pgId ? "consommateurs/" + pgId + "/" : "utilisateur/";
+        const URL = "consommateurs/" + pgId;
         const controller = new AbortController();
         const getUser = async () => {
             try {
@@ -55,10 +56,10 @@ function PG({setPage}) {
                 if (response.data) {
                     setPgData(response.data);
                 } else {
-                    setErr("Pas de PG activé correspondant");
+                    errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
                 }
             } catch (error) {
-                setErr(error.message);
+                errorNotif("Consommateur/", error.message);
                 console.log("Error getting consommateur", error);
             }
         }
@@ -80,6 +81,7 @@ function PG({setPage}) {
                 const response = await axiosPrivate.get(URL);
                 setHistory(response.data);
             } catch (error) {
+                errorNotif("History/pg", error.message);
                 console.log(error);
             }
         }
@@ -94,7 +96,7 @@ function PG({setPage}) {
     return (
         <Container fluid style={{backgroundColor: "pink", height:"100vh"}}>
             <div style={{fontSize:0}}>Usefull Text</div>
-            <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
+            <PgCard data={pgData}/>
             <History history={history}/>
         </Container>
     );
