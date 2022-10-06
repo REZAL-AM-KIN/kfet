@@ -1,4 +1,4 @@
-import {Grid, RingProgress, Tabs, Text} from "@mantine/core"
+import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {useCallback, useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -7,10 +7,14 @@ import PgHistory from "../components/PgHistory";
 import {Carousel} from "@mantine/carousel";
 import errorNotif from "../components/ErrorNotif";
 import GeneralHistory from "../components/GeneralHistory";
+import {useMediaQuery} from "@mantine/hooks";
 
 const Home = ({setPage}) => {
   useEffect(()=>{setPage("Home")});
   const navigate = useNavigate();
+
+  const theme = useMantineTheme();
+  const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
 
   const [activeTab, setActiveTab] = useState("1");
   const [embla, setEmbla] = useState(null);
@@ -101,7 +105,7 @@ const Home = ({setPage}) => {
                 {value:8.2, color:"orange", tooltip:"a toi!"}
           ]} />
         </Grid.Col>
-        <Grid.Col md={6} p={"xl"}>
+        <Grid.Col md={6} p={isSmallDevice?"0":"xl"}>
           <Tabs value={activeTab} onTabChange={(e)=>{embla.scrollTo(Number(e))}}> {/* à supprimer sur mobile*/}
             <Tabs.List grow>
               <Tabs.Tab value="0">Historique Général</Tabs.Tab>
