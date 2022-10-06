@@ -21,7 +21,7 @@ export default function PgCard({data, small, onClick, style}) {
 
     const GoodCard = () => {
         return (
-            <Paper m={isSmallDevice?"xs":"lg"}
+            <Paper m={isSmallDevice ? "xs" : "lg"}
                    shadow="sm"
                    radius="lg"
                    p="sm"
@@ -60,14 +60,7 @@ export default function PgCard({data, small, onClick, style}) {
                     <Text size={isSmallDevice ? theme.fontSizes.sm : theme.fontSizes.md}
                           sx={{lineHeight: ".9em"}}>{data.bucque}</Text>
                     <Text size={isSmallDevice ? theme.fontSizes.xs : theme.fontSizes.md}
-                          sx={{
-                              lineHeight: ".9em",
-                              '@media (max-width: 340px)': {
-                                  width: "100%",
-                              }
-                          }}>
-                        {data.fams}
-                    </Text>
+                          sx={{lineHeight: ".9em"}}>{data.fams}</Text>
                 </Group>
             </Paper>
         );
