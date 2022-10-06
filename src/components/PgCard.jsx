@@ -1,24 +1,22 @@
-import {Grid, Paper, Text, Group, useMantineTheme} from "@mantine/core";
+import {Grid, Group, Paper, Text, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
 
 
 export default function PgCard({data, small, onClick, style}) {
     // data = {bucque, fams.... }
 
     const theme = useMantineTheme();
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
     style = {borderWidth: ".2em", ...style};
-
     if (onClick) {
         // TODO: just change the gradient, not the color (don't make it green if it was red)
         style = {"&:hover":{backgroundColor:theme.colors.green[1]}, ...style};
     }
-
     if (data.solde > 0) {
         style = {backgroundColor: theme.colors.green[3], borderColor: theme.colors.green[6], ...style};
-
     } else {
         style = {backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[7], ...style};
-
     }
 
     const GoodCard = () => {
@@ -31,14 +29,14 @@ export default function PgCard({data, small, onClick, style}) {
                    withBorder
                    onClick={onClick}>
                 <Grid>
-                    <Grid.Col span={8}>
-                        <Text size={45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
-                        <Text size={20} color={theme.colors.gray[9]}
+                    <Grid.Col span={9}>
+                        <Text size={isSmallDevice?25:45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
+                        <Text size={isSmallDevice?12:20} color={theme.colors.gray[9]}
                               style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
-                        <Text size={20}>{data.commentaire}</Text>
+                        <Text size={isSmallDevice?12:20}>{data.commentaire}</Text>
                     </Grid.Col>
-                    <Grid.Col span={4}>
-                        <Text size={35} align="right">{data.solde}€</Text>
+                    <Grid.Col span={3}>
+                        <Text size={isSmallDevice?20:35} align="right">{data.solde}€</Text>
                     </Grid.Col>
                 </Grid>
             </Paper>
