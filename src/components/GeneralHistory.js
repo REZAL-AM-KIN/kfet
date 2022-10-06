@@ -8,7 +8,9 @@ function GeneralHistory({history, style}) {
     const navigate = useNavigate();
 
     const lines = history.map((line, key) => {
+        // format the date
         let date = new Date(line.date_evenement);
+        // for each lines, return a table row
         return (
             <tr key={key}>
                 <td>{line.nom_evenement} par {line.initiateur_evenement}</td>

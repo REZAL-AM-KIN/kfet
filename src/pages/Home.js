@@ -1,4 +1,4 @@
-import {Grid, Tabs} from "@mantine/core"
+import {Grid, RingProgress, Tabs, Text} from "@mantine/core"
 import {useCallback, useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
@@ -11,12 +11,16 @@ import GeneralHistory from "../components/GeneralHistory";
 const Home = ({setPage}) => {
   useEffect(()=>{setPage("Home")});
   const navigate = useNavigate();
-  const axiosPrivate = useAxiosPrivate();
 
+  const [activeTab, setActiveTab] = useState("1");
+  const [embla, setEmbla] = useState(null);
+
+  const axiosPrivate = useAxiosPrivate();
   const [pgData, setPgData] = useState({});
   const [history, setHistory] = useState([]);
   let pgHistory = [];
 
+  // get Utilisateur
   useEffect(() => {
     console.log("UPDATE: PG");
     const controller = new AbortController();
@@ -40,6 +44,7 @@ const Home = ({setPage}) => {
     // eslint-disable-next-line
   }, []);
 
+  // get history (10 000 lines)
   useEffect(() => {
     const controller = new AbortController();
     const getHistory = async () => {
@@ -58,23 +63,12 @@ const Home = ({setPage}) => {
     // eslint-disable-next-line
   }, [])
 
-  // populate pg history
-  history.forEach((line)=>{
-      if (line.cible_evenement.id === pgData.id) {
-        pgHistory.push(line);
-      }
-  });
-
-  const [activeTab, setActiveTab] = useState("1");
-  const [embla, setEmbla] = useState(null);
-
+  // sync carousel with tabs
   const handleScroll = useCallback(() => {
     if (!embla) return;
     setActiveTab(embla.slidesInView(true)[0].toString());
-
-
   }, [embla]);
-
+  // set listener for carousel
   useEffect(() => {
     if (embla) {
       embla.on('select', handleScroll);
@@ -82,11 +76,30 @@ const Home = ({setPage}) => {
     }
   }, [embla, handleScroll]);
 
+  // populate pg history
+  history.forEach((line)=>{
+    if (line.cible_evenement.id === pgData.id) {
+        pgHistory.push(line);
+      }
+  });
+
+
   return(
       <Grid gutter={0}>
         <Grid.Col md={6}>
           <PgCard data={pgData} onClick={()=>navigate("/pg/"+pgData.id)}/>
-          <div>GRAPHE</div>
+          <RingProgress
+              size={200}
+              thickness={20}
+              label={
+                <Text size="xs" align="center" px="xs" sx={{ pointerEvents: 'none' }}>
+                  TODO dès qu'on aura les couleurs :D
+                </Text>
+              }
+              sections={[
+                {value:76, color:"red", tooltip:"eh oui, 76"},
+                {value:8.2, color:"orange", tooltip:"a toi!"}
+          ]} />
         </Grid.Col>
         <Grid.Col md={6} p={"xl"}>
           <Tabs value={activeTab} onTabChange={(e)=>{embla.scrollTo(Number(e))}}> {/* à supprimer sur mobile*/}
