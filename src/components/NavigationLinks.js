@@ -1,10 +1,10 @@
-import {createStyles, Popover, Stack, Text, Tooltip, UnstyledButton} from "@mantine/core";
+import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {Link, useNavigate} from "react-router-dom";
 import {IconLogout, IconUserSearch} from "@tabler/icons";
-import  {handleLogout} from "../auth/logout";
+import {handleLogout} from "../auth/logout";
 import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
-import {useClickOutside, useHotkeys} from "@mantine/hooks";
+import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
 
@@ -19,6 +19,7 @@ const useStyles = createStyles((theme) => ({
 
         '&:hover': {
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
+            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
         },
     },
 
@@ -31,6 +32,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
     const navigate = useNavigate()
 
@@ -39,25 +42,45 @@ export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClic
     useHotkeys([shortcutAssoc]);
 
     const { classes, cx } = useStyles();
-
-    return (
-        <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+    if(!isSmallDevice){
+        return (
+            <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+                <UnstyledButton
+                    component={(link!==undefined)? Link : undefined}
+                    to={link}
+                    onClick={onClick}
+                    className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
+                >
+                    <Stack align="center" spacing="0">
+                        <Icon size={34} stroke={1.5}/>
+                        <Text size="10px">{shortcut}</Text>
+                    </Stack>
+                </UnstyledButton>
+            </Tooltip>
+        );
+    }else{
+        return (
             <UnstyledButton
                 component={(link!==undefined)? Link : undefined}
                 to={link}
                 onClick={onClick}
                 className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
+                style={{width: "80%", justifyContent: "left"}}
             >
-                <Stack align="center" spacing="0">
+                <Group>
                     <Icon size={34} stroke={1.5}/>
-                    <Text size="10px">{shortcut}</Text>
-                </Stack>
+                    <Text >{label}</Text>
+                </Group>
             </UnstyledButton>
-        </Tooltip>
-    );
+        );
+    }
+
 }
 
 export function LogOutLink(){
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+
     const { classes, cx } = useStyles();
 
     const label = "Déconnexion"
@@ -66,21 +89,34 @@ export function LogOutLink(){
 
     useHotkeys([[shortcut, handleLogout]])
 
-
-    return(
-
-        <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+    if(!isSmallDevice){
+        return (
+            <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+                <UnstyledButton
+                    onClick={handleLogout}
+                    className={cx(classes.link)}
+                >
+                    <Stack align="center" spacing="0">
+                        <Icon size={34} stroke={1.5}/>
+                        <Text size="10px">{shortcut}</Text>
+                    </Stack>
+                </UnstyledButton>
+            </Tooltip>
+        );
+    }else{
+        return (
             <UnstyledButton
                 onClick={handleLogout}
                 className={cx(classes.link)}
+                style={{width: "80%"}}
             >
-                <Stack align="center" spacing="0">
+                <Group>
                     <Icon size={34} stroke={1.5}/>
-                    <Text size="10px">{shortcut}</Text>
-                </Stack>
+                    <Text >{label}</Text>
+                </Group>
             </UnstyledButton>
-        </Tooltip>
-    );
+        );
+    }
 }
 
 
@@ -143,7 +179,6 @@ export function NormalSearchPgButton() {
             shadow="md"
             offset={20}
             trapFocus
-
         >
             <Popover.Target>
                 <SearchPgButton/>
