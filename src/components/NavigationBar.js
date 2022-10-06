@@ -14,10 +14,11 @@ import {
     IconListDetails, IconLogout, IconToolsKitchen2,
     IconUserSearch
 } from "@tabler/icons";
-import {Fragment, useState} from "react";
+import {Fragment, useContext, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
 import Logout from "../auth/logout";
 import {Link} from "react-router-dom";
+import {UserContext} from "../contexts/UserContext";
 
 
 const mockdata = [
@@ -162,9 +163,11 @@ const NavigationBar = ({width, page}) => {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
+    const {isSuperUser, groups} = useContext(UserContext)
+
     const [opened, setOpened] = useState(false);
 
-
+    console.log(isSuperUser+"|"+groups)
     const links = mockdata.map((link) => (
         <NavbarLink
             {...link}
