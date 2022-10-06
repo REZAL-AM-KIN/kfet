@@ -88,13 +88,13 @@ const Home = ({setPage}) => {
           <div>GRAPHE</div>
         </Grid.Col>
         <Grid.Col md={6} p={"xl"}>
-          <Tabs value={activeTab} onTabChange={(e)=>{setActiveTab(e); embla.scrollTo(Number(e))}}>
+          <Tabs value={activeTab} onTabChange={(e)=>{embla.scrollTo(Number(e))}}> {/* à supprimer sur mobile*/}
             <Tabs.List grow>
               <Tabs.Tab value="0">Historique Général</Tabs.Tab>
               <Tabs.Tab value="1">Historique Perso</Tabs.Tab>
             </Tabs.List>
           </Tabs>
-          <Carousel loop getEmblaApi={setEmbla}>
+          <Carousel getEmblaApi={setEmbla} withControls={false}>
             <Carousel.Slide>
               <History history={history} general/>
             </Carousel.Slide>
