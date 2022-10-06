@@ -1,4 +1,4 @@
-import {Grid, Group, Paper, Text, useMantineTheme} from "@mantine/core";
+import {Group, Paper, Text, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 
@@ -6,7 +6,7 @@ export default function PgCard({data, small, onClick, style}) {
     // data = {bucque, fams.... }
 
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.xs+'px)')
 
     style = {borderWidth: ".2em", ...style};
     if (onClick) {
@@ -28,17 +28,22 @@ export default function PgCard({data, small, onClick, style}) {
                    sx={style}
                    withBorder
                    onClick={onClick}>
-                <Grid>
-                    <Grid.Col span={9}>
+                <Group position={"apart"}>
+                    <stack>
+
                         <Text size={isSmallDevice?25:45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
                         <Text size={isSmallDevice?12:20} color={theme.colors.gray[9]}
                               style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
                         <Text size={isSmallDevice?12:20}>{data.commentaire}</Text>
-                    </Grid.Col>
-                    <Grid.Col span={3}>
-                        <Text size={isSmallDevice?20:35} align="right">{data.solde}€</Text>
-                    </Grid.Col>
-                </Grid>
+                    </stack>
+                    {/* make the solde stick to the right of the card*/}
+                    <Text size={isSmallDevice?20:35}
+                          sx={{
+                            '@media (max-width: 340px)': {
+                                width: "100%",
+                            }}}
+                          align="right">{data.solde}€</Text>
+                </Group>
             </Paper>
         );
     }
