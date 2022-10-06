@@ -4,7 +4,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import PgCard from '../components/PgCard';
-import History from "../components/History";
+import PgHistory from "../components/PgHistory";
 import {Container} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 
@@ -73,7 +73,7 @@ function PG({setPage}) {
 
 
     useEffect(() => {
-        console.log("UPDATE: History");
+        console.log("UPDATE: PgHistory");
         const URL = "history/" + pgId + "/";
         const controller = new AbortController();
         const getHistory = async () => {
@@ -81,7 +81,7 @@ function PG({setPage}) {
                 const response = await axiosPrivate.get(URL);
                 setHistory(response.data);
             } catch (error) {
-                errorNotif("History/pg", error.message);
+                errorNotif("PgHistory/pg", error.message);
                 console.log(error);
             }
         }
@@ -97,7 +97,7 @@ function PG({setPage}) {
         <Container fluid style={{backgroundColor: "pink", height:"100vh"}}>
             <div style={{fontSize:0}}>Usefull Text</div>
             <PgCard data={pgData}/>
-            <History history={history}/>
+            <PgHistory history={history}/>
         </Container>
     );
 }

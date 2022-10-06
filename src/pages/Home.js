@@ -3,9 +3,10 @@ import {useCallback, useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
-import History from "../components/History";
+import PgHistory from "../components/PgHistory";
 import {Carousel} from "@mantine/carousel";
 import errorNotif from "../components/ErrorNotif";
+import GeneralHistory from "../components/GeneralHistory";
 
 const Home = ({setPage}) => {
   useEffect(()=>{setPage("Home")});
@@ -96,10 +97,10 @@ const Home = ({setPage}) => {
           </Tabs>
           <Carousel getEmblaApi={setEmbla} withControls={false}>
             <Carousel.Slide>
-              <History history={history} general/>
+              <GeneralHistory history={history}/>
             </Carousel.Slide>
             <Carousel.Slide>
-              <History history={pgHistory}/>
+              <PgHistory history={pgHistory}/>
             </Carousel.Slide>
           </Carousel>
         </Grid.Col>
