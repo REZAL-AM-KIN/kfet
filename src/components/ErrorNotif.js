@@ -1,7 +1,7 @@
 import {showNotification} from "@mantine/notifications";
 import {IconX} from "@tabler/icons";
 
-const errorNotif = (localisation, message) => {
+export default function errorNotif (localisation, message) {
     showNotification({
         icon: <IconX size={18} />,
         color: "red",
@@ -9,6 +9,4 @@ const errorNotif = (localisation, message) => {
         title: 'Oh Oh.... Erreur de '+localisation,
         message: 'Une erreur est survenue: '+message,
     });
-}
-
-export default errorNotif;
+};
