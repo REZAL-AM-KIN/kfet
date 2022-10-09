@@ -95,11 +95,11 @@ function PG({setPage}) {
 
 
     return (
-        <Container fluid style={{backgroundColor: "pink", height:"100vh"}}>
+        <Grid fluid style={{backgroundColor: "pink", height:"100vh"}}>
             <div style={{fontSize:0}}>Usefull Text</div>
             <PgCard data={pgData}/>
             <PgHistory history={history}/>
-        </Container>
+        </Grid>
     );
 }
 
