@@ -1,21 +1,21 @@
 import {Route, Routes, useLocation,} from 'react-router-dom';
+import {useState} from "react";
 
 import RequireAuth from './components/RequireAuth';
+import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
 
 import Login from './pages/Login';
 import PG from './pages/PG';
 import Home from "./pages/Home";
 import NavigationBar from "./components/NavigationBar";
-import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
-import {useState} from "react";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import { NotificationsProvider } from '@mantine/notifications';
 
 function App() {
     const theme = useMantineTheme()
-    const { pathname } = useLocation();
+    const {pathname} = useLocation();
 
     const [page, setPage] = useState("Finss")
     /*
@@ -23,9 +23,9 @@ function App() {
     NomDeLaPage identique à pageName spécifié dans la table des liens dans NavigationBar.js
      */
 
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
 
-    const navBarWidth= 80
+    const navBarWidth = 80
     const pathWithoutNav = ["/login"]
 
     const withNavBar = (path) => {
@@ -62,12 +62,11 @@ function App() {
 
                         </Route>
 
-                        {/* 404*/}
-                        {/* TODO:*/}
+                        {/* TODO: 404*/}
                     </Route>
                 </Routes>
-                </Container>
-            </NotificationsProvider>
+            </Container>
+
         </MantineProvider>
     );
 

@@ -3,8 +3,11 @@ import {useParams} from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
-import PgCard from '../components/PgCard';
-import History from "../components/History";
+import {PgCard} from '../components/PgCard';
+import {Grid, useMantineTheme} from "@mantine/core";
+import errorNotif from "../components/ErrorNotif";
+import {PgHistory} from "../components/History";
+import {useMediaQuery} from "@mantine/hooks";
 
 function PG({setPage}) {
     useEffect(()=>{setPage("Debucquage")})
@@ -18,7 +21,6 @@ function PG({setPage}) {
     const [permissions, setPermissions] = useState({});
 
     const [pgData, setPgData] = useState({});
-    const [err, setErr] = useState("");
 
     const [history, setHistory] = useState([]);
 
@@ -32,6 +34,7 @@ function PG({setPage}) {
             } catch (error) {
                 if (error?.response?.status !== 403) {
                     console.log("Error getting logged user's permissions ", error);
+                    errorNotif("Permissions", error.message);
                 }
             }
         }
@@ -46,7 +49,7 @@ function PG({setPage}) {
     useEffect(() => {
         console.log("UPDATE: PG");
         // make the api call for pg info:
-        const URL = pgId ? "consommateurs/" + pgId + "/" : "utilisateur/";
+        const URL = "consommateurs/" + pgId;
         const controller = new AbortController();
         const getUser = async () => {
             try {
@@ -54,10 +57,10 @@ function PG({setPage}) {
                 if (response.data) {
                     setPgData(response.data);
                 } else {
-                    setErr("Pas de PG activé correspondant");
+                    errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
                 }
             } catch (error) {
-                setErr(error.message);
+                errorNotif("Consommateur/", error.message);
                 console.log("Error getting consommateur", error);
             }
         }
@@ -71,7 +74,7 @@ function PG({setPage}) {
 
 
     useEffect(() => {
-        console.log("UPDATE: History");
+        console.log("UPDATE: PgHistory");
         const URL = "history/" + pgId + "/";
         const controller = new AbortController();
         const getHistory = async () => {
@@ -79,6 +82,7 @@ function PG({setPage}) {
                 const response = await axiosPrivate.get(URL);
                 setHistory(response.data);
             } catch (error) {
+                errorNotif("PgHistory/pg", error.message);
                 console.log(error);
             }
         }
@@ -90,17 +94,12 @@ function PG({setPage}) {
     }, [pgId])
 
 
-
     return (
-        <div style={{backgroundColor: "pink", height:"100vh"}}>
-            <nav>Navbar</nav>
-            <br/>
-            <br/>
-            <br/>
-            <PgCard data={pgData} err={err} style={{backgroundColor: "green"}}/>
-            <History history={history}/>
-        </div>
-
+        <Grid fluid style={{backgroundColor: "pink", height:"100vh"}}>
+            <div style={{fontSize:0}}>Usefull Text</div>
+            <PgCard data={pgData}/>
+            <PgHistory history={history}/>
+        </Grid>
     );
 }
 
