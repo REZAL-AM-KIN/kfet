@@ -1,6 +1,6 @@
 import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {useCallback, useEffect, useState} from "react";
-import PgCard from "../components/PgCard";
+import {PgCard} from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
 import {Carousel} from "@mantine/carousel";

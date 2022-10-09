@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
-import PgCard from '../components/PgCard';
+import {PgCard} from '../components/PgCard';
 import {Grid, useMantineTheme} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
