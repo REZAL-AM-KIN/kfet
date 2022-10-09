@@ -4,9 +4,10 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import PgCard from '../components/PgCard';
-import PgHistory from "../components/PgHistory";
-import {Container} from "@mantine/core";
+import {Grid, useMantineTheme} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
+import {PgHistory} from "../components/History";
+import {useMediaQuery} from "@mantine/hooks";
 
 function PG({setPage}) {
     useEffect(()=>{setPage("Debucquage")})

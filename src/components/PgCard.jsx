@@ -31,8 +31,11 @@ export default function PgCard({data, small, onClick, style}) {
                 <Group position={"apart"} spacing={0}>
                     <Stack spacing={0}>
                         <Text size={isSmallDevice ? 25 : 45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
-                        <Text size={isSmallDevice ? 12 : 20} color={theme.colors.gray[9]}
+                        <Group position={"apart"}><Text size={isSmallDevice ? 12 : 20} color={theme.colors.gray[9]}
                               style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
+                            <Text size={isSmallDevice ? 12 : 20} color={theme.colors.gray[9]}
+                                  style={{lineHeight: 1}}>{data.proms}</Text>
+                        </Group>
                         <Text size={isSmallDevice ? 12 : 20}>{data.commentaire}</Text>
                     </Stack>
                     {/* make the solde stick to the right of the card*/}

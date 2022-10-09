@@ -3,10 +3,9 @@ import {useCallback, useEffect, useState} from "react";
 import PgCard from "../components/PgCard";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
-import PgHistory from "../components/PgHistory";
 import {Carousel} from "@mantine/carousel";
 import errorNotif from "../components/ErrorNotif";
-import GeneralHistory from "../components/GeneralHistory";
+import {GeneralHistory, PgHistory} from "../components/History";
 import {useMediaQuery} from "@mantine/hooks";
 
 const Home = ({setPage}) => {
