@@ -4,10 +4,11 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid, useMantineTheme} from "@mantine/core";
+import {Grid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
-import {useMediaQuery} from "@mantine/hooks";
+import RechargeButton from "../components/RechargeButton";
+
 
 function PG({setPage}) {
     useEffect(()=>{setPage("Debucquage")})
@@ -96,9 +97,16 @@ function PG({setPage}) {
 
     return (
         <Grid fluid style={{backgroundColor: "pink", height:"100vh"}}>
-            <div style={{fontSize:0}}>Usefull Text</div>
-            <PgCard data={pgData}/>
-            <PgHistory history={history}/>
+            <Grid.Col md={8}>
+                <PgCard data={pgData}/>
+                {permissions.recharge
+                    ?<RechargeButton pgId={pgId}/>
+                    :<></>}
+            </Grid.Col>
+            <Grid.Col md={4}>
+
+                <PgHistory history={history}/>
+            </Grid.Col>
         </Grid>
     );
 }
