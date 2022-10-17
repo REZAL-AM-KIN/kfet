@@ -99,7 +99,7 @@ function PG({setPage}) {
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 {permissions.recharge
-                    ?<RechargeButton pg={pgData}/>
+                    ?<RechargeButton pgData={pgData}/>
                     :<></>}
             </Grid.Col>
             <Grid.Col md={4}>
