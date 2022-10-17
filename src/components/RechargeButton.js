@@ -1,7 +1,7 @@
 import {Button, createStyles, Modal, NumberInput, SegmentedControl, Stack} from "@mantine/core";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import errorNotif from "./ErrorNotif";
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 
 const useStyles = createStyles((theme) => ({
@@ -36,6 +36,7 @@ function RechargeButton({pgData, sx}) {
     const [methode, setMethode] = useState("");
 
     const [opened, setOpened] = useState(false);
+    const inputRef = useRef();
 
     const {classes} = useStyles();
 
@@ -55,13 +56,20 @@ function RechargeButton({pgData, sx}) {
         } catch (error) {
             errorNotif("Methode de Rechargement", error.message);
         }
+        inputRef.current.focus();
     }
 
     /* Function triggered when the recharge button is clicked */
-    const handleRecharge = (e) => {
+    const handleRecharge = () => {
         optionMethode(); // we get all the methods
         setOpened(true);
     }
+
+    const modalClose = () => {
+        setOpened(false);
+        setMontant(null);
+    }
+
 
     const handleRechargerSubmit = (e) => {
         e.preventDefault();
@@ -77,9 +85,8 @@ function RechargeButton({pgData, sx}) {
                 errorNotif("Recharge", error.message);
             }
         }
-        errorNotif("Recharge Button triggered!", "not implemented yet!")
-        console.log(pgData.id, montant, methode)
-        //createRecharge();
+        createRecharge();
+        modalClose();
     };
 
 
@@ -89,12 +96,13 @@ function RechargeButton({pgData, sx}) {
             <Modal
                 centered
                 opened={opened}
-                onClose={() => setOpened(false)}
-                title={"Recharger"}
+                onClose={() => {modalClose()}}
+                title={"Recharger " + pgData.bucque + " " + pgData.fams}
             >
                 <form onSubmit={handleRechargerSubmit}>
                     <Stack>
                         <NumberInput
+                            ref={inputRef}
                             type="number"
                             hideControls
                             placeholder="76"
