@@ -73,7 +73,6 @@ function PG({setPage}) {
     }, [pgId]);
 
 
-
     useEffect(() => {
         console.log("UPDATE: PgHistory");
         const URL = "history/" + pgId + "/";
@@ -96,11 +95,11 @@ function PG({setPage}) {
 
 
     return (
-        <Grid fluid style={{backgroundColor: "pink", height:"100vh"}}>
+        <Grid fluid style={{backgroundColor: "pink"}}>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 {permissions.recharge
-                    ?<RechargeButton pgId={pgId}/>
+                    ?<RechargeButton pg={pgData}/>
                     :<></>}
             </Grid.Col>
             <Grid.Col md={4}>
