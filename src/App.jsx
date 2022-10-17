@@ -66,7 +66,7 @@ function App() {
                     </Route>
                 </Routes>
             </Container>
-
+            </NotificationsProvider>
         </MantineProvider>
     );
 
