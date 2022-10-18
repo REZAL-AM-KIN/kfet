@@ -1,7 +1,7 @@
 import {Button, createStyles, Modal, NumberInput, SegmentedControl, Stack} from "@mantine/core";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import errorNotif from "./ErrorNotif";
-import {useRef, useState} from "react";
+import {useState} from "react";
 
 
 const useStyles = createStyles((theme) => ({
@@ -14,7 +14,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     active: {
-        backgroundImage: theme.fn.gradient({ from: 'pink', to: 'orange' }),
+        backgroundImage: theme.fn.gradient({from: 'pink', to: 'orange'}),
     },
 
     control: {
@@ -36,7 +36,6 @@ function RechargeButton({pgData, sx}) {
     const [methode, setMethode] = useState("");
 
     const [opened, setOpened] = useState(false);
-    const inputRef = useRef();
 
     const {classes} = useStyles();
 
@@ -56,11 +55,10 @@ function RechargeButton({pgData, sx}) {
         } catch (error) {
             errorNotif("Methode de Rechargement", error.message);
         }
-        inputRef.current.focus();
     }
 
     /* Function triggered when the recharge button is clicked */
-    const handleRecharge = () => {
+    const modalOpen = () => {
         optionMethode(); // we get all the methods
         setOpened(true);
     }
@@ -92,17 +90,20 @@ function RechargeButton({pgData, sx}) {
 
     return (
         <>
-            <Button onClick={handleRecharge} sx={sx}>Recharger</Button>
+            <Button onClick={modalOpen} sx={sx}>Recharger</Button>
+            <Button>Faut aussi update les history et le pgcard</Button>
             <Modal
                 centered
                 opened={opened}
-                onClose={() => {modalClose()}}
+                onClose={() => {
+                    modalClose()
+                }}
                 title={"Recharger " + pgData.bucque + " " + pgData.fams}
             >
                 <form onSubmit={handleRechargerSubmit}>
                     <Stack>
                         <NumberInput
-                            ref={inputRef}
+                            data-autofocus
                             type="number"
                             hideControls
                             placeholder="76"
