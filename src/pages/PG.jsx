@@ -8,6 +8,7 @@ import {Grid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
+import RechargeLydiaButton from "../components/RechargeLydiaButton";
 
 
 function PG({setPage}) {
@@ -101,6 +102,7 @@ function PG({setPage}) {
                 {permissions.recharge
                     ?<RechargeButton pgData={pgData}/>
                     :<></>}
+                <RechargeLydiaButton pgData={pgData}/>
             </Grid.Col>
             <Grid.Col md={4}>
 
