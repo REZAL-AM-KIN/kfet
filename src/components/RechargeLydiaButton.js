@@ -37,17 +37,16 @@ function RechargeLydiaButton({pgData, sx}) {
             try {
                 await axiosPrivate.post("rechargeslydia/",
                     JSON.stringify({
-                        cible_id: pgData.pgId,
+                        cible_id: pgData.id,
                         montant: montant,
                         qrcode: qrcode
                     }));
             } catch (error) {
-                errorNotif("QR Submit", error?.response);
+                errorNotif("QR Submit", error?.message);
             }
         }
-        //postQr();
+        postQr();
         // reset the fields
-        errorNotif("qrcode sscanne", "flsdqjfsmlj")
         modalClose();
     }
 
@@ -59,13 +58,12 @@ function RechargeLydiaButton({pgData, sx}) {
         if (result) {
             setQrcode(result);
             setShowQrScanner(false);
-            console.log("RESULTAT", result);
-            // handleQrSubmit();
+            handleQrSubmit();
         }
     }
 
 
-    const SmallModal = () => {
+    const smallModal = () => {
         return (
             <Modal
                 centered
@@ -90,24 +88,26 @@ function RechargeLydiaButton({pgData, sx}) {
                                 setShowQrScanner(!showQrScanner)
                             }}/>}
                         />
-                        <QrReader
-                            onError={handleError}
-                            onScan={handleScan}
-                            delay={100}
-                            style={{width: '100%'}}
-                        />
-                        <Button
-                            disabled={!montant}
-                            onClick={() => {
-                                setShowQrScanner(true)
-                            }}>Scanner</Button>
+                        {showQrScanner
+                            ? <QrReader
+                                onError={handleError}
+                                onScan={handleScan}
+                                delay={100}
+                                style={{width: '100%'}}
+                            />
+                            : <Button
+                                disabled={!montant}
+                                onClick={() => {
+                                    setShowQrScanner(true)
+                                }}>Scanner</Button>
+                        }
                     </Stack>
                 </form>
             </Modal>
         );
     }
 
-    const BigModal = () => {
+    const bigModal = () => {
         return (
             <Modal
                 centered
@@ -129,7 +129,7 @@ function RechargeLydiaButton({pgData, sx}) {
                             value={montant}
                             onChange={setMontant}
                             rightSection={<IconQrcode onClick={() => {
-                                    setShowQrScanner(!showQrScanner&&montant);
+                                setShowQrScanner(!showQrScanner && montant);
                             }}/>
                             }
                         />
@@ -161,11 +161,18 @@ function RechargeLydiaButton({pgData, sx}) {
             ;
     }
 
+    // to avoid re-rendering and, therefore, loosing focus
+    let modal
+    if (isSmallDevice) {
+        modal = smallModal();
+    } else {
+        modal = bigModal();
+    }
 
     return (
         <>
             <Button onClick={modalOpen} sx={sx}>Qr Code</Button>
-            {isSmallDevice ? <SmallModal/> : <BigModal/>}
+            {modal}
         </>
     );
 }
