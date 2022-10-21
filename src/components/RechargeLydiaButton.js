@@ -6,7 +6,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconQrcode} from "@tabler/icons";
 
-function RechargeLydiaButton({pgData, sx}) {
+function RechargeLydiaButton({pgData, onRecharge, sx}) {
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
 
@@ -41,13 +41,19 @@ function RechargeLydiaButton({pgData, sx}) {
                         montant: montant,
                         qrcode: qrcode
                     }));
+                // reset the fields and close modal
+                modalClose();
+                if (onRecharge){
+                    onRecharge(montant);
+                }
             } catch (error) {
                 errorNotif("QR Submit", error?.message);
+                // reset the fields without closing modal
+                setMontant(null);
+                setQrcode("");
             }
         }
         postQr();
-        // reset the fields
-        modalClose();
     }
 
     function handleError(error) {

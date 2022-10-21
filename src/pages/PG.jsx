@@ -4,7 +4,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid} from "@mantine/core";
+import {Grid, SimpleGrid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
@@ -92,17 +92,29 @@ function PG({setPage}) {
             controller.abort();
         }
         // eslint-disable-next-line
-    }, [pgId])
+    }, [pgData])
+
+
+    //callbacks
+    const handleRecharge = (montant) =>{
+        // update pgData (updates the pgCard)
+        setPgData({...pgData, solde:Number(pgData.solde) + Number(montant)});
+        // TODO: update history (and make history pgId dependent?)
+    }
 
 
     return (
         <Grid fluid style={{backgroundColor: "pink"}}>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
-                {permissions.recharge
-                    ?<RechargeButton pgData={pgData}/>
-                    :<></>}
-                <RechargeLydiaButton pgData={pgData}/>
+                <SimpleGrid>
+                    {permissions.recharge
+                        ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        :<></>}
+                    {/*check lydia permissions*/}
+                    <RechargeLydiaButton pgData={pgData}/>
+
+                </SimpleGrid>
             </Grid.Col>
             <Grid.Col md={4}>
 
