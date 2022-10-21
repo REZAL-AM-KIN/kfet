@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-function RechargeButton({pgData, sx}) {
+function RechargeButton({pgData, onRecharge, sx}) {
 
     const axiosPrivate = useAxiosPrivate();
 
@@ -79,19 +79,21 @@ function RechargeButton({pgData, sx}) {
                         montant: montant,
                         methode: methode
                     }));
+                modalClose();
+                if (onRecharge){
+                    onRecharge(montant);
+                }
             } catch (error) {
                 errorNotif("Recharge", error.message);
             }
         }
         createRecharge();
-        modalClose();
     };
 
 
     return (
         <>
             <Button onClick={modalOpen} sx={sx}>Recharger</Button>
-            <Button>Faut aussi update les history et le pgcard</Button>
             <Modal
                 centered
                 opened={opened}
