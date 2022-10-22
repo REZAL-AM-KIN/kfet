@@ -30,6 +30,7 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
 
     const theme = useMantineTheme()
 
+
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
