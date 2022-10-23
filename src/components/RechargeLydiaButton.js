@@ -43,7 +43,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
                     }));
                 // reset the fields and close modal
                 modalClose();
-                if (onRecharge){
+                if (onRecharge) {
                     onRecharge(montant);
                 }
             } catch (error) {
@@ -79,36 +79,31 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
                 }}
                 title={"Recharger " + pgData.bucque + " " + pgData.fams}
             >
-                <form onSubmit={handleQrSubmit}>
-                    <Stack>
-                        <NumberInput
-                            data-autofocus
-                            type="number"
-                            hideControls
-                            placeholder="76"
-                            label="Montant de la recharge"
-                            value={montant}
-                            onChange={setMontant}
-                            min={0}
-                            rightSection={<IconQrcode onClick={() => {
-                                setShowQrScanner(!showQrScanner)
-                            }}/>}
+                <Stack>
+                    <NumberInput
+                        data-autofocus
+                        type="number"
+                        hideControls
+                        placeholder="76"
+                        label="Montant de la recharge"
+                        value={montant}
+                        onChange={setMontant}
+                        min={0}
+                    />
+                    {showQrScanner
+                        ? <QrReader
+                            onError={handleError}
+                            onScan={handleScan}
+                            delay={100}
+                            style={{width: '100%'}}
                         />
-                        {showQrScanner
-                            ? <QrReader
-                                onError={handleError}
-                                onScan={handleScan}
-                                delay={100}
-                                style={{width: '100%'}}
-                            />
-                            : <Button
-                                disabled={!montant}
-                                onClick={() => {
-                                    setShowQrScanner(true)
-                                }}>Scanner</Button>
-                        }
-                    </Stack>
-                </form>
+                        : <Button
+                            disabled={!montant}
+                            onClick={() => {
+                                setShowQrScanner(true)
+                            }}>Scanner</Button>
+                    }
+                </Stack>
             </Modal>
         );
     }
