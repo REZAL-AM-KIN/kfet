@@ -4,10 +4,11 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid} from "@mantine/core";
+import {Grid, SimpleGrid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
+import RechargeLydiaButton from "../components/RechargeLydiaButton";
 
 
 function PG({setPage}) {
@@ -22,9 +23,32 @@ function PG({setPage}) {
     const [permissions, setPermissions] = useState({});
 
     const [pgData, setPgData] = useState({});
-
     const [history, setHistory] = useState([]);
 
+
+    const getHistory = async () => {
+        try {
+            const response = await axiosPrivate.get("history/" + pgId + "/");
+            setHistory(response.data);
+        } catch (error) {
+            errorNotif("PgHistory/pg", error.message);
+            console.log(error);
+        }
+    }
+
+    const getPG = async () => {
+        try {
+            const response = await axiosPrivate.get("consommateurs/" + pgId);
+            if (response.data) {
+                setPgData(response.data);
+            } else {
+                errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
+            }
+        } catch (error) {
+            errorNotif("Consommateur/", error.message);
+            console.log("Error getting consommateur", error);
+        }
+    }
 
     useEffect(() => {
         const controller = new AbortController();
@@ -50,22 +74,8 @@ function PG({setPage}) {
     useEffect(() => {
         console.log("UPDATE: PG");
         // make the api call for pg info:
-        const URL = "consommateurs/" + pgId;
         const controller = new AbortController();
-        const getUser = async () => {
-            try {
-                const response = await axiosPrivate.get(URL);
-                if (response.data) {
-                    setPgData(response.data);
-                } else {
-                    errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
-                }
-            } catch (error) {
-                errorNotif("Consommateur/", error.message);
-                console.log("Error getting consommateur", error);
-            }
-        }
-        getUser();
+        getPG();
         return () => {
             controller.abort();
         }
@@ -76,32 +86,35 @@ function PG({setPage}) {
 
     useEffect(() => {
         console.log("UPDATE: PgHistory");
-        const URL = "history/" + pgId + "/";
         const controller = new AbortController();
-        const getHistory = async () => {
-            try {
-                const response = await axiosPrivate.get(URL);
-                setHistory(response.data);
-            } catch (error) {
-                errorNotif("PgHistory/pg", error.message);
-                console.log(error);
-            }
-        }
         getHistory()
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
-    }, [pgId])
+    }, [pgData])
+
+
+    //callbacks
+    const handleRecharge = () =>{
+        // update pgdata and history
+        getHistory();
+        getPG();
+    }
 
 
     return (
-        <Grid fluid style={{backgroundColor: "pink", height:"100vh"}}>
+        <Grid fluid style={{backgroundColor: "pink"}}>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
-                {permissions.recharge
-                    ?<RechargeButton pgId={pgId}/>
-                    :<></>}
+                <SimpleGrid>
+                    {permissions.recharge
+                        ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        :<></>}
+                    {/*check lydia permissions*/}
+                    <RechargeLydiaButton pgData={pgData}/>
+
+                </SimpleGrid>
             </Grid.Col>
             <Grid.Col md={4}>
 
