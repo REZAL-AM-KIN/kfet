@@ -129,6 +129,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
                             min={0}
                             value={montant}
                             onChange={setMontant}
+                            rightSectionWidth={"10%"}
                             rightSection={<IconQrcode onClick={() => {
                                 setShowQrScanner(!showQrScanner && montant);
                             }}/>
