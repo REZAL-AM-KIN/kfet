@@ -1,8 +1,19 @@
-import {Group, Table, Text, Center, UnstyledButton, createStyles, ScrollArea, TextInput} from "@mantine/core"
-import {IconChevronDown, IconChevronUp, IconSearch, IconSelector} from "@tabler/icons";
-import {useCallback, useState} from "react";
+import {
+    Group,
+    Button,
+    Text,
+    Center,
+    UnstyledButton,
+    createStyles,
+    ScrollArea,
+    TextInput,
+    ActionIcon,
+    Stack
+} from "@mantine/core"
+import {IconChevronDown, IconChevronUp, IconEdit, IconSearch, IconSelector} from "@tabler/icons";
+import {useCallback, useEffect, useState} from "react";
 import { keys } from '@mantine/utils';
-import {useEventListener} from "@mantine/hooks";
+import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -45,16 +56,22 @@ function Th({ children, reversed, sorted, onSort }) {
 }
 
 function filterData(data, search) {
-  const data_keys = Object.assign({}, data[0])
-  delete data_keys["id"] // On récupère le nom des clés qui peuvent servir au filtrage (soit toutes sauf id)
+  const data_keys = ["titre", "description", "date_event"]
 
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
-      keys(data_keys).some((key) => item[key].toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
+      data_keys.some((key) => item[key].toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
   );
 }
 
+
+//payload: { sortBy: keyof data | null; reversed: boolean; search: string }
 function sortData(data,payload) {
+
+    if(data.length===0){
+        return data
+    }
+
   const { sortBy } = payload;
 
   if (!sortBy) {
@@ -63,6 +80,7 @@ function sortData(data,payload) {
 
   return filterData(
       [...data].sort((a, b) => {
+
         if (payload.reversed) {
           return b[sortBy].localeCompare(a[sortBy]);
         }
@@ -73,89 +91,95 @@ function sortData(data,payload) {
   );
 }
 
-const FinssSelector = ({data, callbackFct}) => {
+const ActionRowRender = ({finss}) =>{
 
+    function prebucqageButtons() {
+
+        //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
+        if(!finss.can_subscribe){
+            return
+        }
+
+        //Si l'utilisateur est déjà prébucque, alors on lui propose de modifier son inscription.
+        if(!finss.is_prebucque){
+            return (<Button style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
+        }else{
+            return (<Button style={{borderRadius: "1.5em"}} color="green">Modifier mon inscription</Button>)
+        }
+
+    }
+
+    //On vérifie si l'utilisateur est manager du fin'ss
+    function editButton(){
+        if(!finss.can_manage){
+            return;
+        }
+
+        return (
+            <ActionIcon color="blue" onClick={() => console.log("edit"+finss.name)}>
+                <IconEdit size={20} />
+            </ActionIcon>
+        )
+
+    }
+
+    return (
+        <Stack justify="space-between" align="center" spacing={3}>
+            {prebucqageButtons()}
+            {editButton()}
+        </Stack>
+    )
+}
+
+const FinssSelector = ({data, isLoading}) => {
+  const [sortStatus, setSortStatus] = useState({ columnAccessor: 'titre', direction: 'asc' });
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState(null);
-  const [reverseSortDirection, setReverseSortDirection] = useState(false);
-  const clickCallback = useCallback((obj) => console.log(obj), []);
-  const clickEventListener = useEventListener('click', clickCallback);
 
-  const setSorting = (field) => {
-    const reversed = field === sortBy ? !reverseSortDirection : false;
-    setReverseSortDirection(reversed);
-    setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
-  };
 
+
+  useEffect(() => {
+        const sorted_data = sortData(data, {sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search:search});
+        setSortedData(sorted_data);
+
+  }, [data, sortStatus]);
 
   const handleSearchChange = (event) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }));
+    setSortedData(sortData(data, { sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search: value }));
   };
 
-  const rows = sortedData.map((row) => (
-      <tr key={row.id} ref={clickEventListener}>
-        <td>{row.name}</td>
-        <td>{row.desc}</td>
-        <td>{row.date}</td>
-      </tr>
-  ));
 
   return (
       <ScrollArea>
         <TextInput
-            placeholder="Search by any field"
+            placeholder="Rechercher un fin'ss sur n'importe quel critère"
             mb="md"
             icon={<IconSearch size={14} stroke={1.5} />}
             value={search}
             onChange={handleSearchChange}
         />
-        <Table
+
+        <DataTable
+            minHeight={150}
             striped
             highlightOnHover
+            fetching={isLoading}
+            records={sortedData}
+            columns={[
+                {accessor: "titre", title:"Nom", sortable: true},
+                {accessor: "description", title:"Description", sortable: true},
+                {accessor: "date_event", title:"Date", width: 110, sortable: true},
+                {accessor: "actions", title:"Actions", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
+            ]}
+            sortStatus={sortStatus}
+            onSortStatusChange={setSortStatus}
+            noRecordsText="Aucun fin'ss n'a été trouvé"
         >
-          <thead>
-          <tr>
-            <Th
-                sorted={sortBy === 'name'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('name')}
-            >
-              Nom
-            </Th>
-            <Th
-                sorted={sortBy === 'desc'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('desc')}
-            >
-              Description
-            </Th>
-            <Th
-                sorted={sortBy === 'date'}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting('date')}
-            >
-              Date
-            </Th>
-          </tr>
-          </thead>
-          <tbody>
-            {rows.length > 0 ? (
-                rows
-            ) : (
-                <tr>
-                  <td colSpan={Object.keys(data[0]).length}>
-                    <Text weight={500} align="center">
-                      Nothing found
-                    </Text>
-                  </td>
-                </tr>
-            )}
-          </tbody>
-        </Table>
+
+        </DataTable>
+
       </ScrollArea>
   )
 }
