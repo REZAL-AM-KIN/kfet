@@ -16,6 +16,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
     const [montant, setMontant] = useState();
     const [opened, setOpened] = useState(false);
     const [showQrScanner, setShowQrScanner] = useState(false)
+    const [numberError, setNumberError] = useState(false);
 
     /* Function triggered when the recharge button is clicked */
     const modalOpen = () => {
@@ -27,6 +28,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
         setMontant(null);
         setShowQrScanner(false);
         setQrcode("");
+        setNumberError(false);
     }
 
     const handleQrSubmit = (e) => {
@@ -130,8 +132,10 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
                             value={montant}
                             onChange={setMontant}
                             rightSectionWidth={"10%"}
+                            error={numberError}
                             rightSection={<IconQrcode onClick={() => {
                                 setShowQrScanner(!showQrScanner && montant);
+                                montant?setNumberError(false):setNumberError("veuillez remplir le montant");
                             }}/>
                             }
                         />
