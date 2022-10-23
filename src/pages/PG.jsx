@@ -23,9 +23,32 @@ function PG({setPage}) {
     const [permissions, setPermissions] = useState({});
 
     const [pgData, setPgData] = useState({});
-
     const [history, setHistory] = useState([]);
 
+
+    const getHistory = async () => {
+        try {
+            const response = await axiosPrivate.get("history/" + pgId + "/");
+            setHistory(response.data);
+        } catch (error) {
+            errorNotif("PgHistory/pg", error.message);
+            console.log(error);
+        }
+    }
+
+    const getPG = async () => {
+        try {
+            const response = await axiosPrivate.get("consommateurs/" + pgId);
+            if (response.data) {
+                setPgData(response.data);
+            } else {
+                errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
+            }
+        } catch (error) {
+            errorNotif("Consommateur/", error.message);
+            console.log("Error getting consommateur", error);
+        }
+    }
 
     useEffect(() => {
         const controller = new AbortController();
@@ -51,22 +74,8 @@ function PG({setPage}) {
     useEffect(() => {
         console.log("UPDATE: PG");
         // make the api call for pg info:
-        const URL = "consommateurs/" + pgId;
         const controller = new AbortController();
-        const getUser = async () => {
-            try {
-                const response = await axiosPrivate.get(URL);
-                if (response.data) {
-                    setPgData(response.data);
-                } else {
-                    errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
-                }
-            } catch (error) {
-                errorNotif("Consommateur/", error.message);
-                console.log("Error getting consommateur", error);
-            }
-        }
-        getUser();
+        getPG();
         return () => {
             controller.abort();
         }
@@ -74,19 +83,10 @@ function PG({setPage}) {
     }, [pgId]);
 
 
+
     useEffect(() => {
         console.log("UPDATE: PgHistory");
-        const URL = "history/" + pgId + "/";
         const controller = new AbortController();
-        const getHistory = async () => {
-            try {
-                const response = await axiosPrivate.get(URL);
-                setHistory(response.data);
-            } catch (error) {
-                errorNotif("PgHistory/pg", error.message);
-                console.log(error);
-            }
-        }
         getHistory()
         return () => {
             controller.abort();
@@ -96,10 +96,10 @@ function PG({setPage}) {
 
 
     //callbacks
-    const handleRecharge = (montant) =>{
-        // update pgData (updates the pgCard)
-        setPgData({...pgData, solde:Number(pgData.solde) + Number(montant)});
-        // TODO: update history (and make history pgId dependent?)
+    const handleRecharge = () =>{
+        // update pgdata and history
+        getHistory();
+        getPG();
     }
 
 
