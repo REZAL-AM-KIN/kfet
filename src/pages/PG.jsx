@@ -9,6 +9,7 @@ import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
+import {usePermissions} from "../hooks/useUser";
 
 
 function PG({setPage}) {
@@ -20,7 +21,7 @@ function PG({setPage}) {
 
     // here we get user's permissions and render get it to outlet
     const axiosPrivate = useAxiosPrivate();
-    const [permissions, setPermissions] = useState({});
+    const permissions = usePermissions();
 
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
@@ -50,26 +51,6 @@ function PG({setPage}) {
         }
     }
 
-    useEffect(() => {
-        const controller = new AbortController();
-        const getPermissions = async () => {
-            try {
-                const response = await axiosPrivate.get("permissions/");
-                setPermissions(response.data);
-            } catch (error) {
-                if (error?.response?.status !== 403) {
-                    console.log("Error getting logged user's permissions ", error);
-                    errorNotif("Permissions", error.message);
-                }
-            }
-        }
-        getPermissions()
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [pgId])
-    console.log(permissions);
 
     useEffect(() => {
         console.log("UPDATE: PG");
@@ -81,8 +62,6 @@ function PG({setPage}) {
         }
         // eslint-disable-next-line
     }, [pgId]);
-
-
 
     useEffect(() => {
         console.log("UPDATE: PgHistory");
@@ -104,7 +83,7 @@ function PG({setPage}) {
 
 
     return (
-        <Grid fluid style={{backgroundColor: "pink"}}>
+        <Grid style={{backgroundColor: "pink"}}>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 <SimpleGrid>
