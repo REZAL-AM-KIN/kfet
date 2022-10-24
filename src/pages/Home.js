@@ -59,6 +59,7 @@ const Home = ({setPage}) => {
     }, [embla, handleScroll]);
 
     // populate pg history
+    // TODO: mieux de get history pg?
     history.forEach((line) => {
         if (line.cible_evenement.id === pgData.id) {
             pgHistory.push(line);

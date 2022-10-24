@@ -19,7 +19,7 @@ function PG({setPage}) {
     let params = useParams();
     const pgId = params.pgId;
 
-    // here we get user's permissions and render get it to outlet
+    // here we get user's permissions
     const axiosPrivate = useAxiosPrivate();
     const permissions = usePermissions();
 
