@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import UserContext from '../context/User';
 
-export const useUser = () => {
+export function useUser() {
     return useContext(UserContext)["pgData"];
 }
 
-export const usePermissions = () => {
+export function usePermissions() {
     return useContext(UserContext)["permissions"];
 }
