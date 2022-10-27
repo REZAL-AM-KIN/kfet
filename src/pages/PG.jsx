@@ -91,8 +91,7 @@ function PG({setPage}) {
                         ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
                         :<></>}
                     {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pgData}/>
-
+                    <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
             </Grid.Col>
             <Grid.Col md={4}>
