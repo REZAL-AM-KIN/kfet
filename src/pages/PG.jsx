@@ -10,7 +10,6 @@ import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
-import Categories from "../components/Categories";
 import {useCategorie} from "../hooks/useCategorie";
 
 
@@ -108,8 +107,6 @@ function PG({setPage}) {
                     {/*check lydia permissions*/}
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
-                <Categories value={categorie}
-                            onChange={setCategorie}/>
                 {/*<Produits produits={allProduits} categorie={categorie}/>*/}
 
             </Grid.Col>
