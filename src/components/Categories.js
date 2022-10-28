@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {useCategorie} from "../hooks/useCategorie";
-import {IconBoxMultiple} from "@tabler/icons";
+import {useCatColor, useCategorie} from "../hooks/useCategorie";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import errorNotif from "./ErrorNotif";
-import {Button, Group, Popover} from "@mantine/core";
+import {Button, Group} from "@mantine/core";
 
 
-function Categories({value, onChange}) {
+function Categories({refForOutsideClick, setActive}) {
 
     const axiosPrivate = useAxiosPrivate();
     const [categorie, setCategorie] = useCategorie();
+    const [catColor, setCatColor] = useCatColor();
     const [categories, setCategories] = useState([]);
-    const [catColor, setCatColor] = useState([]);
+
 
     useEffect(() => {
         const controller = new AbortController();
@@ -38,41 +38,22 @@ function Categories({value, onChange}) {
 
 
     return (
-        <Popover
-            width={300}
-            position="right"
-            styles={{
-                dropdown: {
-                    padding: 0,
-                    borderRadius: 9,
-                    borderStyle: "none"
-                }
-            }}
-            shadow="md"
-            offset={20}
-            trapFocus
-        >
-            <Popover.Target>
-                <IconBoxMultiple size={34} stroke={1.5}/>
-            </Popover.Target>
+        <Group ref={refForOutsideClick}>
+            {categories.map((cat, key) => {
+                return (
+                    <Button key={key}
+                            variant="gradient"
+                            gradient={{ from: catColor, to: cat.color }}
+                            onClick={() => {
+                                setCategorie(cat.name);
+                                setCatColor(cat.color);
+                                setActive(false);
+                            }}
+                    >{cat.name}</Button>
+                );
+            })}
+        </Group>
 
-            <Popover.Dropdown>
-                <Group>
-                    {categories.map((cat, key) => {
-                        return (
-                            <Button key={key}
-                                    variant="gradient"
-                                    gradient={{from: catColor, to: cat.color}}
-                                    onClick={() => {
-                                        setCategorie(cat.name);
-                                        setCatColor(cat.color);
-                                    }}
-                            >{cat.name}</Button>
-                        );
-                    })}
-                </Group>
-            </Popover.Dropdown>
-        </Popover>
     );
 }
 

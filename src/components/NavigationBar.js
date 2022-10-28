@@ -2,7 +2,7 @@ import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme
 import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
-import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
+import {CategorieSelector, LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
 import SearchPg from "./SearchPg";
 
 
@@ -97,6 +97,11 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                 <Center>
                     <NormalSearchPgButton/>
                 </Center>
+                <Navbar.Section>
+                    <Stack justify="center" spacing={0}>
+                        <CategorieSelector/>
+                    </Stack>
+                </Navbar.Section>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
                         {links}
