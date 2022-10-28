@@ -4,19 +4,20 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Container, Grid, SimpleGrid} from "@mantine/core";
+import {Grid, SimpleGrid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
 import Categories from "../components/Categories";
-import Produits from "../components/Produits";
 import {useCategorie} from "../hooks/useCategorie";
 
 
 function PG({setPage}) {
-    useEffect(()=>{setPage("Debucquage")})
+    useEffect(() => {
+        setPage("Debucquage")
+    })
 
     // current displayed pgId from url
     let params = useParams();
@@ -80,7 +81,7 @@ function PG({setPage}) {
                 console.log(error);
             }
         }
-        getProduits()
+        getProduits();
         return () => {
             controller.abort();
         }
@@ -89,7 +90,7 @@ function PG({setPage}) {
 
 
     //callbacks
-    const handleRecharge = () =>{
+    const handleRecharge = () => {
         // update pgdata and history
         getHistory();
         getPG();
@@ -97,23 +98,20 @@ function PG({setPage}) {
 
 
     return (
-        <Grid style={{backgroundColor: "pink"}}>
+        <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 <SimpleGrid>
                     {permissions.recharge
-                        ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
-                        :<></>}
+                        ? <RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        : <></>}
                     {/*check lydia permissions*/}
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
-                <Container>
-                    <Categories produits={allProduits}
-                                permissions={permissions}
-                                value={categorie}
-                                onChange={setCategorie}/>
-                    <Produits produits={allProduits} categorie={categorie}/>
-                </Container>
+                <Categories value={categorie}
+                            onChange={setCategorie}/>
+                {/*<Produits produits={allProduits} categorie={categorie}/>*/}
+
             </Grid.Col>
             <Grid.Col md={4}>
 
