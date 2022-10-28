@@ -4,12 +4,14 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid} from "@mantine/core";
+import {Container, Grid, SimpleGrid} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
+import Categories from "../components/Categories";
+import Produits from "../components/Produits";
 
 
 function PG({setPage}) {
@@ -25,7 +27,8 @@ function PG({setPage}) {
 
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
-
+    const [allProduits, setAllProduits] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const getHistory = async () => {
         try {
@@ -53,25 +56,35 @@ function PG({setPage}) {
 
 
     useEffect(() => {
-        console.log("UPDATE: PG");
+        console.log("UPDATE: PG and HISTORY");
         // make the api call for pg info:
         const controller = new AbortController();
         getPG();
+        getHistory()
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
     }, [pgId]);
 
+
     useEffect(() => {
-        console.log("UPDATE: PgHistory");
+        /* Retrieves the produits list from the server and extracts the categories list */
         const controller = new AbortController();
-        getHistory()
+        const getProduits = async () => {
+            try {
+                const response = await axiosPrivate.get("produits/");
+                setAllProduits(response.data.results);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getProduits()
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
-    }, [pgData])
+    }, [])
 
 
     //callbacks
@@ -93,6 +106,13 @@ function PG({setPage}) {
                     {/*check lydia permissions*/}
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
+                <Container>
+                    <Categories produits={allProduits}
+                                permissions={permissions}
+                                value={categories}
+                                onChange={setCategories}/>
+                    <Produits produits={allProduits} categorie={categories}/>
+                </Container>
             </Grid.Col>
             <Grid.Col md={4}>
 
