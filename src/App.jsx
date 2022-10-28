@@ -60,6 +60,7 @@ function App() {
                                 <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
                                 <Route path="edit" element={<Edit setPage={setPage}/>}/>
                                 <Route path="finss" element={<Finss setPage={setPage}/>}/>
+                                <Route path="finss/:applyto" element={<Finss setPage={setPage}/>}/>
 
                             </Route>
 

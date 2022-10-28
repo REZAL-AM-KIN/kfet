@@ -91,47 +91,9 @@ function sortData(data,payload) {
   );
 }
 
-const ActionRowRender = ({finss}) =>{
 
-    function prebucqageButtons() {
 
-        //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
-        if(!finss.can_subscribe){
-            return
-        }
-
-        //Si l'utilisateur est déjà prébucque, alors on lui propose de modifier son inscription.
-        if(!finss.is_prebucque){
-            return (<Button style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
-        }else{
-            return (<Button style={{borderRadius: "1.5em"}} color="green">Modifier mon inscription</Button>)
-        }
-
-    }
-
-    //On vérifie si l'utilisateur est manager du fin'ss
-    function editButton(){
-        if(!finss.can_manage){
-            return;
-        }
-
-        return (
-            <ActionIcon color="blue" onClick={() => console.log("edit"+finss.name)}>
-                <IconEdit size={20} />
-            </ActionIcon>
-        )
-
-    }
-
-    return (
-        <Stack justify="space-between" align="center" spacing={3}>
-            {prebucqageButtons()}
-            {editButton()}
-        </Stack>
-    )
-}
-
-const FinssSelector = ({data, isLoading}) => {
+const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
   const [sortStatus, setSortStatus] = useState({ columnAccessor: 'titre', direction: 'asc' });
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState(data);
@@ -149,6 +111,46 @@ const FinssSelector = ({data, isLoading}) => {
     setSearch(value);
     setSortedData(sortData(data, { sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search: value }));
   };
+
+    const ActionRowRender = ({finss}) =>{
+
+        function prebucqageButtons() {
+
+            //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
+            if(!finss.can_subscribe){
+                return
+            }
+
+            //Si l'utilisateur est déjà prébucque, alors on lui propose de modifier son inscription.
+            if(!finss.is_prebucque){
+                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
+            }else{
+                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier mon inscription</Button>)
+            }
+
+        }
+
+        //On vérifie si l'utilisateur est manager du fin'ss
+        function editButton(){
+            if(!finss.can_manage){
+                return;
+            }
+
+            return (
+                <ActionIcon color="blue" onClick={() => console.log("edit"+finss.name)}>
+                    <IconEdit size={20} />
+                </ActionIcon>
+            )
+
+        }
+
+        return (
+            <Stack justify="space-between" align="center" spacing={3}>
+                {prebucqageButtons()}
+                {editButton()}
+            </Stack>
+        )
+    }
 
 
   return (
