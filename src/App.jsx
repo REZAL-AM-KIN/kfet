@@ -13,6 +13,7 @@ import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import {Notifications} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
+import {CategorieProvider} from "./context/Categorie";
 
 
 function App() {
