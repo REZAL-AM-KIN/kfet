@@ -168,7 +168,7 @@ export function NormalSearchPgButton() {
         <Popover
             width={300}
             opened={active}
-            position="left"
+            position="right"
             styles={{
                 dropdown: {
                     padding: 0,
