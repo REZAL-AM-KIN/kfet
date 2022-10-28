@@ -12,6 +12,7 @@ import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
 import Categories from "../components/Categories";
 import Produits from "../components/Produits";
+import {useCategorie} from "../hooks/useCategorie";
 
 
 function PG({setPage}) {
@@ -28,7 +29,7 @@ function PG({setPage}) {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [categorie, setCategorie] = useCategorie();
 
     const getHistory = async () => {
         try {
@@ -109,9 +110,9 @@ function PG({setPage}) {
                 <Container>
                     <Categories produits={allProduits}
                                 permissions={permissions}
-                                value={categories}
-                                onChange={setCategories}/>
-                    <Produits produits={allProduits} categorie={categories}/>
+                                value={categorie}
+                                onChange={setCategorie}/>
+                    <Produits produits={allProduits} categorie={categorie}/>
                 </Container>
             </Grid.Col>
             <Grid.Col md={4}>
