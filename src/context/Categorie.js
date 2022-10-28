@@ -5,6 +5,7 @@ const CategorieContext = createContext({});
 
 export const CategorieProvider = ({children}) => {
     const [categorie, setCategorie] = useState("");
+    const [catColor, setCatColor] = useState("#760076");
 
     const permissions = usePermissions();
 
@@ -21,7 +22,7 @@ export const CategorieProvider = ({children}) => {
     }, [permissions])
 
     return (
-        <CategorieContext.Provider value={[categorie, setCategorie]}>
+        <CategorieContext.Provider value={{categorie:[categorie, setCategorie], catColor:[catColor, setCatColor]}}>
             {children}
         </CategorieContext.Provider>
     )
