@@ -59,7 +59,7 @@ export const UserProvider = ({children}) => {
     }
 
     return (
-        <UserContext.Provider value={{pgData, permissions}}>
+        <UserContext.Provider value={{pgData, permissions, isLogged}}>
             {children}
         </UserContext.Provider>
     )
