@@ -5,6 +5,8 @@ import {handleLogout} from "../auth/logout";
 import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
 import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
+import {useCatColor, useCategorie} from "../hooks/useCategorie";
+import Categories from "./Categories";
 
 const useStyles = createStyles((theme) => ({
 
@@ -19,37 +21,39 @@ const useStyles = createStyles((theme) => ({
 
         '&:hover': {
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+            color: theme.fn.variant({variant: 'light', color: theme.primaryColor}).color,
         },
     },
 
     active: {
         '&, &:hover': {
-            backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+            backgroundColor: theme.fn.variant({variant: 'light', color: theme.primaryColor}).background,
+            color: theme.fn.variant({variant: 'light', color: theme.primaryColor}).color,
         },
     },
 }));
 
-export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClick, currentPage }) {
+export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick, currentPage}) {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
 
     const navigate = useNavigate()
 
     //Si aucun shortcut n'est spécifié, on associé la key "" à la fonction {} (on fait rien quoi)
-    const shortcutAssoc =  (shortcut !== undefined)? [shortcut, ()=>navigate(link)] : ["",()=>{}];
+    const shortcutAssoc = (shortcut !== undefined) ? [shortcut, () => navigate(link)] : ["", () => {
+    }];
     useHotkeys([shortcutAssoc]);
 
-    const { classes, cx } = useStyles();
-    if(!isSmallDevice){
+    const {classes, cx} = useStyles();
+    if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+            <Tooltip label={label} position="right" transitionDuration={0}
+                     events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
-                    component={(link!==undefined)? Link : undefined}
+                    component={(link !== undefined) ? Link : undefined}
                     to={link}
                     onClick={onClick}
-                    className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
+                    className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
                 >
                     <Stack align="center" spacing="0">
                         <Icon size={34} stroke={1.5}/>
@@ -58,18 +62,18 @@ export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClic
                 </UnstyledButton>
             </Tooltip>
         );
-    }else{
+    } else {
         return (
             <UnstyledButton
-                component={(link!==undefined)? Link : undefined}
+                component={(link !== undefined) ? Link : undefined}
                 to={link}
                 onClick={onClick}
-                className={cx(classes.link, {[classes.active]: (pageName===currentPage)})}
+                className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
                 style={{width: "80%", justifyContent: "left"}}
             >
                 <Group>
                     <Icon size={34} stroke={1.5}/>
-                    <Text >{label}</Text>
+                    <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
         );
@@ -77,11 +81,11 @@ export function NavbarLink({ icon: Icon, label, pageName, link, shortcut, onClic
 
 }
 
-export function LogOutLink(){
+export function LogOutLink() {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
 
-    const { classes, cx } = useStyles();
+    const {classes, cx} = useStyles();
 
     const label = "Déconnexion"
     const Icon = IconLogout
@@ -89,9 +93,10 @@ export function LogOutLink(){
 
     useHotkeys([[shortcut, handleLogout]])
 
-    if(!isSmallDevice){
+    if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0} events={{ hover: true, focus: true, touch: false }}>
+            <Tooltip label={label} position="right" transitionDuration={0}
+                     events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     onClick={handleLogout}
                     className={cx(classes.link)}
@@ -103,7 +108,7 @@ export function LogOutLink(){
                 </UnstyledButton>
             </Tooltip>
         );
-    }else{
+    } else {
         return (
             <UnstyledButton
                 onClick={handleLogout}
@@ -112,7 +117,7 @@ export function LogOutLink(){
             >
                 <Group>
                     <Icon size={34} stroke={1.5}/>
-                    <Text >{label}</Text>
+                    <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
         );
@@ -120,33 +125,32 @@ export function LogOutLink(){
 }
 
 
-
 export function NormalSearchPgButton() {
-    const { classes, cx } = useStyles();
+    const {classes, cx} = useStyles();
 
     const ref = useClickOutside(() => setActive(false));
 
-    const Icon =IconUserSearch
-    const label="Rechercher un pg"
-    const shortcut="alt+P"
+    const Icon = IconUserSearch
+    const label = "Rechercher un pg"
+    const shortcut = "alt+P"
 
     const [active, setActive] = useState(false)
 
     useHotkeys([[shortcut, onClick]])
 
 
-    function onClick(){
+    function onClick() {
         setActive(!active)
     }
 
-    const SearchPgButton = forwardRef((props, ref) =>(
+    const SearchPgButton = forwardRef((props, ref) => (
 
         <Tooltip
             label={label}
             opened={active ? false : undefined}
             position="right"
             transitionDuration={0}
-            events={{ hover: true, focus: true, touch: false }}>
+            events={{hover: true, focus: true, touch: false}}>
             <UnstyledButton
                 ref={ref}
                 {...props}
@@ -161,7 +165,6 @@ export function NormalSearchPgButton() {
         </Tooltip>
 
     ));
-
 
 
     return (
@@ -186,6 +189,69 @@ export function NormalSearchPgButton() {
 
             <Popover.Dropdown>
                 <SearchPg refForOutsideClick={ref} setActive={setActive}/>
+            </Popover.Dropdown>
+        </Popover>
+    );
+}
+
+
+export function CategorieSelector() {
+    const {classes, cx} = useStyles();
+
+    const ref = useClickOutside(() => setActive(false));
+
+    const Icon = IconBoxMultiple;
+    const label = "Catégorie";
+    const [categorie, ] = useCategorie();
+    const [catColor, ] = useCatColor();
+
+    const [active, setActive] = useState(false);
+
+    function onClick() {
+        setActive(!active);
+    }
+
+    const CategorieButton = forwardRef((props, ref) => (
+
+        <Tooltip
+            label={label}
+            opened={active ? false : undefined}
+            position="right"
+            transitionDuration={0}
+            events={{hover: true, focus: true, touch: false}}>
+            <UnstyledButton
+                ref={ref}
+                {...props}
+                onClick={onClick}
+                className={cx(classes.link, {[classes.active]: active})}
+                style={{backgroundColor:catColor}}
+            >
+                <Stack align="center" spacing="0">
+                    <Icon size={34} stroke={1.5}/>
+                    <Text size="10px">{categorie}</Text>
+                </Stack>
+            </UnstyledButton>
+        </Tooltip>
+
+    ));
+
+
+    return (
+        <Popover
+            width={300}
+            opened={active}
+            position="right"
+            shadow="md"
+            offset={15}
+            trapFocus
+            withArrow
+        >
+            <Popover.Target>
+                <CategorieButton/>
+            </Popover.Target>
+
+            <Popover.Dropdown>
+                <Categories refForOutsideClick={ref} setActive={setActive}/>
             </Popover.Dropdown>
         </Popover>
     );
