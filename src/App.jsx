@@ -14,6 +14,7 @@ import Finss from "./pages/Finss";
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
 
+
 function App() {
     const theme = useMantineTheme()
     const {pathname} = useLocation();
