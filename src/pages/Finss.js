@@ -1,9 +1,6 @@
-
-import {Stack, Text, Center} from "@mantine/core"
+import {Center, Stack} from "@mantine/core"
 import {useEffect, useState} from "react";
 import FinssSelector from "../components/FinssSelector";
-import errorNotif from "../components/ErrorNotif";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useFinssList} from "../hooks/finssHooks/useFinssList";
 import FinssRegisterModal from "../components/FinssRegisterModal";
 import {useParams} from "react-router-dom";
@@ -44,6 +41,8 @@ const Finss = ({setPage}) => {
                 setOpened={setModalOpened}
                 finssId={finssBucquage}
             />
+
+
 
         </Stack>
     );

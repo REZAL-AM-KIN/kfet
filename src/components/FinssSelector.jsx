@@ -1,59 +1,9 @@
-import {
-    Group,
-    Button,
-    Text,
-    Center,
-    UnstyledButton,
-    createStyles,
-    ScrollArea,
-    TextInput,
-    ActionIcon,
-    Stack
-} from "@mantine/core"
-import {IconChevronDown, IconChevronUp, IconEdit, IconSearch, IconSelector} from "@tabler/icons";
-import {useCallback, useEffect, useState} from "react";
-import { keys } from '@mantine/utils';
-import { DataTable, DataTableSortStatus } from 'mantine-datatable';
+import {ActionIcon, Button, Group, ScrollArea, Stack, Text, TextInput} from "@mantine/core"
+import {IconEdit, IconSearch} from "@tabler/icons";
+import {useEffect, useState} from "react";
+import {DataTable} from 'mantine-datatable';
+import {Link} from "react-router-dom";
 
-const useStyles = createStyles((theme) => ({
-  th: {
-    padding: '0 !important',
-  },
-
-  control: {
-    width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-    },
-  },
-
-  icon: {
-    width: 21,
-    height: 21,
-    borderRadius: 21,
-  },
-}));
-
-function Th({ children, reversed, sorted, onSort }) {
-  const { classes } = useStyles();
-  const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
-  return (
-      <th className={classes.th}>
-        <UnstyledButton onClick={onSort} className={classes.control}>
-          <Group position="apart">
-            <Text weight={500} size="sm">
-              {children}
-            </Text>
-            <Center className={classes.icon}>
-              <Icon size={14} stroke={1.5} />
-            </Center>
-          </Group>
-        </UnstyledButton>
-      </th>
-  );
-}
 
 function filterData(data, search) {
   const data_keys = ["titre", "description", "date_event"]
@@ -125,30 +75,52 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
             if(!finss.is_prebucque){
                 return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
             }else{
-                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier mon inscription</Button>)
+                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier</Button>)
             }
 
         }
 
+
+
+        return (
+            <Stack justify="space-between" align="center" spacing={3}>
+                {prebucqageButtons()}
+            </Stack>
+        )
+    }
+
+    const NameRowRender = ({finss}) =>{
         //On vérifie si l'utilisateur est manager du fin'ss
-        function editButton(){
+        const EditButton = () => {
             if(!finss.can_manage){
                 return;
             }
 
             return (
-                <ActionIcon color="blue" onClick={() => console.log("edit"+finss.name)}>
+                <ActionIcon component={Link} to={"/finssedit/"+finss.id} color="blue" onClick={() => console.log("edit"+finss.name)}>
                     <IconEdit size={20} />
                 </ActionIcon>
             )
 
         }
 
+        /*
+
+
+         */
+
         return (
-            <Stack justify="space-between" align="center" spacing={3}>
-                {prebucqageButtons()}
-                {editButton()}
-            </Stack>
+
+        <Group position="apart">
+
+
+
+            <Text style={{maxWidth:200, wordWrap:"break-word", margin:1}}> {finss.titre}</Text>
+
+            <EditButton/>
+
+        </Group>
+
         )
     }
 
@@ -170,10 +142,10 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
             fetching={isLoading}
             records={sortedData}
             columns={[
-                {accessor: "titre", title:"Nom", sortable: true},
-                {accessor: "description", title:"Description", sortable: true},
+                {accessor: "test", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), width:270},
+                {accessor: "description", title:"Description", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
                 {accessor: "date_event", title:"Date", width: 110, sortable: true},
-                {accessor: "actions", title:"Actions", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
+                {accessor: "actions", title:"Inscription", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
             ]}
             sortStatus={sortStatus}
             onSortStatusChange={setSortStatus}
