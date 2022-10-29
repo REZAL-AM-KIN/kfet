@@ -1,22 +1,83 @@
-import {useState} from "react";
+import {forwardRef, useState} from "react";
+import {Autocomplete, Group, Text, useMantineTheme} from "@mantine/core";
+import errorNotif from "./ErrorNotif";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 
-function Produits({produits, categorie}) {
+const AutoCompleteItem = forwardRef(({value, nom, raccourci, prix, ...others}, ref) => (
+        <Group position="apart" ref={ref} {...others}>
+            <Group>
+                <Text>{nom}</Text>
+                <Text size="xs" color="dimmed">({raccourci})</Text>
+            </Group>
+            <Text>{prix}</Text>
+        </Group>
+    )
+);
 
-    const [selectedProduit, setSelectedProduit] = useState(null);
 
+function Produits({pgData, produits, categorie, onDebucuqage}) {
+
+    const theme = useMantineTheme();
+    const axiosPrivate = useAxiosPrivate();
+    const [value, setValue] = useState("");
+
+    // create the list of produits in the categorie
     let produits_list = [];
     for (let line of produits) {
         if (line["nom_entite"] === categorie) {
-            produits_list.push(line);
+            produits_list.push({value: line.nom, ...line});
         }
     }
 
+    const onItemSubmit = (e) => {
+        const createBucquage = async () => {
+            try {
+                await axiosPrivate.post("bucquages/",
+                    JSON.stringify({
+                        cible_bucquage: pgData.id,
+                        id_produit: e.id
+                    }));
+                if (onDebucuqage) {
+                    onDebucuqage();
+                }
+            } catch (error) {
+                errorNotif("Debucquage", error);
+            }
+        }
+        createBucquage();
+    }
+
     return (
-        <>
-            <div>shows the products list "{produits_list.toString()}" corresponding to the categorie "{categorie.toString()}"</div>
-            <div> the product selected is {selectedProduit?selectedProduit.toString():"NONE"}</div>
-        </>
+        <Autocomplete
+            data={produits_list}
+            itemComponent={AutoCompleteItem}
+            limit={6}
+            value={value}
+            onChange={setValue}
+            onItemSubmit={(e) => {
+                onItemSubmit(e);
+                setValue("");
+            }}
+            placeholder="Rechercher un Produit"
+            nothingFound="Aucun produit trouvé :("
+            styles={{
+                input: {
+                    width: "100%",
+                    borderRadius: 9,
+                    borderStyle: "none",
+                    borderWidth: 2,
+                    '&:focus': {
+                        borderStyle: "solid",
+                        borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}).background
+                    }
+                }
+            }}
+            filter={(value, item) =>
+                item.nom.toLowerCase().includes(value.toString().toLowerCase().trim()) ||
+                item.raccourci.toLowerCase().includes(value.toString().toLowerCase().trim())
+            }
+        />
     );
 }
 
