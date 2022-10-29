@@ -11,6 +11,7 @@ import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
 import {useCategorie} from "../hooks/useCategorie";
+import Produits from "../components/Produits";
 
 
 function PG({setPage}) {
@@ -29,7 +30,7 @@ function PG({setPage}) {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categorie, setCategorie] = useCategorie();
+    const [categorie, ] = useCategorie();
 
     const getHistory = async () => {
         try {
@@ -89,12 +90,11 @@ function PG({setPage}) {
 
 
     //callbacks
-    const handleRecharge = () => {
+    const handleTransaction = () => {
         // update pgdata and history
         getHistory();
         getPG();
     }
-
 
     return (
         <Grid>
@@ -102,12 +102,16 @@ function PG({setPage}) {
                 <PgCard data={pgData}/>
                 <SimpleGrid>
                     {permissions.recharge
-                        ? <RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        ? <RechargeButton pgData={pgData} onRecharge={handleTransaction}/>
                         : <></>}
-                    {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
+
+                    <RechargeLydiaButton pgData={pgData} onRecharge={handleTransaction}/>
                 </SimpleGrid>
-                {/*<Produits produits={allProduits} categorie={categorie}/>*/}
+                <Produits
+                    pgData={pgData}
+                    produits={allProduits}
+                    categorie={categorie}
+                    onDebucuqage={handleTransaction}/>
 
             </Grid.Col>
             <Grid.Col md={4}>
