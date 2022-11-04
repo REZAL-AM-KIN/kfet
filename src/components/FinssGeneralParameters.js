@@ -14,9 +14,11 @@ import {
 } from "@mantine/core";
 import {useFinssInfo} from "../hooks/finssHooks/useFinssInfo";
 import {useForm} from "@mantine/form";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {DatePicker} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons";
+import {useConsommateursList} from "../hooks/useConsommateursList";
+import ManagersSelector from "./ManagersSelector";
 
 function endEvent(finss) {
     const endFinss = ()=>{
@@ -50,6 +52,8 @@ const FinssGeneralParameters = ({finssid})=>{
     const useFinss = useFinssInfo(finssid)
 
 
+
+    // Initialisation de la Form des paramètres du fin'ss
     const form = useForm({
         initialValues:{
             titre: "",
@@ -71,6 +75,7 @@ const FinssGeneralParameters = ({finssid})=>{
     })
 
 
+    //update de la date à chaque chargement de fin'ss (il faut créer un objet "Date" pour le component "DatePicker")
     useEffect(()=>{
         // On crée un objet Date à partir du string date_event
         const data = useFinss.finssInfo
@@ -79,6 +84,7 @@ const FinssGeneralParameters = ({finssid})=>{
     }, [useFinss.finssInfo])
 
 
+    //Construction de l'UI
     return (
         <Stack>
             <Center style={{paddingTop:20}}>
@@ -116,11 +122,8 @@ const FinssGeneralParameters = ({finssid})=>{
 
                         />
 
-                        <MultiSelect
-                            data={[]}
-                            label= "Managers"
+                        <ManagersSelector
                             {...form.getInputProps('managers')}
-
                         />
 
                         <Center>
