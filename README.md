@@ -1,11 +1,12 @@
 # Objectif
-L'objectif de ce projet est de refaire entièrement le front Kfet
+L'objectif de ce projet est de refaire entièrement le front Kfet  
+*[TODO](./todo.txt)*
+
 
 # Table des matieres
 <!-- TOC -->
 * [Objectif](#objectif)
 * [Table des matières](#table-des-matieres)
-* [TODO](./todo.txt)
 * [Cahier des Charges](#cahier-des-charges)
   * [Pouvoir Débucquer](#pouvoir-dbucquer)
   * [Pouvoir recharger](#pouvoir-recharger)
