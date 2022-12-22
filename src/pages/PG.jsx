@@ -10,10 +10,14 @@ import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
+import {useCategorie} from "../hooks/useCategorie";
+import Produits from "../components/Produits";
 
 
 function PG({setPage}) {
-    useEffect(()=>{setPage("Debucquage")})
+    useEffect(() => {
+        setPage("Debucquage")
+    })
 
     // current displayed pgId from url
     let params = useParams();
@@ -25,7 +29,8 @@ function PG({setPage}) {
 
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
-
+    const [allProduits, setAllProduits] = useState([]);
+    const [categorie, ] = useCategorie();
 
     const getHistory = async () => {
         try {
@@ -53,46 +58,61 @@ function PG({setPage}) {
 
 
     useEffect(() => {
-        console.log("UPDATE: PG");
+        console.log("UPDATE: PG and HISTORY");
         // make the api call for pg info:
         const controller = new AbortController();
         getPG();
+        getHistory()
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
     }, [pgId]);
 
+
     useEffect(() => {
-        console.log("UPDATE: PgHistory");
+        /* Retrieves the produits list from the server and extracts the categories list */
         const controller = new AbortController();
-        getHistory()
+        const getProduits = async () => {
+            try {
+                const response = await axiosPrivate.get("produits/");
+                setAllProduits(response.data.results);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getProduits();
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
-    }, [pgData])
+    }, [])
 
 
     //callbacks
-    const handleRecharge = () =>{
+    const handleTransaction = () => {
         // update pgdata and history
         getHistory();
         getPG();
     }
 
-
     return (
-        <Grid style={{backgroundColor: "pink"}}>
+        <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 <SimpleGrid>
                     {permissions.recharge
-                        ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
-                        :<></>}
-                    {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
+                        ? <RechargeButton pgData={pgData} onRecharge={handleTransaction}/>
+                        : <></>}
+
+                    <RechargeLydiaButton pgData={pgData} onRecharge={handleTransaction}/>
                 </SimpleGrid>
+                <Produits
+                    pgData={pgData}
+                    produits={allProduits}
+                    categorie={categorie}
+                    onDebucuqage={handleTransaction}/>
+
             </Grid.Col>
             <Grid.Col md={4}>
 
