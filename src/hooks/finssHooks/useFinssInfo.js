@@ -4,6 +4,34 @@ import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons";
 
+/*
+Permet d'obtenir et de changer les informations d'un Fin'ss
+
+Paramètres:
+    finssId: Id du fin'ss
+
+Retour:
+    isLoading: bool qui donne l'état de chargement des informations
+    finssInfo: Dictionnaire qui contient les infos du fin'ss
+    retrieveFinssInfo: Fonction qui force l'update de finssInfo
+    changeInfo: Change les informations du fin'ss (prends en entrée le tableau d'info du fin'ss)
+
+Tableau d'info du fin'ss:
+    {
+        "id": id du fin'ss,
+        "titre": "Nom du fin'ss",
+        "description": "Description du fin'ss",
+        "can_subscribe": peut on encore s'inscrire ? (bool),
+        "date_event": "Date du fin'ss",
+        "ended": est-il cloturer ?,
+        "can_manage": l'utilisateur en cours peut-il le manager ?,
+        "is_prebucque":  l'utilisateur est il inscrit ?,
+        "managers": [Liste des managers]
+    }
+
+
+ */
+
 export function useFinssInfo(finssId) {
     const axiosPrivate = useAxiosPrivate()
 

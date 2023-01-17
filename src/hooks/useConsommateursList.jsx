@@ -37,5 +37,5 @@ export function useConsommateursList(){
         // eslint-disable-next-line
     }, []);
 
-    return {consommateurs, isLoading}
+    return {consommateurs, isLoading, retrieveConsommateurs}
 }

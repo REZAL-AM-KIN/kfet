@@ -1,14 +1,13 @@
 import {Box, Button, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useForm} from '@mantine/form';
-import {useFinssProducts} from "../hooks/finssHooks/useFinssProduct";
-import {useEffect} from "react";
+import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
+import {useEffect, useState} from "react";
 import {DataTable} from "mantine-datatable";
 import {useMediaQuery} from "@mantine/hooks";
-
-function sendParticipation(values){
-    console.log(values)
-    //TODO: Faire l'envoie des participations (prébucquage) --> Finir backend
-}
+import {useUser} from "../../hooks/useUser";
+import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
+import {showNotification} from "@mantine/notifications";
+import {IconCheck} from "@tabler/icons";
 
 
 const FinssRegisterModal = ({opened, setOpened, finssId})=>{
@@ -16,7 +15,11 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
 
-    const {isLoading, productsList} = useFinssProducts(finssId)
+    const userInfo = useUser()
+    const useParticipation = useUserParticipation()
+    const {isLoading, productsList, retrieveProducts} = useFinssProducts(finssId)
+
+    const [isSending, setSending] = useState(false)
 
 // initialisation de la user form. La liste des produits est vide
     const form = useForm({
@@ -26,13 +29,36 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     })
 
 
+
 //on remplie la liste des produits en renommant l'attribue id en "key"
     useEffect(()=>{
         const data = productsList.map(({id, ...product}) => ({key:id, ...product, qts: (product.obligatoire ? 1: 0)}))
         form.setValues({products:data})
     },[productsList])
 
+    //Fonction de submit de la form
+    function sendParticipation(values){
 
+        const participations = values.products.map(({key,qts})=>(
+            {cible_participation:userInfo.id, product_participation:key, prebucque_quantity:qts}
+        ))
+        setSending(true)
+        useParticipation.sendParticipations(participations).then((success)=>{
+            if(success){
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: 'Inscription réussie',
+                    message: 'Votre participation a bien été prise en compte.'
+                })
+            }
+            setSending(false)
+            closeModal()
+        })
+
+
+    }
 
     function closeModal(){
         setOpened(false);

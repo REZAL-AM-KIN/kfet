@@ -1,4 +1,4 @@
-import {openConfirmModal} from "@mantine/modals";
+import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {
     Box,
     Button,
@@ -12,34 +12,74 @@ import {
     TextInput,
     useMantineTheme
 } from "@mantine/core";
-import {useFinssInfo} from "../hooks/finssHooks/useFinssInfo";
 import {useForm} from "@mantine/form";
 import {useEffect, useState} from "react";
 import {DatePicker} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons";
-import {useConsommateursList} from "../hooks/useConsommateursList";
-import ManagersSelector from "./ManagersSelector";
+import ManagersSelector from "../ManagersSelector";
 
-function endEvent(finss) {
+function endEvent(finss, usebucquage) {
     const endFinss = ()=>{
-
+        // TODO : End fin'ss
     }
 
     const checkIfFinssCanBeEnded = () =>{
+               // On récupère la liste des bucquages (pas participations) qui comporte des participations bucqué mais pas débucqué
+        const bucquedButNotDebucquedBucquage = usebucquage.bucquages.filter((bucquage)=> (
+                                                    bucquage.participation_event.some((participation)=>
+                                                        (participation.participation_bucquee
+                                                            && !participation.participation_debucquee))
+                                                ))
+
+        // Si il reste des bucquages avec des participations non débucquées, alors on interdit la cloture
+        if(bucquedButNotDebucquedBucquage.length!==0){
+            console.log(bucquedButNotDebucquedBucquage.length)
+            openModal({
+                title: 'Clôture du Fin\'ss impossible :',
+                centered: true,
+                children: (
+                    <>
+                        <Text size="sm">
+                            Tous les débucquages non pas été effectués.<br/>
+                            Rendez-vous dans section débucquage.
+                        </Text>
+                        <Button fullWidth color="red" onClick={closeAllModals} mt="md">C'est compris.</Button>
+                    </>
+                ),
+            });
+
+        // Sinon on demande une dernière fois si l'utilisateur est sur de lui
+        }else{
+            openConfirmModal({
+                title: "Clôture du fin'ss "+finss.titre,
+                centered: true,
+                closeOnConfirm: false,
+                children : (
+                    <Text size="sm">
+                        Les conditions permettant la clôture du fin'ss sont réunis.<br/>
+                        La clôture sera <i><u><b>définitive</b></u></i>.
+                    </Text>
+                ),
+                labels : {confirm: "Clôturer le Fin'ss", cancel:"Annuler"},
+                confirmProps:{color:"red"},
+                onConfirm: endFinss,
+            });
+        }
 
     }
 
     // Première modal de confirmation : Vérifie que l'utilisateur souhaite bien cloturer le Fin'ss
     const confirmModal = () => openConfirmModal({
-        title: "Cloture du fin'ss "+finss.titre,
+        title: "Clôture du fin'ss "+finss.titre,
         centered: true,
+        closeOnConfirm: false,
         children : (
             <Text size="sm">
-                Une fois le fin'ss cloturé, il ne sera plus possible de modifier ses paramètres ni de débucquer
+                Une fois le fin'ss clôturé, il ne sera plus possible de modifier ses paramètres ni de débucquer
                 de nouvelles personnes.
             </Text>
         ),
-        labels : {confirm: "Cloturer le Fin'ss", cancel:"Annuler"},
+        labels : {confirm: "Clôturer le Fin'ss", cancel:"Annuler"},
         confirmProps:{color:"red"},
         onConfirm: checkIfFinssCanBeEnded,
     });
@@ -47,9 +87,9 @@ function endEvent(finss) {
     confirmModal()
 }
 
-const FinssGeneralParameters = ({finssid})=>{
+const FinssGeneralParameters = ({usefinssinfo, usebucquage})=>{
     const theme = useMantineTheme()
-    const useFinss = useFinssInfo(finssid)
+    const useFinss = usefinssinfo
 
 
 
@@ -75,6 +115,7 @@ const FinssGeneralParameters = ({finssid})=>{
     })
 
 
+    //0n remplie la form avec les valeurs du finss
     //update de la date à chaque chargement de fin'ss (il faut créer un objet "Date" pour le component "DatePicker")
     useEffect(()=>{
         // On crée un objet Date à partir du string date_event
@@ -138,7 +179,7 @@ const FinssGeneralParameters = ({finssid})=>{
                         <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
                     </form>
 
-                    <Button style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(useFinss.finssInfo)}}>Cloturer le Fin'ss</Button>
+                    <Button style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(useFinss.finssInfo, usebucquage)}}>Clôturer le Fin'ss</Button>
                 </Box>
             </Center>
 

@@ -6,6 +6,12 @@ import {showNotification} from "@mantine/notifications";
 import {IconX} from "@tabler/icons";
 import {getHotkeyHandler} from "@mantine/hooks";
 
+/*
+Composant qui propose la sélection d'un pg.
+
+Lorsqu'un PG est sélectionné, la fonction "onSelectCallBack" est appelée et l'objet pg est passé en paramètre.
+
+ */
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
         <div ref={ref} {...others}>
             <Stack>
@@ -25,16 +31,13 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({refForOutsideClick, setActive})=>{
-
-
+const SearchPg = ({refForOutsideClick, setActive, onSelectCallBack, withBorder, ...othersProps})=>{
     const theme = useMantineTheme()
 
-
     const axiosPrivate = useAxiosPrivate();
-    const navigate = useNavigate();
 
     const [consommateurList, setConsommateurList] = useState([]);
+
 
     //retrieve All consomateur
     useEffect(() => {
@@ -66,15 +69,13 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
 
 
     //Pour que autocompltete fonctionne, il faut obligatoirement un champ value. On transforme donc le champ bucque en value
-    const data = consommateurList.map((pg) =>{
-        return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
+    const data = consommateurList.map(({bucque, ...pg}) =>{
+        return { value: bucque, ...pg}
     })
 
 
-    const onItemSubmit = (e)=>{
-        console.log("ee")
-        setActive(false) //On ferme le popover quand un pg est sélectionné
-        navigate("pg/"+e.id)
+    const onItemSubmit = (pg)=>{
+        onSelectCallBack(pg)
     }
 
     return (
@@ -89,7 +90,8 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 input: {
                     width: "100%",
                     borderRadius: 9,
-                    borderStyle: "none",
+                    borderStyle: withBorder ? "solid" : "none",
+                    borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}),
                     borderWidth: 2,
                     '&:focus': {
                         borderStyle: "solid",
@@ -105,9 +107,14 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
             ref={refForOutsideClick} //on passe en ref le useOutSideClick pour fermer la popover lorsqu'on clique en dehors du champ
-            onKeyDown={getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
+
+
+            onKeyDown={setActive ? getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
                 ['escape', ()=>setActive(false)],       //En appuyant sur escape.
-            ])}
+            ]) : undefined}
+
+            {...othersProps}
+
         />
 
 

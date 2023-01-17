@@ -1,4 +1,4 @@
-import {ActionIcon, Button, Group, ScrollArea, Stack, Text, TextInput} from "@mantine/core"
+import {ActionIcon, Button, Group, Stack, Text, TextInput, Box, Image} from "@mantine/core"
 import {IconEdit, IconSearch} from "@tabler/icons";
 import {useEffect, useState} from "react";
 import {DataTable} from 'mantine-datatable';
@@ -113,8 +113,6 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
 
         <Group position="apart">
 
-
-
             <Text style={{maxWidth:200, wordWrap:"break-word", margin:1}}> {finss.titre}</Text>
 
             <EditButton/>
@@ -124,9 +122,8 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
         )
     }
 
-
   return (
-      <ScrollArea>
+      <Stack style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <TextInput
             placeholder="Rechercher un fin'ss sur n'importe quel critère"
             mb="md"
@@ -134,27 +131,31 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
             value={search}
             onChange={handleSearchChange}
         />
+        <Box style={{
+            flex: "1 1 auto",
+            overflow: "hidden"
+        }}>
+            <DataTable
+                minHeight={150}
+                striped
+                highlightOnHover
+                fetching={isLoading}
+                records={sortedData}
+                columns={[
+                    {accessor: "test", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), width:270},
+                    {accessor: "description", title:"Description", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                    {accessor: "date_event", title:"Date", width: 110, sortable: true},
+                    {accessor: "actions", title:"Inscription", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
+                ]}
+                sortStatus={sortStatus}
+                onSortStatusChange={setSortStatus}
+                noRecordsText="Aucun fin'ss n'a été trouvé"
+            >
 
-        <DataTable
-            minHeight={150}
-            striped
-            highlightOnHover
-            fetching={isLoading}
-            records={sortedData}
-            columns={[
-                {accessor: "test", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), width:270},
-                {accessor: "description", title:"Description", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                {accessor: "date_event", title:"Date", width: 110, sortable: true},
-                {accessor: "actions", title:"Inscription", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
-            ]}
-            sortStatus={sortStatus}
-            onSortStatusChange={setSortStatus}
-            noRecordsText="Aucun fin'ss n'a été trouvé"
-        >
 
-        </DataTable>
-
-      </ScrollArea>
+            </DataTable>
+        </Box>
+      </Stack>
   )
 }
 

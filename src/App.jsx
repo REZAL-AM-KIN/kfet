@@ -3,7 +3,7 @@ import {useState} from "react";
 
 import RequireAuth from './components/RequireAuth';
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
-import {useMediaQuery} from "@mantine/hooks";
+import {useMediaQuery, useViewportSize} from "@mantine/hooks";
 
 import Login from './pages/Login';
 import PG from './pages/PG';
@@ -28,6 +28,7 @@ function App() {
      */
 
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const viewportSize = useViewportSize();
 
     const navBarWidth = 80
     const pathWithoutNav = ["/login"]
@@ -51,7 +52,8 @@ function App() {
                                 // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
                                 // de la nav bar sur le container
                                 marginLeft: (isSmallDevice || !withNavBar(pathname)) ? 0 : navBarWidth,
-                                paddingLeft: "0"
+                                paddingLeft: "0",
+                                height: viewportSize.height,
                             }}>
 
                                 <Routes>

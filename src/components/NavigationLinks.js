@@ -126,6 +126,8 @@ export function NormalSearchPgButton() {
 
     const ref = useClickOutside(() => setActive(false));
 
+    const navigate = useNavigate();
+
     const Icon =IconUserSearch
     const label="Rechercher un pg"
     const shortcut="alt+P"
@@ -162,6 +164,11 @@ export function NormalSearchPgButton() {
 
     ));
 
+    function pgSelectCallBack(pg) {
+        setActive(false) //On ferme le popover quand un pg est sélectionné
+        navigate("pg/"+pg.id)
+    }
+
 
 
     return (
@@ -185,7 +192,7 @@ export function NormalSearchPgButton() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <SearchPg refForOutsideClick={ref} setActive={setActive}/>
+                <SearchPg refForOutsideClick={ref} setActive={setActive} onSelectCallBack={pgSelectCallBack} />
             </Popover.Dropdown>
         </Popover>
     );
