@@ -36,11 +36,15 @@ FinssList:
 export function useFinssList(){
     const axiosPrivate = useAxiosPrivate()
     const [isLoading, setLoading] = useState(true)
+    const [isSending, setSending] = useState(false)
     const [finssList, setFinssList] = useState([])
 
     const createFinss = async (finssInfo)=>{
         try {
-           const response = await axiosPrivate.post("event/", finssInfo)
+            setSending(true)
+            const response = await axiosPrivate.post("event/", finssInfo)
+            setSending(false)
+
             console.log(response)
 
             if(response.status===201){
@@ -55,6 +59,7 @@ export function useFinssList(){
 
                 // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
                 retrieveFinssList()
+
 
             }else{
                 errorNotif("Finss", "Une erreur inconnue est survenue lors de la création du finss")
@@ -94,5 +99,5 @@ export function useFinssList(){
         // eslint-disable-next-line
     }, []);
 
-    return {isLoading, finssList, retrieveFinssList, createFinss}
+    return {isLoading, finssList, isSending, retrieveFinssList, createFinss}
 }

@@ -133,8 +133,8 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFins
 
     function formSubmit(values) {
         if(forCreation){
-            useFinssList.createFinss(values)
-            closeAllModals()
+            useFinssList.createFinss(values).then(()=>closeAllModals())
+
         }else{
             usefinssinfo.changeInfo(values)
         }
@@ -148,7 +148,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFins
 
                 <Box style={{width:400, position:'relative'}}>
 
-                    <LoadingOverlay visible={usefinssinfo.isLoading} overlayBlur={2} />
+                    <LoadingOverlay visible={usefinssinfo.isLoading || (useFinssList && useFinssList.isSending)} overlayBlur={2} />
 
                     <form  onSubmit={form.onSubmit((values) => formSubmit(values))}>
                         <TextInput
