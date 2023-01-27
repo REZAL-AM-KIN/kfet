@@ -1,4 +1,4 @@
-import {Center, Stack,Box,Image} from "@mantine/core"
+import {Center, Stack,Box} from "@mantine/core"
 import {useEffect, useState} from "react";
 import FinssSelector from "../components/Finss/FinssSelector";
 import {useFinssList} from "../hooks/finssHooks/useFinssList";
@@ -14,13 +14,13 @@ const Finss = ({setPage}) => {
     const [finssBucquage, setFinssBucquage] = useState()
 
 
-    const {finssList, isLoading, updateFinssList} = useFinssList()
+    const usefinsslist = useFinssList()
 
     // On configure un useEffect qui s'execute à chaque changement d'état d'ouverture de la modale de sélection d'inscription
     // Si modalOpened===false alors l'utilisateur vient de fermer la modal : on update donc les résultats
     useEffect(()=>{
         if(modalOpened===false){
-            updateFinssList()
+            usefinsslist.retrieveFinssList()
         }
     }, [modalOpened])
 
@@ -54,9 +54,9 @@ const Finss = ({setPage}) => {
      */
 
     return(
-        <Stack style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Stack spacing="0" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
            <Center>
-               <h1>Listes des fin'ss</h1>
+               <h1 style={{margin:"10px"}}>Listes des fin'ss</h1>
            </Center>
             <Box
                 style={{
@@ -65,8 +65,7 @@ const Finss = ({setPage}) => {
                 }}
             >
                 <FinssSelector
-                    data={finssList}
-                    isLoading={isLoading}
+                    usefinsslist={usefinsslist}
                     setFinssId={setFinssBucquage}
                     setModalOpened={setModalOpened}
                 />

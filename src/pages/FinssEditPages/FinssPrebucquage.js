@@ -1,9 +1,5 @@
 import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay} from "@mantine/core";
-import {DataTable} from "mantine-datatable";
 import SearchableDataTable from "../../components/SearchableDataTable";
-import {useBucquage} from "../../hooks/finssHooks/useBucquage";
-import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
-import {useEffect} from "react";
 import errorNotif from "../../components/ErrorNotif";
 
 
@@ -103,7 +99,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                     elementSpacing={"xs"}
 
                     styles={{
-                        input: {width: "60%"}
+                        input: {flex: "auto"}
                     }}
 
                     rowExpansion={{

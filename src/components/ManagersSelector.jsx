@@ -1,4 +1,4 @@
-import {Group, MultiSelect, Stack, Text, Textarea} from "@mantine/core";
+import {Group, MultiSelect, Stack, Text} from "@mantine/core";
 import {useConsommateursList} from "../hooks/useConsommateursList";
 import {forwardRef, useEffect, useState} from "react";
 

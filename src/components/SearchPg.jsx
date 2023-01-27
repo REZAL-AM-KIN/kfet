@@ -1,7 +1,6 @@
 import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import {forwardRef, useEffect, useState} from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import {useNavigate} from "react-router-dom";
 import {showNotification} from "@mantine/notifications";
 import {IconX} from "@tabler/icons";
 import {getHotkeyHandler} from "@mantine/hooks";

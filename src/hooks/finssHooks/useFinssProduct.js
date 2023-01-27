@@ -34,6 +34,7 @@ Retours:
  */
 
 export function useFinssProducts(finssId){
+
     const axiosPrivate = useAxiosPrivate()
 
     const [isLoading, setLoading] = useState(true)
@@ -142,6 +143,10 @@ export function useFinssProducts(finssId){
 
     // get product list
     useEffect(() => {
+        //Si aucun finss id n'est passé, alors on de récup pas les produits
+        if(!finssId){
+            return
+        }
         const controller = new AbortController();
 
         setLoading(true)

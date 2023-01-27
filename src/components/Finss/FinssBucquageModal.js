@@ -3,7 +3,7 @@ import {
     Button,
     Modal,
     NumberInput,
-    Stack,
+    Center,
     Text,
     useMantineTheme,
     Overlay,
@@ -12,23 +12,20 @@ import {
     FocusTrap
 } from "@mantine/core";
 import {useForm} from '@mantine/form';
-import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
 import {useEffect, useState} from "react";
 import {DataTable} from "mantine-datatable";
-import {useFocusTrap, useMediaQuery} from "@mantine/hooks";
+import {useMediaQuery} from "@mantine/hooks";
 import {useUser} from "../../hooks/useUser";
 import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck, IconCross, IconX} from "@tabler/icons";
+import {IconCheck, IconX} from "@tabler/icons";
 import SearchPg from "../SearchPg";
 
 
 const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>{
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
-
-
-    const userInfo = useUser()
+    useUser();
     const useParticipation = useUserParticipation()
 
 
@@ -36,12 +33,14 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     const [selectedPG, setSelectedPG] = useState()
     const [pgselectorValue, setPgselectorValue] = useState()
     const [focusOnPGSelector, setFocusOnPGSelector] = useState(true)
+    const [error, setError] = useState("")
 
 // initialisation de la user form. La liste des produits est vide
     const form = useForm({
         initialValues:{
-            products:[]
-        }
+            products:[],
+        },
+
     })
 
 
@@ -87,13 +86,14 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         // On regarde si les valeurs de quantité ont augmenté entre le prébucquage et le bucquage
         // Si c'est le cas, on vérifie que le PG a le montant suffisant pour être débucqué
         if(values.products.some((product)=>product.qts>product.already_bucqued_quantity)){
-            console.log("qts changed")
+            //console.log("qts changed")
             // On calcule le montant du par le PG avec les prix min fixé pour chaques produit
             const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.prix_min,0)
-            console.log(prix_min_total+"/"+selectedPG.solde)
-            console.log(selectedPG)
+            //console.log(prix_min_total+"/"+selectedPG.solde)
+            //console.log(selectedPG)
             if(selectedPG.solde<prix_min_total){
-                console.log("negatss")
+                setError("Solde insuffisant.")
+                return
             }
 
         }
@@ -139,6 +139,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     }
 
     function clearPgSelector() {
+        setError("")
         setSelectedPG(undefined);
         setPgselectorValue("");
         setFocusOnPGSelector(true) // On remet le focus sur le SearchPg
@@ -176,10 +177,11 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         <Modal opened={opened} onClose={closeModal}>
             <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})}>
                <Box sx={{height: isSmallDevice ? 300:400}}>
+                   {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                    <Group  spacing="0">
                        <FocusTrap active={focusOnPGSelector}>
                        {/*On wrap le SearchPg dans une box pour pouvoir controler la width*/}
-                       <Box style={{width:"90%"}}>
+                       <Box style={{flex:"auto"}}>
 
                                 <SearchPg onSelectCallBack={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
 
@@ -213,9 +215,10 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
 
                </Box>
-
-                <Button style={{width:"48%", marginTop: 10, marginRight: "3px"}} type="submit" disabled={!selectedPG}>Valider</Button>
-                <Button style={{width:"48%", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6]}} type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                <Group spacing="0">
+                    <Button style={{flex:"auto", marginTop: 10, marginRight: "3px"}} type="submit" disabled={!selectedPG}>Valider</Button>
+                    <Button style={{flex:"auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6]}} type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                </Group>
             </form>
         </Modal>
     )

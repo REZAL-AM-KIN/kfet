@@ -1,4 +1,4 @@
-import {Stack, Tabs, Title} from "@mantine/core"
+import {Stack, Tabs, Title, Group, Text, Center} from "@mantine/core"
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
 import FinssPrebucquage from "./FinssEditPages/FinssPrebucquage";
@@ -8,6 +8,7 @@ import {useFinssProducts} from "../hooks/finssHooks/useFinssProduct";
 import {useFinssInfo} from "../hooks/finssHooks/useFinssInfo";
 import FinssBucquage from "./FinssEditPages/FinssBucquage";
 import FinssDebucquage from "./FinssEditPages/FinssDebucquage";
+import {IconAlertTriangle} from "@tabler/icons";
 
 const FinssEdit = ({setPage}) => {
     let params = useParams()
@@ -23,6 +24,7 @@ const FinssEdit = ({setPage}) => {
     return(
         <Stack style={{height: "100%"}}>
             <Title order={1} align="center">{usefinssinfo.finssInfo.titre}</Title>
+            {usefinssinfo.finssInfo.ended ? <Center><Group spacing="0"><IconAlertTriangle size={33} color="red"/><Text size={18} color="red"> Fin'ss cloturé !</Text></Group></Center>:""}
 
             <Tabs keepMounted={false} defaultValue="prebucquage" style={{
                                                                             display: "flex",
@@ -46,7 +48,7 @@ const FinssEdit = ({setPage}) => {
                 </Tabs.Panel>
 
                 <Tabs.Panel style={{flex: "1 1 auto"}} value="debucquage">
-                    <FinssDebucquage usebucquage={usebucquage}  usefinssproduct={usefinssproduct}/>
+                    <FinssDebucquage usefinssinfo={usefinssinfo} usebucquage={usebucquage}  usefinssproduct={usefinssproduct}/>
                 </Tabs.Panel>
 
                 <Tabs.Panel value="parameters">

@@ -4,7 +4,6 @@ import {
     Button,
     Center,
     LoadingOverlay,
-    MultiSelect,
     Stack,
     Switch,
     Text,
@@ -13,14 +12,14 @@ import {
     useMantineTheme
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {DatePicker} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons";
 import ManagersSelector from "../ManagersSelector";
 
-function endEvent(finss, usebucquage) {
+function endEvent(usefinss, usebucquage) {
     const endFinss = ()=>{
-        // TODO : End fin'ss
+        usefinss.endFinss()
     }
 
     const checkIfFinssCanBeEnded = () =>{
@@ -51,9 +50,8 @@ function endEvent(finss, usebucquage) {
         // Sinon on demande une dernière fois si l'utilisateur est sur de lui
         }else{
             openConfirmModal({
-                title: "Clôture du fin'ss "+finss.titre,
+                title: "Clôture du fin'ss "+usefinss.finssInfo.titre,
                 centered: true,
-                closeOnConfirm: false,
                 children : (
                     <Text size="sm">
                         Les conditions permettant la clôture du fin'ss sont réunis.<br/>
@@ -70,7 +68,7 @@ function endEvent(finss, usebucquage) {
 
     // Première modal de confirmation : Vérifie que l'utilisateur souhaite bien cloturer le Fin'ss
     const confirmModal = () => openConfirmModal({
-        title: "Clôture du fin'ss "+finss.titre,
+        title: "Clôture du fin'ss "+usefinss.finssInfo.titre,
         centered: true,
         closeOnConfirm: false,
         children : (
@@ -87,9 +85,18 @@ function endEvent(finss, usebucquage) {
     confirmModal()
 }
 
-const FinssGeneralParameters = ({usefinssinfo, usebucquage})=>{
+const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFinssList})=>{
     const theme = useMantineTheme()
-    const useFinss = usefinssinfo
+
+    if((useFinssList && !forCreation ) ||(!useFinssList && forCreation)){
+        throw "forCreation option require useFinssList."
+    }
+
+    //Si on est dans le cas d'une création, on créer un faux objet usefinssinfo vide.
+    if(forCreation){
+        const date = new Date()
+       usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString(), can_subscribe:true, ended:false}}
+    }
 
 
 
@@ -119,10 +126,19 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage})=>{
     //update de la date à chaque chargement de fin'ss (il faut créer un objet "Date" pour le component "DatePicker")
     useEffect(()=>{
         // On crée un objet Date à partir du string date_event
-        const data = useFinss.finssInfo
+        const data = usefinssinfo.finssInfo
         data.date_event = new Date(data.date_event)
         form.setValues(data)
-    }, [useFinss.finssInfo])
+    }, [usefinssinfo.finssInfo])
+
+    function formSubmit(values) {
+        if(forCreation){
+            useFinssList.createFinss(values)
+            closeAllModals()
+        }else{
+            usefinssinfo.changeInfo(values)
+        }
+    }
 
 
     //Construction de l'UI
@@ -132,9 +148,9 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage})=>{
 
                 <Box style={{width:400, position:'relative'}}>
 
-                    <LoadingOverlay visible={useFinss.isLoading} overlayBlur={2} />
+                    <LoadingOverlay visible={usefinssinfo.isLoading} overlayBlur={2} />
 
-                    <form onSubmit={form.onSubmit((values) => useFinss.changeInfo(values))}>
+                    <form  onSubmit={form.onSubmit((values) => formSubmit(values))}>
                         <TextInput
                             label="Nom"
                             placeholder = "Nom"
@@ -176,11 +192,14 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage})=>{
                         </Center>
 
 
-                        <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
+                        <Button disabled={!form.isValid() || usefinssinfo.finssInfo.ended} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
                     </form>
 
-                    <Button style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(useFinss.finssInfo, usebucquage)}}>Clôturer le Fin'ss</Button>
-                </Box>
+                    {/* S'il ne s'agit pas d'une création de finss, on affiche le bouton de cloture*/}
+                    {!forCreation ?
+                        <Button disabled={usefinssinfo.finssInfo.ended} style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(usefinssinfo, usebucquage)}}>Clôturer le Fin'ss</Button>
+                        : ""}
+                    </Box>
             </Center>
 
 

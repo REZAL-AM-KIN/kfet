@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
+import {showNotification} from "@mantine/notifications";
+import {IconCheck} from "@tabler/icons";
 
 /*
 Permet d'obtenir la liste des fin'ss
@@ -36,7 +38,36 @@ export function useFinssList(){
     const [isLoading, setLoading] = useState(true)
     const [finssList, setFinssList] = useState([])
 
-    const updateFinssList = async () => {
+    const createFinss = async (finssInfo)=>{
+        try {
+           const response = await axiosPrivate.post("event/", finssInfo)
+            console.log(response)
+
+            if(response.status===201){
+                // On indique à l'utilisateur que les paramètres ont été changés
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: "Ajout d'un finss",
+                    message: 'Finss créé avec succès'
+                })
+
+                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                retrieveFinssList()
+
+            }else{
+                errorNotif("Finss", "Une erreur inconnue est survenue lors de la création du finss")
+                console.log("Error creating finss", response);
+            }
+        }catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error creating finss", error);
+        }
+    }
+
+
+    const retrieveFinssList = async () => {
         try {
             const response = await axiosPrivate.get("event/");
             if (response.data) {
@@ -56,12 +87,12 @@ export function useFinssList(){
         const controller = new AbortController();
 
         setLoading(true)
-        updateFinssList();
+        retrieveFinssList();
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
     }, []);
 
-    return {isLoading, finssList, updateFinssList}
+    return {isLoading, finssList, retrieveFinssList, createFinss}
 }

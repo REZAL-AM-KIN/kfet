@@ -17,7 +17,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 
     const userInfo = useUser()
     const useParticipation = useUserParticipation()
-    const {isLoading, productsList, retrieveProducts} = useFinssProducts(finssId)
+    const {isLoading, productsList} = useFinssProducts(finssId)
 
     const [isSending, setSending] = useState(false)
 
@@ -30,11 +30,30 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 
 
 
+//TODO : Pb avec useParticipation.participations qui reste = undefined du coup pas de récupération des participations
 //on remplie la liste des produits en renommant l'attribue id en "key"
     useEffect(()=>{
-        const data = productsList.map(({id, ...product}) => ({key:id, ...product, qts: (product.obligatoire ? 1: 0)}))
+        const data = productsList.map(({id, ...product}) => {
+            let prebucque_quantity = null
+
+            //On vérifie que la participation n'est pas en loading
+            if (useParticipation.participations) {
+
+
+                //On selectionne l'objet pariticipation qui correspond au produit
+                const participation = useParticipation.participations.find((participation) => participation.product_participation === id)
+
+                //Si une participation est trouvée alors on récupère la quantité déjà prébucquée
+                if (participation) {
+                    prebucque_quantity = participation ? participation.prebucque_quantity : 0 // On regarde si une participation pour le produit existe, sinon on attribue la quantité de 0
+                }
+            }
+
+
+            return {key:id, ...product, qts: (prebucque_quantity ? prebucque_quantity : (product.obligatoire ? 1: 0))}
+        })
         form.setValues({products:data})
-    },[productsList])
+    },[productsList, useParticipation.participations])
 
     //Fonction de submit de la form
     function sendParticipation(values){

@@ -1,7 +1,5 @@
 
 import {useEffect, useState} from "react";
-import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons";
 import useAxiosPrivate from "../useAxiosPrivate";
 import errorNotif from "../../components/ErrorNotif";
 
@@ -33,11 +31,12 @@ export function useUserParticipation(){
     }
 
     const retrieveParticipations = async () => {
+
         setLoading(true)
         try {
             const response = await axiosPrivate.get("bucquagevent/my_bucquages/");
             if (response.data) {
-                setParticipations(response.data.results);
+                setParticipations(response.data);
             } else {
                 errorNotif("Participation","Impossible de récupérer les participations de l'utilisateur");
             }

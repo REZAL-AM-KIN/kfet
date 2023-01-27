@@ -38,6 +38,37 @@ export function useFinssInfo(finssId) {
     const [isLoading, setLoading] = useState(true)
     const [finssInfo, setFinssInfo] = useState([])
 
+    const endFinss = async ()=>{
+        try {
+            await retrieveFinssInfo()
+            finssInfo.can_subscribe=false
+            finssInfo.ended=true
+
+            const response = await axiosPrivate.put("event/"+finssId+"/", finssInfo)
+
+            if(response.status===200){
+                // On indique à l'utilisateur que les paramètres ont été changés
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: 'Modification des paramètres du Finss',
+                    message: 'Le finss à bien été cloturé'
+                })
+
+                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                retrieveFinssInfo()
+
+            }else{
+                errorNotif("Finss", "Une erreur inconue est survenue lors de la cloture du finss")
+                console.log("Error sending Finss parameters", response);
+            }
+        }catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error sending Finss parameters", error);
+        }
+    }
+
     const changeInfo = async (finssInfo)=>{
         try {
 
@@ -95,6 +126,6 @@ export function useFinssInfo(finssId) {
         // eslint-disable-next-line
     }, [finssId]);
 
-    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo}
+    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo, endFinss}
 
 }

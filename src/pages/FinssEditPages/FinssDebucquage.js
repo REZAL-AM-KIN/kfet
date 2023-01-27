@@ -1,15 +1,16 @@
 import SearchableDataTable from "../../components/SearchableDataTable";
 import {Paper, Box, Center, Switch, Stack, Group, Text, Button, List, Tooltip} from "@mantine/core"
 import {useEffect, useState} from "react";
-import {IconAlertTriangle, IconCircleCheck, IconCircleX, IconCross} from "@tabler/icons";
+import {IconAlertTriangle, IconCircleCheck, IconCircleX} from "@tabler/icons";
 import errorNotif from "../../components/ErrorNotif";
 import {useConsommateursList} from "../../hooks/useConsommateursList";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {DataTable} from "mantine-datatable";
+import openFinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 
 
 //TODO : Permettre le débucquage en negat'ss si permission.
-const FinssDebucquage = ({usebucquage, usefinssproduct}) => {
+const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const useconsommateurlist = useConsommateursList()
 
     const [selectedRecords, selectedRecordsChange] = useState([])
@@ -66,29 +67,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct}) => {
     }, [usebucquage.bucquages, useconsommateurlist.consommateurs, usefinssproduct.productsList])
     
     
-    //Modal pour afficher le recap des prix et Qts des produits
-    function recapModal() {
-        openModal({
-            title: 'Récap des prix et quantités',
-            centered: true,
-            children: (
-                <>
-                    <Box>
-                        <DataTable columns={[
-                                                {accessor: "nom", title:"Nom"},
-                                                {accessor: "prix_total", title:"Prix total", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                                                {accessor: "prix_min", title:"Prix min", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                                                {accessor: "quantite_bucque", title:"Qts"},
-                                                {accessor: "prix_unitaire", title:"€/u"}
-                                            ]}
-                                   records={usefinssproduct.productsList}
-                        />
-                    </Box>
-                    <Button fullWidth onClick={closeAllModals} mt="md">Fermer</Button>
-                </>
-            ),
-        });
-    }
+
 
     //Est appelé au clique sur le bouton débucquer
     function debucquage() {
@@ -301,6 +280,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct}) => {
 
     const CategorieFilter = (
             <Switch
+                style={{flex:"1"}}
+                styles={{body:{alignItems:"center"}}}
                 labelPosition="left"
                 label="Afficher les participations déjà débucquée ?"
                 checked={displayDebucque}
@@ -333,7 +314,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct}) => {
                     elementSpacing={"xs"}
 
                     styles={{
-                        input: {width: "60%"}
+                        input: {flex: "auto"}
                     }}
 
                     searchBarPosition="apart"
@@ -350,9 +331,9 @@ const FinssDebucquage = ({usebucquage, usefinssproduct}) => {
                     
                     categoriesSelector={CategorieFilter}
 
-                    secondBarNodes={<Group position = "apart">
-                                        <Button color="red" style={{width: "130px"}} onClick={debucquage}>Débucquer</Button>
-                                        <Button style={{width: "170px"}} onClick={()=>recapModal()}>Recap prix</Button>
+                    secondBarNodes={<Group spacing="0" position = "apart">
+                                        <Button disabled={usefinssinfo.finssInfo.ended} color="red" style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}} onClick={debucquage}>Débucquer</Button>
+                                        <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>openFinssProductRecapModal(usefinssproduct)}>Recap prix</Button>
                                     </Group>
                                     }
 

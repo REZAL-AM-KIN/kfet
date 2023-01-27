@@ -1,4 +1,4 @@
-import {Center, Stack, Tabs, Text} from "@mantine/core";
+import {Paper, Tabs} from "@mantine/core";
 import FinssGeneralParameters from "../../components/Finss/FinssGeneralParameters";
 import FinssProductsParameters from "../../components/Finss/FinssProductsParameters";
 
@@ -14,11 +14,14 @@ const FinssParameters = ({usefinssinfo, usefinssproduct, usebucquage})=>{
             </Tabs.List>
 
             <Tabs.Panel value="general">
-                <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
+
+                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"10px auto", maxWidth:"fit-content"}}>
+                    <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
+                </Paper>
             </Tabs.Panel>
 
             <Tabs.Panel value="products">
-                <FinssProductsParameters usefinssproduct={usefinssproduct} usebucquage={usebucquage}/>
+                <FinssProductsParameters usefinssinfo={usefinssinfo} usefinssproduct={usefinssproduct} usebucquage={usebucquage}/>
             </Tabs.Panel>
         </Tabs>
 

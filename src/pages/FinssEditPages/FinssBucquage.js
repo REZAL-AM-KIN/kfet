@@ -1,18 +1,32 @@
 import SearchableDataTable from "../../components/SearchableDataTable";
-import {Paper, Box, ActionIcon, Center, Text, SimpleGrid, Button, Group} from "@mantine/core"
-import {IconAlertTriangle, IconUserPlus} from "@tabler/icons";
+import {
+    Paper,
+    Box,
+    ActionIcon,
+    Text,
+    Button,
+    Group,
+    Progress,
+    Table,
+    useMantineTheme
+} from "@mantine/core"
+import {IconAlertTriangle, IconNotes, IconUserPlus} from "@tabler/icons";
 import errorNotif from "../../components/ErrorNotif";
 import FinssBucquageModal from "../../components/Finss/FinssBucquageModal";
 import {useState} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
+import openFinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
+import {useMediaQuery} from "@mantine/hooks";
 
 
-//TODO : Verifier le montant avant de permettre le bucquage
+
 //TODO : Modification des bucquages dans le tableau
-
+//TODO : Blocquer la diminution des quantités si pas la permission
 const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     const [bucquageModalOpened, setBucquageModalOpened] = useState(false);
+    const theme = useMantineTheme();
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
     //Construction du déroulant au clique sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
@@ -20,7 +34,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const rowExpansionContent = (record)=>{
 
         //Construction des nodes contenant la quantité de chaque produit demandé par le PG
-        const productQuantityNodes =
+        const productQuantity =
             record.participation_event.map((participation) =>
             {
 
@@ -32,24 +46,82 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 }
 
                 //construction des nodes
-                return (
-                    <Center key={participation.id}>
-                        <Text weight={500}> {product.nom} </Text>
-                        <Text>: {participation.prebucque_quantity} | {participation.quantity}</Text>
-                    </Center>
-                )
+                return {nom:product.nom, preQts: participation.prebucque_quantity, qts: participation.quantity}
+
             })
 
-        //On wrap les nodes de quantités dans une SimpleGrid,
-        // On régle le nombre de colone égale aux nombres de produits
-        // si il y a moins de 3 produits afin d'avoir une grille centrée.
+
+       let tabs_content = [[],[],[]]
+
+        //Si on est sur téléphone on affiche tous les bucquages dans un seul tableau
+        if (isSmallDevice){
+            tabs_content[0]=productQuantity
+
+        }else{ //Sinon on les répartis dans 3 tableau
+            productQuantity.forEach((quantity, index)=>{
+                tabs_content[index%3].push(quantity)
+            })
+        }
+
+
+        const nodes = tabs_content.map((tab)=>{
+            if(tab.length===0){
+                return ""
+            }
+
+            const content = tab.map((quantity, index)=>(
+                <tr key={index}>
+                    <td>{quantity.nom}</td>
+                    <td>{quantity.preQts}</td>
+                    <td>{quantity.qts}</td>
+                </tr>
+            ))
+
+            return (
+                <Box style={{flex:"1"}}>
+                    <Table withBorder withColumnBorders style={{tableLayout:"fixed", wordBreak:"break-word"}}>
+                        <thead >
+                            <tr>
+                                <th>Nom</th>
+                                <th>Pré Qts</th>
+                                <th>Qts</th>
+                            </tr>
+                        </thead>
+                        <tbody>{content}</tbody>
+                    </Table>
+                </Box>
+            )
+        })
+
         return (
 
-            <SimpleGrid cols={usefinssproduct.productsList.length<3 ? usefinssproduct.productsList.length: 3}>
-                {productQuantityNodes}
-            </SimpleGrid>
+            <Group style={{alignItems: "flex-start", margin:"10px 0"}}>
+                {nodes}
+            </Group>
         )
 
+    }
+
+    //Construction de l'élément de progession des bucquages
+    const BucquageProgress = () =>{
+
+        //on sélectionne tous les prébucquages
+        const prebucqueBucquage = usebucquage.bucquages.filter((bucquage) =>
+                                                            bucquage.participation_event.some((participation)=>
+                                                                participation.prebucque_quantity!==0
+                                                            ))
+        //On sélectionne tous les bucquages qui ont été d'abord prébucqué puis bucqué
+        const bucquedBucquage = prebucqueBucquage.filter((bucquage) =>
+                                                            bucquage.participation_event.some((participation)=>
+                                                                participation.prebucque_quantity!==0 &&
+                                                                participation.participation_bucquee &&
+                                                                participation.quantity !==0
+                                                            ))
+
+        const value = prebucqueBucquage.length === 0 ? 100 : (bucquedBucquage.length/prebucqueBucquage.length)*100
+        const label = prebucqueBucquage.length === 0 ? "Aucune inscription" : bucquedBucquage.length+"/"+prebucqueBucquage.length
+
+        return (<Progress value={value} label={label} size="lg" style={{marginBottom:10}}/>)
     }
 
     //On souhaite vérifier que les inscriptions sont fermé avant de permettre le bucquage des gens.
@@ -118,7 +190,9 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+                <BucquageProgress/>
+
                   <SearchableDataTable
                       searchPlaceHolder={"Rechercher un PG"}
                       columns={[
@@ -126,21 +200,26 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                           {accessor: "consommateur_prenom", title:"Prénom", sortable: true},
                       ]}
                       idAccessor="consommateur_bucque"
-                      data={usebucquage.bucquages}
+                      data={usebucquage.bucquages.filter((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_bucquee))}
                       isLoading = {usebucquage.isLoading}
 
                       elementSpacing={"xs"}
 
                       styles={{
-                          input: {width: "60%"}
+                          input: {flex: "auto"}
                       }}
 
                       searchBarPosition="apart"
 
                       extraButtons={
-                                      <ActionIcon size={33} color="green" onClick={()=>{openBucquage()}}>
+                                    <>
+                                        <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
                                           <IconUserPlus size={33}/>
-                                      </ActionIcon>
+                                        </ActionIcon>
+                                        <ActionIcon size={33} color="blue" onClick={()=>openFinssProductRecapModal(usefinssproduct)}>
+                                            <IconNotes size={33}/>
+                                        </ActionIcon>
+                                    </>
                                     }
 
                       withReloadIcon

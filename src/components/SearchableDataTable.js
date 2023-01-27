@@ -1,5 +1,5 @@
-import {Box, Stack, TextInput, Group, ActionIcon, NativeSelect} from "@mantine/core";
-import {IconRefresh, IconReload, IconSearch, IconSquarePlus} from "@tabler/icons";
+import {Box, Stack, TextInput, Group, ActionIcon} from "@mantine/core";
+import {IconCirclePlus, IconRefresh, IconSearch} from "@tabler/icons";
 import {DataTable} from "mantine-datatable";
 import {useEffect, useState} from "react";
 
@@ -55,7 +55,6 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     //payload: { sortBy: keyof data | null; reversed: boolean; search: string }
     function sortData(data, payload) {
 
-
         if(data.length===0){
             return data
         }
@@ -94,8 +93,7 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
     return (
         <Stack spacing={elementSpacing} style={{height: "100%"}}>
-            <Group position={searchBarPosition}>
-                <Group spacing="xs" position="left" style={{flex: "auto"}}>
+            <Group spacing="xs" position={searchBarPosition} style={styles.searchBar}>
                     <TextInput
                         placeholder={searchPlaceHolder}
 
@@ -105,23 +103,22 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
                         onChange={handleSearchChange}
                     />
 
-                    {/* Ajout du selector si demandé par l'utilisateur*/}
-                    {categoriesSelector}
-                </Group>
-
                 {/* Ajout des boutons d'ajout et de refresh si demandé par l'utilisateur*/}
                 {(withAddIcon || withReloadIcon || extraButtons) && (
-                    <Group style={{alignItems: "flex-start"}}>
+                    <Group style={{alignItems: "center", ...styles.buttons}}>
+                        {/* Ajout du selector si demandé par l'utilisateur*/}
+                        {categoriesSelector}
+
                         {extraButtons}
 
                         {withAddIcon && (
-                            <ActionIcon size={33} color = "green" onClick={()=>addCallback()}>
-                                <IconSquarePlus size={33}/>
+                            <ActionIcon  style={{flex:"initial"}} size={33} color = "green" onClick={()=>addCallback()}>
+                                <IconCirclePlus size={33}/>
                             </ActionIcon>
                         )}
 
                         {withReloadIcon && (
-                            <ActionIcon size={33} color = "blue" onClick={()=>reloadCallback()}>
+                            <ActionIcon style={{flex:"initial"}} size={33} color = "blue" onClick={()=>reloadCallback()}>
                                 <IconRefresh size={33}/>
                             </ActionIcon>
                         )}

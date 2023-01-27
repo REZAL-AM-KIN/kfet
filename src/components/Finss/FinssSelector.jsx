@@ -1,66 +1,44 @@
-import {ActionIcon, Button, Group, Stack, Text, TextInput, Box, Image} from "@mantine/core"
-import {IconEdit, IconSearch} from "@tabler/icons";
+import {
+    ActionIcon,
+    Button,
+    Group,
+    Stack,
+    Text,
+    Box,
+    Paper,
+    Center,
+    Tooltip, useMantineTheme, Switch
+} from "@mantine/core"
+import {IconCircleX, IconEdit} from "@tabler/icons";
 import {useEffect, useState} from "react";
-import {DataTable} from 'mantine-datatable';
 import {Link} from "react-router-dom";
+import SearchableDataTable from "../SearchableDataTable";
+import {useMediaQuery} from "@mantine/hooks";
+import openFinssAddModal from "./FinssAddModal";
 
+const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
 
-function filterData(data, search) {
-  const data_keys = ["titre", "description", "date_event"]
+    const [tabData, setTabData] = useState([])
+    const [displayEnded, setDisplayEnded] = useState(false)
+    const theme = useMantineTheme();
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
-  const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-      data_keys.some((key) => item[key].toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
-  );
-}
+    // On convertie la date d'un forma iso vers un format heure:minutes jour/mois/année
+    useEffect(()=>{
+        let tabData = usefinsslist.finssList
 
-
-//payload: { sortBy: keyof data | null; reversed: boolean; search: string }
-function sortData(data,payload) {
-
-    if(data.length===0){
-        return data
-    }
-
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData(data, payload.search);
-  }
-
-  return filterData(
-      [...data].sort((a, b) => {
-
-        if (payload.reversed) {
-          return b[sortBy].localeCompare(a[sortBy]);
+        if(!displayEnded){
+            tabData = tabData.filter((finss)=>!finss.ended)
         }
 
-        return a[sortBy].localeCompare(b[sortBy]);
-      }),
-      payload.search
-  );
-}
+        tabData = tabData.map(({date_event, ...finss})=>{
+            const date = new Date(date_event)
+            const date_string = date.toLocaleDateString() // si on voulait l'heure il faudrait ajouter : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })+" "+
 
-
-
-const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
-  const [sortStatus, setSortStatus] = useState({ columnAccessor: 'titre', direction: 'asc' });
-  const [search, setSearch] = useState('');
-  const [sortedData, setSortedData] = useState(data);
-
-
-
-  useEffect(() => {
-        const sorted_data = sortData(data, {sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search:search});
-        setSortedData(sorted_data);
-
-  }, [data, sortStatus]);
-
-  const handleSearchChange = (event) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-    setSortedData(sortData(data, { sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search: value }));
-  };
+            return {date_event:date_string, ...finss}
+        })
+       setTabData(tabData)
+    }, [usefinsslist.finssList, displayEnded])
 
     const ActionRowRender = ({finss}) =>{
 
@@ -68,7 +46,12 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
 
             //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
             if(!finss.can_subscribe){
-                return
+                return (
+                    <Tooltip label={"Inscription terminée"}>
+                        <div>
+                            <IconCircleX size={30} color="red"/>
+                        </div>
+                    </Tooltip>) //La div est nécessaire car la node Tooltip à besoin de la prop ref que les icones ne possèdent pas.
             }
 
             //Si l'utilisateur est déjà prébucque, alors on lui propose de modifier son inscription.
@@ -97,23 +80,18 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
             }
 
             return (
-                <ActionIcon component={Link} to={"/finssedit/"+finss.id} color="blue" onClick={() => console.log("edit"+finss.name)}>
+                <ActionIcon component={Link} to={"/finssedit/"+finss.id} color="blue">
                     <IconEdit size={20} />
                 </ActionIcon>
             )
 
         }
 
-        /*
-
-
-         */
-
         return (
 
         <Group position="apart">
 
-            <Text style={{maxWidth:200, wordWrap:"break-word", margin:1}}> {finss.titre}</Text>
+            <Text style={{ maxWidth:200, wordWrap:"break-word", margin:1}}> {finss.titre}</Text>
 
             <EditButton/>
 
@@ -122,40 +100,82 @@ const FinssSelector = ({data, isLoading, setFinssId, setModalOpened}) => {
         )
     }
 
-  return (
-      <Stack style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        <TextInput
-            placeholder="Rechercher un fin'ss sur n'importe quel critère"
-            mb="md"
-            icon={<IconSearch size={14} stroke={1.5} />}
-            value={search}
-            onChange={handleSearchChange}
+    //Construction du déroulant au clique sur une ligne du tableau
+    //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
+    // (les datas correspondant à la ligne) est passé via l'argument record
+    const rowExpansionContent = (record)=>{
+
+
+            return (
+                <Stack spacing="0" style={{marginBottom:10, marginTop:10}}>
+                    <Text>Date: {record.date_event}</Text>
+                    <Text>Description: {record.description}</Text>
+                    <Center  style={{marginTop:10}}>
+                        <ActionRowRender finss={record}/>
+                    </Center>
+                </Stack>
+            )
+
+
+    }
+
+    const CategorieFilter = (
+        <Switch
+            style={{flex:"1"}}
+            styles={{body:{alignItems:"center"}}}
+            labelPosition="left"
+            label="Afficher les fin'ss cloturés ?"
+            checked={displayEnded}
+            onChange={(event)=>setDisplayEnded(event.currentTarget.checked)}
+
         />
-        <Box style={{
-            flex: "1 1 auto",
-            overflow: "hidden"
-        }}>
-            <DataTable
-                minHeight={150}
-                striped
-                highlightOnHover
-                fetching={isLoading}
-                records={sortedData}
-                columns={[
-                    {accessor: "test", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), width:270},
-                    {accessor: "description", title:"Description", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                    {accessor: "date_event", title:"Date", width: 110, sortable: true},
-                    {accessor: "actions", title:"Inscription", textAlignment:"center", width:"20%", render: (finss) => (<ActionRowRender finss={finss}/>) }
-                ]}
-                sortStatus={sortStatus}
-                onSortStatusChange={setSortStatus}
-                noRecordsText="Aucun fin'ss n'a été trouvé"
-            >
+    )
 
+  return (
+      <Box style={{display: "flex", height: "100%"}}>
+      <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
 
-            </DataTable>
-        </Box>
-      </Stack>
+          <SearchableDataTable
+              noRecordsText="Aucun fin'ss n'a été trouvé"
+              searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
+              striped
+              highlightOnHover
+              data={tabData}
+              columns={[
+                  {accessor: "titre", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
+                  {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                  {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                  {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)') }
+              ]}
+              defaultSortedColumn="titre"
+              idAccessor="id"
+              isLoading = {usefinsslist.isLoading}
+
+              elementSpacing={"xs"}
+
+              styles={{
+                  input: {flex: "auto"}
+              }}
+
+              rowExpansion={ isSmallDevice ? {
+                  content: ({record})=>(rowExpansionContent(record))
+              }:""}
+
+              searchBarPosition="apart"
+
+              categoriesSelector={CategorieFilter}
+
+              withReloadIcon
+
+              reloadCallback={()=>usefinsslist.retrieveFinssList()}
+              
+              withAddIcon
+              
+              addCallback={()=>openFinssAddModal(usefinsslist)}
+
+          />
+      </Paper>
+      </Box>
   )
 }
 

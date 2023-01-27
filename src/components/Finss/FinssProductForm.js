@@ -1,5 +1,5 @@
 import {useForm} from "@mantine/form";
-import {Button, Center, NumberInput, Switch, Textarea, TextInput} from "@mantine/core";
+import {Button, NumberInput, Switch, Textarea, TextInput} from "@mantine/core";
 import {useEffect} from "react";
 
 /*
@@ -13,7 +13,7 @@ func formSubmitCallback(values){
 }
 
  */
-const FinssProductForm = ({initialProduct, formSubmitCallback}) => {
+const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
 
     // Initialisation de la Form des paramètres d'un produit
     const form = useForm({
@@ -82,7 +82,7 @@ const FinssProductForm = ({initialProduct, formSubmitCallback}) => {
                     {...form.getInputProps('obligatoire',{type:'checkbox'})}
                 />
 
-            <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
+            <Button disabled={!form.isValid() || disabled} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
         </form>
     )
 

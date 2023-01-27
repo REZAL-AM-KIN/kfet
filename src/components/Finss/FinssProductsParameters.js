@@ -1,10 +1,10 @@
-import {Center, Paper, Tabs, Button, Modal, Group, ActionIcon, Stack, Text} from "@mantine/core"
-import {IconCirclePlus, IconTrash} from "@tabler/icons";
+import {Center, Paper, Tabs, Button, Modal, Stack, Text} from "@mantine/core"
+import {IconCirclePlus} from "@tabler/icons";
 import FinssProductForm from "./FinssProductForm";
 import {useState} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 
-const FinssProductsParameters = ({usefinssproduct, usebucquage}) => {
+const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) => {
 
     const [productModalOpen, setProductModalOpen] = useState(false);
 
@@ -71,9 +71,13 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage}) => {
         return (
             <Tabs.Panel value={product.id.toString()} key={product.id} style={{marginLeft: "10px"}}>
                 <Stack spacing="xs">
-                    <FinssProductForm initialProduct={product}
-                                      formSubmitCallback={(values) => usefinssproduct.updateProduct(values)}/>
-                    <Button color="red" onClick={(e) => deleteProduct(e, product)}>Supprimer</Button>
+                    <FinssProductForm
+                        initialProduct={product}
+                        formSubmitCallback={(values) => usefinssproduct.updateProduct(values)}
+                        disabled={usefinssinfo.finssInfo.ended}
+
+                    />
+                    <Button disabled={usefinssinfo.finssInfo.ended} color="red" onClick={(e) => deleteProduct(e, product)}>Supprimer</Button>
                 </Stack>
             </Tabs.Panel>
         )
@@ -82,7 +86,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage}) => {
 
     return (
         <>
-        <Center style={{paddingTop:20}}>
+        <Center style={{paddingTop:10}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{width:600, position:'relative'}}>
                 <Tabs keepMounted={false} orientation="vertical" defaultValue={usefinssproduct.productsList.length>0 ? usefinssproduct.productsList[0].id.toString() : ""}>
 
