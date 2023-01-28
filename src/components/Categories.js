@@ -42,6 +42,7 @@ function Categories({refForOutsideClick, setActive}) {
             {categories.map((cat, key) => {
                 return (
                     <Button key={key}
+                            radius="xl"
                             variant="gradient"
                             gradient={{ from: catColor, to: cat.color }}
                             onClick={() => {
