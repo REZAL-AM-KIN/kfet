@@ -244,7 +244,6 @@ export function CategorieSelector() {
             shadow="md"
             offset={15}
             trapFocus
-            withArrow
         >
             <Popover.Target>
                 <CategorieButton/>
