@@ -8,6 +8,8 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
 
     const [productModalOpen, setProductModalOpen] = useState(false);
 
+    const isDebucquageStarted = usebucquage.bucquages.some((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_debucquee))
+
     //Fonction appeler au clique sur le bouton de suppression.
     //On interdit la suppression du produit s'il y a des participations bucquée sur ce produit.
     function deleteProduct(event, product) {
@@ -74,10 +76,10 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
                     <FinssProductForm
                         initialProduct={product}
                         formSubmitCallback={(values) => usefinssproduct.updateProduct(values)}
-                        disabled={usefinssinfo.finssInfo.ended}
+                        disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted}
 
                     />
-                    <Button disabled={usefinssinfo.finssInfo.ended} color="red" onClick={(e) => deleteProduct(e, product)}>Supprimer</Button>
+                    <Button disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted} color="red" onClick={(e) => deleteProduct(e, product)}>Supprimer</Button>
                 </Stack>
             </Tabs.Panel>
         )
@@ -92,7 +94,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
 
                     <Tabs.List>
                         {tabsListProducts}
-                        <Button variant="subtle" onClick = {()=>setProductModalOpen(true)}><IconCirclePlus color="green"/></Button>
+                        <Button disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted} variant="subtle" onClick = {()=>setProductModalOpen(true)}><IconCirclePlus color="green"/></Button>
                     </Tabs.List>
 
                     {tabsPanelList}

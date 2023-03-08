@@ -21,11 +21,16 @@ import {showNotification} from "@mantine/notifications";
 import {IconCheck, IconX} from "@tabler/icons";
 import SearchPg from "../SearchPg";
 
+// Ce composant permet de faire le bucquage d'un fin'ss
+// Il s'agit d'un modal qui s'ouvre depuis FinssGeneralParameters
+// Il est composé d'un tableau de produit avec les quantités à bucqué, d'un selecteur de PG et d'un bouton de validation
+// Il permet également de faire un bucquage partiel (sélectionner un produit et une quantité)
+// Il permet également de débucquer (sélectionner un produit et une quantité)
 
 const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>{
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
-    useUser();
+
     const useParticipation = useUserParticipation()
 
 
@@ -92,7 +97,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
             //console.log(prix_min_total+"/"+selectedPG.solde)
             //console.log(selectedPG)
             if(selectedPG.solde<prix_min_total){
-                setError("Solde insuffisant.")
+                setError("Solde insuffisant.") //TODO: Faire en sorte que ça calcule à chaque changement de valeur
                 return
             }
 
