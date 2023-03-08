@@ -13,6 +13,7 @@ import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
+import Pianss from "./pages/Pianss";
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
                                     <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
                                     <Route path="edit" element={<Edit setPage={setPage}/>}/>
                                     <Route path="finss" element={<Finss setPage={setPage}/>}/>
+                                    <Route path="pianss" element={<Pianss setPage={setPage}/>}/>
 
                                 </Route>
 

@@ -1,17 +1,21 @@
 import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
-import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
+import {IconBuildingStore, IconDeviceDesktop, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
 import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
 import SearchPg from "./SearchPg";
 
 
-const mockdata = [
+const upperLinks = [
     { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
     { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "alt+E" },
     { icon: IconToolsKitchen2, label: "Fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
 
 ];
+
+const lowerLinks = [
+    { icon: IconDeviceDesktop, label: 'Pianss', pageName: "Pianss", link: "/pianss", shortcut: "alt+C" },
+    ]
 
 
 
@@ -22,8 +26,8 @@ Mobile Nav Bar
 const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>{
         const theme = useMantineTheme()
 
-        linksData = linksData.filter(link => link.pageName!=="Debucquage")
-        const links = linksData.map((link) => (
+        linksData.upperLinks = linksData.upperLinks.filter(link => link.pageName!=="Debucquage")
+        const links = linksData.upperLinks.map((link) => (
             <NavbarLink
                 {...link}
                 key={link.label}
@@ -77,13 +81,22 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>
 
 const NormalNavBar = ({linksData, width}, currentPage)=> {
 
-    const links = linksData.map((link) => (
+    const upperLinks = linksData.upperLinks.map((link) => (
         <NavbarLink
             {...link}
             key={link.label}
             currentPage={currentPage}
         />
     ));
+
+    const lowerLinks = linksData.lowerLinks.map((link) => (
+        <NavbarLink
+            {...link}
+            key={link.label}
+            currentPage={currentPage}
+        />
+    ));
+
 
     return (
             <Navbar height="100vh"
@@ -99,11 +112,12 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                 </Center>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
-                        {links}
+                        {upperLinks}
                     </Stack>
                 </Navbar.Section>
                 <Navbar.Section>
                     <Stack justify="center" spacing={0}>
+                        {lowerLinks}
                        <LogOutLink/>
                     </Stack>
                 </Navbar.Section>
@@ -125,9 +139,9 @@ const NavigationBar = ({width, page}) => {
     return (
         <Fragment>
             {isSmallDevice?
-                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} linksData={mockdata} currentPage={page}/>
+                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} linksData={{upperLinks:upperLinks, lowerLinks:lowerLinks}} currentPage={page}/>
                 :
-                <NormalNavBar width={width} linksData={mockdata} currentPage={page}/>
+                <NormalNavBar width={width} linksData={{upperLinks:upperLinks, lowerLinks:lowerLinks}} currentPage={page}/>
             }
         </Fragment>
     );
