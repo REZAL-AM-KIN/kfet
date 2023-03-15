@@ -1,11 +1,9 @@
-import {Text, Button} from "@mantine/core";
-import {closeAllModals, openModal} from "@mantine/modals";
 import errorNotif from "../components/ErrorNotif";
 import {useEffect, useState} from "react";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons";
 
-export function useLocalPians(){
+export function useLocalPianss(){
 
     const [localPianss, setLocalPianss] = useState(null)
 
@@ -64,3 +62,4 @@ export function useLocalPians(){
 
     return {localPianss, isDeviceAPianss, installPianss, getInstalledPianss, uninstallPianss}
 }
+

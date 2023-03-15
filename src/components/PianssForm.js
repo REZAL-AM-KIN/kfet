@@ -1,18 +1,21 @@
 import {useForm} from "@mantine/form";
-import {Textarea, TextInput, Button, Stack, useMantineTheme, Text, Tooltip} from "@mantine/core";
+import {Textarea, TextInput, Button, Stack, useMantineTheme, Tooltip} from "@mantine/core";
 import {useEffect} from "react";
-import {useLocalPians} from "../hooks/useLocalPianss";
+import {useLocalPianss} from "../hooks/useLocalPianss";
 
 // React Node qui permet de modifier les paramètres d'un Pian'ss
 
 //TODO : Ajouter le champ "groupe" dans le formulaire (necessite l'endpoint entités)
 
-const PianssForm = ({pianssInfo, usepianss, forCreation}) => {
+const PianssForm = ({pianssInfo, usepianss, uselocalpianss, forCreation}) => {
     const theme = useMantineTheme()
-    const uselocalpianss = useLocalPians()
+
 
     if((!usepianss.addPianss && forCreation)){
         throw "forCreation option require createPianss callback."
+    }
+    if(!forCreation && !uselocalpianss){
+        throw "uselocalpianss is requiered for modification mode."
     }
 
     //Initialisation du formulaire

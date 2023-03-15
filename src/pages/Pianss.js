@@ -1,16 +1,21 @@
 
-import {Center, Stack, Paper, Button, Tabs, Modal} from "@mantine/core"
+import {Center, Stack, Paper, Button, Tabs, Modal, Text} from "@mantine/core"
 import {useEffect, useState} from "react";
 import PianssForm from "../components/PianssForm";
 import {usePians} from "../hooks/usePianss";
 import {IconCirclePlus} from "@tabler/icons";
+import {useLocalPianss} from "../hooks/useLocalPianss";
+import {closeAllModals, openModal} from "@mantine/modals";
 
 //TODO : Restreindre l'accès à la page sur permission
 const Pianss = ({setPage}) => {
     useEffect(()=>{setPage("Pianss")})
 
     const usepianss = usePians()
+    const uselocalpianss = useLocalPianss()
+
     const [pianssModalOpen, setPianssModalOpen] = useState(false)
+    const [pianssUnistallModalOpen, setPianssUnistallModalOpen] = useState(false)
 
     const tabsList = usepianss.pianssList.map((pianss) => (
         <Tabs.Tab value={pianss.id.toString()} key={pianss.id}>{pianss.nom}</Tabs.Tab>
@@ -18,9 +23,18 @@ const Pianss = ({setPage}) => {
 
     const panelList = usepianss.pianssList.map((pianss) => (
         <Tabs.Panel value={pianss.id.toString()} key={pianss.id}>
-            <PianssForm pianssInfo={pianss} usepianss={usepianss}/>
+            <PianssForm pianssInfo={pianss} uselocalpianss={uselocalpianss} usepianss={usepianss}/>
         </Tabs.Panel>
     ))
+
+    //Si le pian'ss local n'existe plus sur la liste des pian'ss, on le désinstalle et on affiche une modal pour informer l'utilisateur
+    useEffect(()=>{
+        if(uselocalpianss.localPianss && !usepianss.pianssList.some((pianss)=>pianss.id===uselocalpianss.localPianss.id)){
+            uselocalpianss.uninstallPianss()
+
+            setPianssUnistallModalOpen(true)
+        }
+    },[usepianss.pianssList, uselocalpianss.localPianss])
 
     return(
         <>
@@ -45,8 +59,19 @@ const Pianss = ({setPage}) => {
             </Paper>
         </Stack>
             <Modal opened={pianssModalOpen} onClose={()=>setPianssModalOpen(false)} title="Création d'un pian'ss">
-                <PianssForm usepianss={usepianss} forCreation/>
+                <PianssForm usepianss={usepianss} uselocalpianss={uselocalpianss} forCreation/>
             </Modal>
+
+            <Modal opened={pianssUnistallModalOpen} onClose={()=>setPianssUnistallModalOpen(false)} title="Désinstallation d'un pian'ss">
+                <>
+                    <Text size="sm">
+                        Le pian'ss installé sur cet appareil n'est plus présent dans la liste des pian'ss. <br/>
+                        Il a donc été désinstallé.
+                    </Text>
+                    <Button fullWidth color="red" onClick={()=>setPianssUnistallModalOpen(false)} mt="md">C'est compris.</Button>
+                </>
+            </Modal>
+
         </>
     );
 }
