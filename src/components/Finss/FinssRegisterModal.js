@@ -37,16 +37,15 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
             let prebucque_quantity = null
 
             //On vérifie que la participation n'est pas en loading
-            if (useParticipation.participations) {
+            if (!useParticipation.isLoading) {
 
 
                 //On selectionne l'objet pariticipation qui correspond au produit
                 const participation = useParticipation.participations.find((participation) => participation.product_participation === id)
 
                 //Si une participation est trouvée alors on récupère la quantité déjà prébucquée
-                if (participation) {
-                    prebucque_quantity = participation ? participation.prebucque_quantity : 0 // On regarde si une participation pour le produit existe, sinon on attribue la quantité de 0
-                }
+                prebucque_quantity = participation && participation.prebucque_quantity // On regarde si une participation pour le produit existe
+
             }
 
 
