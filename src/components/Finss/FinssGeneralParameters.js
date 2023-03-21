@@ -39,7 +39,7 @@ function endEvent(usefinss, usebucquage) {
                 children: (
                     <>
                         <Text size="sm">
-                            Tous les débucquages non pas été effectués.<br/>
+                            Tous les débucquages n'ont pas été effectués.<br/>
                             Rendez-vous dans section débucquage.
                         </Text>
                         <Button fullWidth color="red" onClick={closeAllModals} mt="md">C'est compris.</Button>
