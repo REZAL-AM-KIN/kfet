@@ -217,7 +217,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             return ( <List.Item key={participation.id}>
                         <Tooltip label={participation.participation_debucquee ? "Participation déjà débucquée" :""} disabled={!participation.participation_debucquee}>
                                 <Text strikethrough = {participation.participation_debucquee}>
-                                    {participation.quantity}x{product.nom}
+                                    {participation.quantity}x {product.nom}
                                 </Text>
                         </Tooltip>
                     </List.Item>)
