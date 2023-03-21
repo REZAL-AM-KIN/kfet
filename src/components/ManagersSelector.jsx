@@ -30,7 +30,7 @@ const ManagersSelector = ({...props})=>{
     useEffect(()=>{
         const data = consommateurs.map(({...consommateur})=>({
             key:consommateur.id,
-            label:consommateur.nom,
+            label:consommateur.bucque+" "+consommateur.fams,
             value: consommateur.id,
             ...consommateur,
         }))
