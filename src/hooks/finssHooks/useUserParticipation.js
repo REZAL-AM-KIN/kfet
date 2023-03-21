@@ -21,7 +21,7 @@ export function useUserParticipation(){
                 return true
 
             }else{
-                errorNotif("Finss", "Une erreur inconue est survenue lors de l'envoi des participations")
+                errorNotif("Finss", "Une erreur inconnue est survenue lors de l'envoi des participations")
             }
         }catch (error) {
             errorNotif("Finss", error.message)
