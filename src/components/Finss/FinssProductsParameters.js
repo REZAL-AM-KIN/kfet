@@ -44,7 +44,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
                 children: (
                     <Text size="sm">
                         Vous êtes sur le point de supprimer un produit.<br/>
-                        Les inscriptions liées à ce produit seront <i><u><b>définitivement</b></u></i> supprimer.
+                        Les inscriptions liées à ce produit seront <i><u><b>définitivement</b></u></i> supprimées.
                     </Text>
                 ),
                 labels: { confirm: 'Supprimer', cancel: 'Annuler' },
