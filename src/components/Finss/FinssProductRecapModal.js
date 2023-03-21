@@ -6,7 +6,6 @@ import {DataTable} from "mantine-datatable";
 const openFinssProductRecapModal = (usefinssproduct)=> {
     openModal({
         title: 'Récap des prix et quantités',
-        centered: true,
         children: (
             <>
                 <Box>

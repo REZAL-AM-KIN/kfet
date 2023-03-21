@@ -8,7 +8,7 @@ import {
     Group,
     Progress,
     Table,
-    useMantineTheme
+    useMantineTheme, Tooltip
 } from "@mantine/core"
 import {IconAlertTriangle, IconNotes, IconUserPlus} from "@tabler/icons";
 import errorNotif from "../../components/ErrorNotif";
@@ -121,7 +121,11 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         const value = prebucqueBucquage.length === 0 ? 100 : (bucquedBucquage.length/prebucqueBucquage.length)*100
         const label = prebucqueBucquage.length === 0 ? "Aucune inscription" : bucquedBucquage.length+"/"+prebucqueBucquage.length
 
-        return (<Progress value={value} label={label} size="lg" style={{marginBottom:10}}/>)
+        return (
+            <Tooltip label={"Indique le nombre de personne qui se sont inscrites et qui ont été bucquées"} position={"bottom-start"} withArrow>
+                <Progress value={value} label={label} size="xl" style={{marginBottom:10}} styles={{label:{fontSize:"15px"}}}/>
+            </Tooltip>
+        )
     }
 
     //On souhaite vérifier que les inscriptions sont fermé avant de permettre le bucquage des gens.
@@ -131,7 +135,6 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         if(usefinssinfo.finssInfo.can_subscribe){
             openModal({
                 title: 'Bucquage impossible',
-                centered: true,
                 children: (
                     <>
                         <Text size="sm">
@@ -149,7 +152,6 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         if(usebucquage.bucquages.some((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_debucquee))){
             openModal({
                 title: 'Bucquage impossible',
-                centered: true,
                 children: (
                     <>
                         <Text size="sm">
@@ -167,7 +169,6 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         if(usefinssproduct.productsList.some((product)=>parseFloat(product.prix_min)===0 || parseFloat(product.prix_total)===0)){
             openConfirmModal({
                 title: <Group spacing="0"><IconAlertTriangle color="red"/><Text color="red"> Produit gratuit !</Text></Group>,
-                centered: true,
                 children: (
                     <Text size="sm">
                         Certains produits ont un prix nul. <br/>
@@ -213,12 +214,16 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                       extraButtons={
                                     <>
-                                        <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
-                                          <IconUserPlus size={33}/>
-                                        </ActionIcon>
-                                        <ActionIcon size={33} color="blue" onClick={()=>openFinssProductRecapModal(usefinssproduct)}>
-                                            <IconNotes size={33}/>
-                                        </ActionIcon>
+                                        <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
+                                            <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
+                                              <IconUserPlus size={33}/>
+                                            </ActionIcon>
+                                        </Tooltip>
+                                        <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
+                                            <ActionIcon size={33} color="blue" onClick={()=>openFinssProductRecapModal(usefinssproduct)}>
+                                                <IconNotes size={33}/>
+                                            </ActionIcon>
+                                        </Tooltip>
                                     </>
                                     }
 

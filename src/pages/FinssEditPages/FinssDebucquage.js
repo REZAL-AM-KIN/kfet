@@ -35,7 +35,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             const consommateur = useconsommateurlist.consommateurs.find((consommateur)=>consommateur.id===bucquage.consommateur_id)
             if(!consommateur){
                 errorNotif("Débucquage","Correspondance consommateur manquante\n consommateur id: "+bucquage.consommateur_id)
-                return;
+                return ;
             }
 
 
@@ -76,7 +76,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         if(selectedRecords.length === 0){
             openModal({
                 title: 'Aucun PG séléctionné',
-                centered: true,
                 children: (
                     <>
                         <Text size="sm">
@@ -92,7 +91,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         //On déclare la modal de confirmation qui sera appelé plus tard.
         const debucquageConfirmModal = () => openConfirmModal({
             title: <Text color="red">Confirmation de débucquage</Text>,
-            centered: true,
             children: (
 
                 <Text size="sm">
@@ -136,7 +134,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         if(usefinssproduct.productsList.some((product)=>parseFloat(product.prix_min)===0 || parseFloat(product.prix_total)===0)){
             openConfirmModal({
                 title: <Group spacing="0"><IconAlertTriangle color="red"/><Text color="red"> Produit gratuit !</Text></Group>,
-                centered: true,
                 closeOnConfirm: false,
                 children: (
                     <Text size="sm">
@@ -158,7 +155,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             if(negatssList.length !==0){
                 openConfirmModal({
                     title: <Text color="red">Débucquage en négatss !</Text>,
-                    centered: true,
                     closeOnConfirm: false,
                     children: (
                         <Stack>
@@ -332,8 +328,13 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     categoriesSelector={CategorieFilter}
 
                     secondBarNodes={<Group spacing="0" position = "apart">
-                                        <Button disabled={usefinssinfo.finssInfo.ended} color="red" style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}} onClick={debucquage}>Débucquer</Button>
-                                        <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>openFinssProductRecapModal(usefinssproduct)}>Recap prix</Button>
+                                        <Tooltip label={"Débucquer les PG sélectionnés"} position={"bottom"} withArrow>
+                                            <Button disabled={usefinssinfo.finssInfo.ended} color="red" style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}} onClick={debucquage}>Débucquer</Button>
+                                        </Tooltip>
+
+                                        <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
+                                            <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>openFinssProductRecapModal(usefinssproduct)}>Recap prix</Button>
+                                        </Tooltip>
                                     </Group>
                                     }
 
