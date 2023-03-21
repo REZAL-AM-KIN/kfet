@@ -25,12 +25,14 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
             "prix_min": 0,
             "obligatoire": false,
         },
-        validateInputOnChange:["nom", "description"],
+        validateInputOnChange:["nom", "description", "prix_total", "prix_min"],
 
         validate:{
             nom: (value) => (value.length>30 ? "Le nom doit faire moins de 30 caractères" :
                 value.length===0 ? "Le titre est obligatoire !": null),
             description: (value) => (value.length>100 ? "La description doit faire moins de 100 caractères" : null),
+            prix_total: (value) => (value<0 ? "Le prix total doit être positif" : null),
+            prix_min: (value) => (value<0 ? "Le prix minimum doit être positif" : null),
 
         },
     })
@@ -62,6 +64,7 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
                 label="Prix total"
                 withAsterisk
                 precision={2}
+                decimalSeparator=","
                 hideControls
                 {...form.getInputProps('prix_total')}
             />
@@ -71,6 +74,7 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
                 label="Prix minimum"
                 withAsterisk
                 precision={2}
+                decimalSeparator=","
                 hideControls
                 {...form.getInputProps('prix_min')}
             />
