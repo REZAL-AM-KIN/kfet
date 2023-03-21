@@ -18,7 +18,8 @@ Retours:
             {
                 "consommateur_id": id du consommateur,
                 "consommateur_bucque": "Bucque du consommateur",
-                "consommateur_prenom": "Prénom du consommateur",
+                "consommateur_nom": "Nom du consommateur",
+                "consommateur_fams": "Famss du consommateur",
                 "participation_event": liste des participation organisé comme suit :
                     [
                         {

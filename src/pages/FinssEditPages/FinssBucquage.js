@@ -64,7 +64,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         }
 
 
-        const nodes = tabs_content.map((tab)=>{
+        const nodes = tabs_content.map((tab,index)=>{
             if(tab.length===0){
                 return ""
             }
@@ -78,14 +78,14 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             ))
 
             return (
-                <Box style={{flex:"1"}}>
+                <Box style={{flex:"1"}} key={index}>
                     <Table withBorder withColumnBorders style={{tableLayout:"fixed", wordBreak:"break-word"}}>
                         <thead >
-                            <tr>
-                                <th>Nom</th>
-                                <th>Pré Qts</th>
-                                <th>Qts</th>
-                            </tr>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Pré Qts</th>
+                            <th>Qts</th>
+                        </tr>
                         </thead>
                         <tbody>{content}</tbody>
                     </Table>
@@ -95,7 +95,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
         return (
 
-            <Group style={{alignItems: "flex-start", margin:"10px 0"}}>
+            <Group style={{alignItems: "flex-start", margin:"10px 0"}} key={record.id}>
                 {nodes}
             </Group>
         )
@@ -189,6 +189,12 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     }
 
+    // On selectionne les bucquages qui ont au moins une participation qui a été bucqué
+    // On ajoute un champ "consommateur_bucque_famss" qui contient le nom du consommateur et la famss pour l'affichage
+    const data = usebucquage.bucquages.filter(
+        (bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_bucquee))
+        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))
+
     return (
         <Box style={{display: "flex", height: "100%"}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
@@ -197,11 +203,11 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                   <SearchableDataTable
                       searchPlaceHolder={"Rechercher un PG"}
                       columns={[
-                          {accessor: "consommateur_bucque", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                          {accessor: "consommateur_prenom", title:"Prénom", sortable: true},
+                          {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
+                          {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
                       ]}
                       idAccessor="consommateur_bucque"
-                      data={usebucquage.bucquages.filter((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_bucquee))}
+                      data={data}
                       isLoading = {usebucquage.isLoading}
 
                       elementSpacing={"xs"}

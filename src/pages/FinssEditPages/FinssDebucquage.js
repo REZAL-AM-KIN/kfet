@@ -254,8 +254,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     //Fonction qui permet d'ajouter la colonne débucquée ? si l'affichage de tous les bucquages (y compris ceux déjà débucqué) est activé
     const columnsList = () => {
         const baseColumns =[
-            {accessor: "consommateur_bucque", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-            {accessor: "consommateur_prenom", title:"Prénom", sortable: true},
+            {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
+            {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
         ]
         if(displayDebucque){
             baseColumns.push({accessor: "status", title:"Débucquée ?", width: 110,render:statusColum})
@@ -292,17 +292,18 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 <SearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={columnsList()}
-                    idAccessor="consommateur_bucque"
+                    idAccessor="consommateur_bucque_famss"
 
 
                     //On récupère les bucquages dont au moins une participation est bucquee
                     // et si on n'affiche pas les débucquée on sélectionne seulement les bucquages
                     // qui ont au moins une participation non débucquee dont la quantité n'est pas nulle.
+                    //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
                     data={data.filter((bucquage)=>bucquage.participation_event.some(
                         (participation)=>
                             participation.participation_bucquee &&
                             (displayDebucque || (!participation.participation_debucquee && participation.quantity!==0)))
-                    )}
+                    ).map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))}
 
 
                     isLoading = {usebucquage.isLoading ||useconsommateurlist.isLoading}

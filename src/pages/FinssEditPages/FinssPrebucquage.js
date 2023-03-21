@@ -82,18 +82,22 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                 <SearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
-                                {accessor: "consommateur_bucque", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                                {accessor: "consommateur_prenom", title:"Prénom", sortable: true},
+                                {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
+                                {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
 
                             ]}
                     idAccessor="consommateur_bucque"
 
                     //On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation a une quantité non nulle
                     //Ainsi, on affiche pas les participations qui ont été bucqué mais pas prébucqué.
+                    //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
                     data={usebucquage.bucquages.filter((bucquage)=>(
                         (bucquage.participation_event.length!==0)
                         && (bucquage.participation_event.some((participation)=>participation.prebucque_quantity!==0)))
-                                                        )}
+                                                        )
+                        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))
+                        }
+
                     isLoading = {usebucquage.isLoading}
 
                     elementSpacing={"xs"}
