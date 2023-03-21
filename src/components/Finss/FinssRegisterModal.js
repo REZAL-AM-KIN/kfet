@@ -1,4 +1,4 @@
-import {Box, Button, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Box, Button, LoadingOverlay, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
 import {useEffect, useState} from "react";
@@ -52,7 +52,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
             return {key:id, ...product, qts: (prebucque_quantity ? prebucque_quantity : (product.obligatoire ? 1: 0))}
         })
         form.setValues({products:data})
-    },[productsList, useParticipation.participations])
+    },[productsList, useParticipation.participations, useParticipation.isLoading])
 
     //Fonction de submit de la form
     function sendParticipation(values){
@@ -115,28 +115,32 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 
     return (
         <Modal opened={opened} onClose={closeModal}>
-            <form onSubmit={form.onSubmit((values)=>sendParticipation(values))}>
-               <Box sx={{height: isSmallDevice ? 300:400}}>
-                   <DataTable
-                       minHeight={150} //Pour l'affichage du logo "pas de produits trouvés"
-                       fetching={isLoading}
-                       records={tableData}
-                       columns={[
-                           {accessor: "nom", title:"Nom"},
-                           {accessor: "actions", title:"Quantités", textAlignment:"center", width:"20%", render: (product) => (<QtsInput item={product}/>) }
-                       ]}
-                       noRecordsText="Aucun produit n'existe pour ce fin'ss"
-                       rowExpansion={{
-                           trigger: "always",
-                           content: ({record})=>(<RowDescription product={record}/>),
-                       }}
-                   >
+            <Box style={{position:"relative"}}>
+                <LoadingOverlay visible={isSending} />
 
-                   </DataTable>
-               </Box>
+                <form onSubmit={form.onSubmit((values)=>sendParticipation(values))}>
+                   <Box sx={{height: isSmallDevice ? 300:400}}>
+                       <DataTable
+                           minHeight={150} //Pour l'affichage du logo "pas de produits trouvés"
+                           fetching={isLoading}
+                           records={tableData}
+                           columns={[
+                               {accessor: "nom", title:"Nom"},
+                               {accessor: "actions", title:"Quantités", textAlignment:"center", width:"20%", render: (product) => (<QtsInput item={product}/>) }
+                           ]}
+                           noRecordsText="Aucun produit n'existe pour ce fin'ss"
+                           rowExpansion={{
+                               trigger: "always",
+                               content: ({record})=>(<RowDescription product={record}/>),
+                           }}
+                       >
 
-                <Button style={{width:"100%", marginTop: 10}} type="submit">Valider</Button>
-            </form>
+                       </DataTable>
+                   </Box>
+
+                    <Button style={{width:"100%", marginTop: 10}} type="submit">Valider</Button>
+                </form>
+            </Box>
         </Modal>
     )
 }
