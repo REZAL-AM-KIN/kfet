@@ -59,7 +59,6 @@ const Login = () => {
 
     // function called when the login form is submited
     const handleSubmit = async (e, forceClassicConnection) => {
-        console.log(e)
         //don't forget to disable the default form submit (get method)
         e.preventDefault();
 
@@ -139,21 +138,20 @@ const Login = () => {
     return (
         <div style={{backgroundImage: `url(${bkgImg})`, backgroundSize: "cover", height:"100vh", width:"100%"}}>
             <Container size={420} pt={35} >
-                <Box pos="relative">
-                 <LoadingOverlay visible={isSubmitting} />
 
 
-                    <Title
-                        align="center"
-                        sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
-                    >
-                        Welcome back!
-                    </Title>
-                    <Text color="black" size="sm" align="center" mt={5}>
-                        Utilise ton compte Niki!
-                    </Text>
-                    <Alert ref={errRef} style={{display:errMsg ? "block" : "none", whiteSpace: "pre-wrap"}} icon={<IconAlertCircle size={16} />} color={"red"} radius="lg">{errMsg}</Alert>
-
+                <Title
+                    align="center"
+                    sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
+                >
+                    Welcome back!
+                </Title>
+                <Text color="black" size="sm" align="center" mt={5}>
+                    Utilise ton compte Niki!
+                </Text>
+                <Alert ref={errRef} style={{display:errMsg ? "block" : "none", whiteSpace: "pre-wrap"}} icon={<IconAlertCircle size={16} />} color={"red"} radius="lg">{errMsg}</Alert>
+                <Box style={{position: "relative"}}>
+                    <LoadingOverlay visible={isSubmitting} />
                     <Paper component="form" withBorder shadow="md" p={30} mt={30} radius="md">
                         <TextInput value={user} onChange={(e) => setUser(e.target.value)} label="Nom d'utilisateur" ref={userRef}
                                    placeholder="Username" required/>

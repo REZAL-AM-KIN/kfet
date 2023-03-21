@@ -1,7 +1,6 @@
 import {useForm} from "@mantine/form";
-import {Textarea, TextInput, Button, Stack, useMantineTheme, Tooltip} from "@mantine/core";
+import {Textarea, TextInput, Button, Stack, useMantineTheme, Tooltip, LoadingOverlay,Box} from "@mantine/core";
 import {useEffect} from "react";
-import {useLocalPianss} from "../hooks/useLocalPianss";
 
 // React Node qui permet de modifier les paramètres d'un Pian'ss
 
@@ -11,8 +10,8 @@ const PianssForm = ({pianssInfo, usepianss, uselocalpianss, forCreation}) => {
     const theme = useMantineTheme()
 
 
-    if((!usepianss.addPianss && forCreation)){
-        throw "forCreation option require createPianss callback."
+    if((!usepianss && forCreation)){
+        throw "forCreation option require usepianss."
     }
     if(!forCreation && !uselocalpianss){
         throw "uselocalpianss is requiered for modification mode."
@@ -53,8 +52,7 @@ const PianssForm = ({pianssInfo, usepianss, uselocalpianss, forCreation}) => {
     }
 
     const localPianssButton = () => {
-        console.log(pianssInfo)
-        console.log(uselocalpianss.isDeviceAPianss)
+
         function clickHandler() {
             if(uselocalpianss.isDeviceAPianss && uselocalpianss.localPianss.id === pianssInfo.id){
                 uselocalpianss.uninstallPianss()
@@ -88,44 +86,47 @@ const PianssForm = ({pianssInfo, usepianss, uselocalpianss, forCreation}) => {
 
 
     return (
-        <Stack spacing={0}>
+        <Stack spacing={0} >
+            <Box style={{position:"relative"}}>
+                <LoadingOverlay visible={usepianss?.isLoading} />
 
-            <form onSubmit={form.onSubmit((values)=>submitForm(values))}>
-                <TextInput
-                    label={"Nom"}
-                    placeholder={"Nom du Pian'ss"}
-                    {...form.getInputProps("nom")}
-                    withAsterisk
-                />
+                <form onSubmit={form.onSubmit((values)=>submitForm(values))}>
+                    <TextInput
+                        label={"Nom"}
+                        placeholder={"Nom du Pian'ss"}
+                        {...form.getInputProps("nom")}
+                        withAsterisk
+                    />
 
-                <Textarea
-                    label="Description"
-                    placeholder = "Description"
-                    autosize
-                    minRows={2}
-                    maxRows={4}
-                    {...form.getInputProps('description')}
-                />
+                    <Textarea
+                        label="Description"
+                        placeholder = "Description"
+                        autosize
+                        minRows={2}
+                        maxRows={4}
+                        {...form.getInputProps('description')}
+                    />
 
-                <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
-            </form>
+                    <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
+                </form>
 
-            {/* S'il ne s'agit pas d'une création de pianss, on affiche le bouton de supression*/}
-            {!forCreation ?
-                <>
-                    <Button style={{width:"100%", backgroundColor:theme.colors.red[9], marginTop:5}} onClick={()=>{usepianss.deletePianss(pianssInfo)}}>Supprimer le Pian'ss</Button>
+                {/* S'il ne s'agit pas d'une création de pianss, on affiche le bouton de supression*/}
+                {!forCreation ?
+                    <>
+                        <Button style={{width:"100%", backgroundColor:theme.colors.red[9], marginTop:5}} onClick={()=>{usepianss.deletePianss(pianssInfo)}}>Supprimer le Pian'ss</Button>
 
-                    {
-                        uselocalpianss.isDeviceAPianss && uselocalpianss.localPianss.id !== pianssInfo.id ?
-                            <Tooltip label={"Le pian'ss "+uselocalpianss.localPianss.nom+" est installé sur cet appareil."} placement="top" withArrow>
-                                {localPianssButton()}
-                            </Tooltip>
-                            :
-                            localPianssButton()
-                    }
+                        {
+                            uselocalpianss.isDeviceAPianss && uselocalpianss.localPianss.id !== pianssInfo.id ?
+                                <Tooltip label={"Le pian'ss "+uselocalpianss.localPianss.nom+" est installé sur cet appareil."} placement="top" withArrow>
+                                    {localPianssButton()}
+                                </Tooltip>
+                                :
+                                localPianssButton()
+                        }
 
-                </>
-                : ""}
+                    </>
+                    : ""}
+            </Box>
         </Stack>
 
 
