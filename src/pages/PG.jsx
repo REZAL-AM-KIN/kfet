@@ -4,12 +4,14 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid} from "@mantine/core";
+import {Group, Stack} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
+
+
 import {useCategorie} from "../hooks/useCategorie";
 import Produits from "../components/Produits";
 
@@ -30,7 +32,7 @@ function PG({setPage}) {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categorie, ] = useCategorie();
+    const [categorie,] = useCategorie();
 
     const getHistory = async () => {
         try {
@@ -97,28 +99,28 @@ function PG({setPage}) {
     }
 
     return (
-        <Grid>
-            <Grid.Col md={8}>
+        <Group grow sx={{backgroundColor: "pink"}}>
+            <Stack md={8} justify="flex-start">
                 <PgCard data={pgData}/>
-                <SimpleGrid>
-                    {permissions.recharge
-                        ? <RechargeButton pgData={pgData} onRecharge={handleTransaction}/>
-                        : <></>}
+                <Group position={"apart"} grow>
+                    <Stack>
+                        {permissions.recharge
+                            ? <RechargeButton pgData={pgData} onRecharge={handleTransaction}/>
+                            : <></>}
 
-                    <RechargeLydiaButton pgData={pgData} onRecharge={handleTransaction}/>
-                </SimpleGrid>
-                <Produits
-                    pgData={pgData}
-                    produits={allProduits}
-                    categorie={categorie}
-                    onDebucuqage={handleTransaction}/>
-
-            </Grid.Col>
-            <Grid.Col md={4}>
-
+                        <RechargeLydiaButton pgData={pgData} onRecharge={handleTransaction}/>
+                    </Stack>
+                    <Produits
+                        pgData={pgData}
+                        produits={allProduits}
+                        categorie={categorie}
+                        onDebucuqage={handleTransaction}/>
+                </Group>
+            </Stack>
+            <Stack md={4}>
                 <PgHistory history={history}/>
-            </Grid.Col>
-        </Grid>
+            </Stack>
+        </Group>
     );
 }
 
