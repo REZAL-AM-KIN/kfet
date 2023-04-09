@@ -1,5 +1,5 @@
 import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
-import {IconBuildingStore, IconDeviceDesktop, IconListDetails, IconToolsKitchen2} from "@tabler/icons";
+import {IconBuildingStore, IconDeviceDesktop, IconListDetails, IconToolsKitchen2} from "@tabler/icons-react";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
 import {LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";

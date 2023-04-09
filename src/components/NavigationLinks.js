@@ -1,6 +1,6 @@
 import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {Link, useNavigate} from "react-router-dom";
-import {IconLogout, IconUserSearch} from "@tabler/icons";
+import {IconLogout, IconUserSearch} from "@tabler/icons-react";
 import {handleLogout} from "../auth/logout";
 import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
