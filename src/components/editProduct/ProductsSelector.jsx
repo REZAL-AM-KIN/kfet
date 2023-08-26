@@ -1,20 +1,38 @@
 import {
     Box,
     Paper,
+    Stack,
+    Text,
     useMantineTheme
 } from "@mantine/core"
+import {useMediaQuery} from "@mantine/hooks";
 import {useEffect, useState} from "react";
 import SearchableDataTable from "../SearchableDataTable";
 
-const ProductsSelector = ({productsList}) => {
+const ProductsSelector = ({useproductslist}) => {
 
     const [tabData, setTabData] = useState([])
     const theme = useMantineTheme();
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+
 
     useEffect(()=>{
-        let tabData = productsList
-        setTabData(tabData)
-    }, [productsList])
+        setTabData(useproductslist.productsList)
+    }, [useproductslist.productsList])
+
+
+    //Construction du déroulant au clic sur une ligne du tableau
+    //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
+    // (les datas correspondant à la ligne) est passé via l'argument record
+    const rowExpansionContent = (record)=>{
+        return (
+            <Stack spacing="0" style={{marginBottom:7.5, marginTop:7.5, marginLeft:15}}>
+                <Text>raccourci : {record.raccourci}</Text>
+                <Text>prix (€) : {record.prix}</Text>
+            </Stack>
+        )
+    }
+
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
@@ -27,14 +45,13 @@ const ProductsSelector = ({productsList}) => {
                     highlightOnHover
                     data={tabData}
                     columns={[
-                        {accessor: "id", title:"id", titleStyle: {minWidth:"280px"}, width: "20%"},
-                        {accessor: "nom", title:"Nom", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                        {accessor: "nom", title:"Nom", sortable: true, titleStyle: {minWidth:"280px"}, width: "15%"},
                         {accessor: "raccourci", title:"Raccourci", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                        {accessor: "prix", title:"prix (€)", textAlignment:"center", width:140, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)') }
+                        {accessor: "prix", title:"prix (€)", textAlignment:"center", width:140,  sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)') }
                     ]}
                     defaultSortedColumn="nom"
                     idAccessor="id"
-                    isLoading = {false}
+                    isLoading = {useproductslist.isLoading}
 
                     elementSpacing={"xs"}
 
@@ -42,7 +59,14 @@ const ProductsSelector = ({productsList}) => {
                         input: {flex: "auto"}
                     }}
 
+                    rowExpansion={ isSmallDevice ? {
+                        content: ({record})=>(rowExpansionContent(record))
+                    }:""}
+
                     searchBarPosition="apart"
+
+                    withReloadIcon
+                    reloadCallback={()=>useproductslist.retrieveProducts()}
 
                 />
             </Paper>
