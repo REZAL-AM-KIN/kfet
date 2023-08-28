@@ -123,16 +123,18 @@ export function useProductInfo(productId){
 
     const retrieveProductInfo = async () => {
         setLoading(true)
-        try {
-            const response = await axiosPrivate.get("produits/"+productId+"/");
-            if (response.data) {
-                setProductInfo(response.data);
-            } else {
-                errorNotif("Produits","Impossible de récupérer les produits de l'entité");
+        if(productId){
+            try {
+                const response = await axiosPrivate.get("produits/"+productId+"/");
+                if (response.data) {
+                    setProductInfo(response.data);
+                } else {
+                    errorNotif("Produits","Impossible de récupérer les produits de l'entité");
+                }
+            } catch (error) {
+                errorNotif("Produits", error.message)
+                console.log("Error getting products", error);
             }
-        } catch (error) {
-            errorNotif("Produits", error.message)
-            console.log("Error getting products", error);
         }
         setLoading(false)
     }

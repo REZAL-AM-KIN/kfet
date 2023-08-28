@@ -34,39 +34,7 @@ export function useProductsList(entityId){
     const axiosPrivate = useAxiosPrivate()
 
     const [isLoading, setLoading] = useState(true)
-    const [isSending, setSending] = useState(false)
     const [productsList, setProductsList] = useState([])
-
-    const addProduct = async (productInfo)=>{
-        try {
-            if (!productInfo.entite){ productInfo.entite = entityId}    // on remplit l'id de l'entité.
-
-            setSending(true)
-            const response = await axiosPrivate.post("products/", productInfo)
-            setSending(false)
-
-            if(response.status===201){
-                // On indique à l'utilisateur que les paramètres ont été changés
-                showNotification( {
-                    icon: <IconCheck size={18} />,
-                    color: "green",
-                    autoClose: true,
-                    title: "Ajout d'un produit",
-                    message: 'Le produit a bien été ajouté'
-                })
-
-                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
-                retrieveProducts()
-
-            }else{
-                errorNotif("Produits", "Une erreur inconnue est survenue lors de l'envoi des paramètres produit")
-                console.log("Error sending product parameters", response);
-            }
-        }catch (error) {
-            errorNotif("Produits", error.message)
-            console.log("Error sending product parameters", error);
-        }
-    }
 
     const retrieveProducts = async () => {
         setLoading(true)
@@ -101,6 +69,6 @@ export function useProductsList(entityId){
         // eslint-disable-next-line
     }, [entityId]);
 
-    return {productsList, isLoading, isSending, retrieveProducts, addProduct}
+    return {productsList, isLoading, retrieveProducts}
 
 }
