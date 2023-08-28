@@ -32,7 +32,7 @@ export function useProductInfo(productId){
 
     const [isLoading, setLoading] = useState(true)
     const [isSending, setSending] = useState(false)
-    const [productInfo, setProductInfo] = useState([])
+    const [productInfo, setProductInfo] = useState({})
 
     const addProduct = async (productInfo)=>{
         try {

@@ -4,6 +4,7 @@ import {
     Center,
     Stack,
     TextInput,
+    NumberInput,
     useMantineTheme
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
@@ -33,17 +34,20 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             nom: (value) => (value.length>50 ? "Le nom doit faire moins de 50 caractères" :
                 value.length===0 ? "Le titre est obligatoire !": null),
             raccourci: (value) => (value.length>3 ? "Le raccourci doit faire moins de 3 caractères" : null),
-            prix: (value) => {
-                if(!value){return !"Le prix est obligatoire !" }
-
-            }
+            prix: (value) => (value === undefined
+                ? 'Le prix est obligatoire !'
+                : value >= 1000
+                ? 'Le prix doit être inférieur à 1000€'
+                : value < 0
+                ? 'Le prix doit être positif'
+                : null),
         },
     })
     useEffect(()=>{
-        if(productId){
-            form.setValues(useproductinfo.productInfo)
+        if(Object.keys(useproductinfo.productInfo).length>0){
+            form.setValues({ ...useproductinfo.productInfo, prix:parseFloat(useproductinfo.productInfo.prix)})
         }else{
-            form.setValues({ nom:"", raccourci:"", prix:"", entite:entity}) //on met des valeurs nulles et on définit l'entité à celle de travail actuel
+            form.setValues({ nom:"", raccourci:"", prix:0, entite:entity}) //on met des valeurs nulles et on définit l'entité à celle de travail actuel
         }
     }, [useproductinfo.productInfo])
 
@@ -71,12 +75,13 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                         <TextInput
                             label="Raccourci"
                             placeholder = "Raccourci"
-                            withAsterisk
                             {...form.getInputProps('raccourci')}
                         />
-                        <TextInput
+                        <NumberInput
                             label="Prix"
                             placeholder = "Prix"
+                            precision={2}
+                            hideControls
                             withAsterisk
                             {...form.getInputProps('prix')}
                         />
