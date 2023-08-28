@@ -18,7 +18,6 @@ import {useProductInfo} from "../../hooks/products/useProductInfo";
 const ProductsSelector = ({useproductslist, category, setProductId, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
     const theme = useMantineTheme();
-    console.log(theme)
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
     const permissions = usePermissions();
