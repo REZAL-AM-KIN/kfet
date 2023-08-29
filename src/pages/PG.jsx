@@ -4,7 +4,7 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid} from "@mantine/core";
+import {Grid, SimpleGrid, Text} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
@@ -29,7 +29,7 @@ function PG({setPage}) {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categorie, setCategorie] = useCategorie();
+    const [categorie, ] = useCategorie();
 
     const getHistory = async () => {
         try {
@@ -43,7 +43,7 @@ function PG({setPage}) {
 
     const getPG = async () => {
         try {
-            const response = await axiosPrivate.get("consommateurs/" + pgId);
+            const response = await axiosPrivate.get("consommateurs/" + pgId + "/");
             if (response.data) {
                 setPgData(response.data);
             } else {
@@ -108,10 +108,9 @@ function PG({setPage}) {
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
                 {/*<Produits produits={allProduits} categorie={categorie}/>*/}
-
+                <Text>{categorie}</Text>
             </Grid.Col>
             <Grid.Col md={4}>
-
                 <PgHistory history={history}/>
             </Grid.Col>
         </Grid>
