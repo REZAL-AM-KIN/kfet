@@ -1,41 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useCatColor, useCategorie} from "../hooks/useCategorie";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import errorNotif from "./ErrorNotif";
 import {Button, Group, useMantineTheme} from "@mantine/core";
+import {useCategorieList} from "../hooks/useCategorieList";
 
 
 function Categories({refForOutsideClick, setActive}) {
     const theme = useMantineTheme()
 
-    const axiosPrivate = useAxiosPrivate();
     const [categorie, setCategorie] = useCategorie();
     const [catColor, setCatColor] = useCatColor();
-    const [categories, setCategories] = useState([]);
-
+    const usecategorielist = useCategorieList();
 
     useEffect(() => {
-        const controller = new AbortController();
-        const getCategories = async () => {
-            try {
-                const response = await axiosPrivate.get("entites/");
-                setCategories(response.data.results);
-                response.data.results.forEach((line) => {
-                    if (line.name === categorie) {
-                        setCatColor(line.color);
-                    }
-                });
-            } catch (error) {
-                console.log(error);
-                errorNotif("Categories", error);
+        console.log(categorie)
+        usecategorielist.entitiesList.forEach((line) => {
+            if (line.name === categorie) {
+                setCatColor(line.color);
             }
-        }
-        getCategories(categories);
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [])
+        });
+    }, [categorie])
 
     function colorMixer(color1,color2){
         function componentToHex(c) {
@@ -63,7 +46,7 @@ function Categories({refForOutsideClick, setActive}) {
 
     return (
         <Group ref={refForOutsideClick}>
-            {categories.map((cat, key) => {
+            {usecategorielist.entitiesList.map((cat, key) => {
                 return (
                     <Button key={key}
                             variant="gradient"
