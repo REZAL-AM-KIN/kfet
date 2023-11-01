@@ -12,13 +12,12 @@ function Categories({refForOutsideClick, setActive}) {
     const usecategorielist = useCategorieList();
 
     useEffect(() => {
-        console.log(categorie)
         usecategorielist.entitiesList.forEach((line) => {
-            if (line.name === categorie) {
+            if (line.nom === categorie) {
                 setCatColor(line.color);
             }
         });
-    }, [categorie])
+    }, [usecategorielist.entitiesList])
 
     function colorMixer(color1,color2){
         function componentToHex(c) {
