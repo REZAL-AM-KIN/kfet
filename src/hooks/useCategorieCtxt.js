@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import CategorieContext from "../context/Categorie";
 
-export function useCategorie() {
+export function useCategorieCtxt() {
     return useContext(CategorieContext)["categorie"];
 }
 

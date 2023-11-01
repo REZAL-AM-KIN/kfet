@@ -5,8 +5,8 @@ import {handleLogout} from "../auth/logout";
 import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
 import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
-import {useCatColor, useCategorie} from "../hooks/useCategorie";
-import Categories from "./Categories";
+import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
+import CategoriesSelector from "./CategoriesSelector";
 
 const useStyles = createStyles((theme) => ({
 
@@ -202,7 +202,7 @@ export function CategorieSelector() {
 
     const Icon = IconBoxMultiple;
     const label = "Catégorie";
-    const [categorie, ] = useCategorie();
+    const [categorie, ] = useCategorieCtxt();
     const [catColor, ] = useCatColor();
 
     const [active, setActive] = useState(false);
@@ -250,7 +250,7 @@ export function CategorieSelector() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <Categories refForOutsideClick={ref} setActive={setActive}/>
+                <CategoriesSelector refForOutsideClick={ref} setActive={setActive}/>
             </Popover.Dropdown>
         </Popover>
     );

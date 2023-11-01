@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import {useCatColor, useCategorie} from "../hooks/useCategorie";
+import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
 import {Button, Group, useMantineTheme} from "@mantine/core";
 import {useCategorieList} from "../hooks/useCategorieList";
 
 
-function Categories({refForOutsideClick, setActive}) {
+function CategoriesSelector({refForOutsideClick, setActive}) {
     const theme = useMantineTheme()
 
-    const [categorie, setCategorie] = useCategorie();
+    const [categorie, setCategorie] = useCategorieCtxt();
     const [catColor, setCatColor] = useCatColor();
     const usecategorielist = useCategorieList();
 
@@ -65,4 +65,4 @@ function Categories({refForOutsideClick, setActive}) {
     );
 }
 
-export default Categories;
+export default CategoriesSelector;

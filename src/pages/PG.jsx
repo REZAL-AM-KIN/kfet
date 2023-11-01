@@ -10,7 +10,7 @@ import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
-import {useCategorie} from "../hooks/useCategorie";
+import {useCategorieCtxt} from "../hooks/useCategorieCtxt";
 
 
 function PG({setPage}) {
@@ -29,7 +29,7 @@ function PG({setPage}) {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categorie, ] = useCategorie();
+    const [categorie, ] = useCategorieCtxt();
 
     const getHistory = async () => {
         try {
