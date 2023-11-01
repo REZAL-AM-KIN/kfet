@@ -12,11 +12,12 @@ export const CategorieProvider = ({children}) => {
     useEffect(() => {
         if (Object.keys(permissions).length) {
             // it means we are connected!
-            if (permissions.ipIdentification.length) {
-                setCategorie(permissions.ipIdentification[0]);
-            } else {
-                setCategorie(permissions.groupes[0]);
+            if (permissions.entities_manageable.length) {
+                setCategorie(permissions.entities_manageable[0]);
+            } else if (permissions.entities.length) {
+                setCategorie(permissions.entities[0]);
             }
+
 
         }
     }, [permissions])
