@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
 import {Button, Group, useMantineTheme} from "@mantine/core";
 import {useCategorieList} from "../hooks/useCategorieList";
@@ -10,14 +10,6 @@ function CategoriesSelector({refForOutsideClick, setActive}) {
     const [categorie, setCategorie] = useCategorieCtxt();
     const [catColor, setCatColor] = useCatColor();
     const usecategorielist = useCategorieList();
-
-    useEffect(() => {
-        usecategorielist.entitiesList.forEach((line) => {
-            if (line.nom === categorie) {
-                setCatColor(line.color);
-            }
-        });
-    }, [usecategorielist.entitiesList])
 
     function colorMixer(color1,color2){
         function componentToHex(c) {
