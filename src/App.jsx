@@ -8,12 +8,10 @@ import {useMediaQuery} from "@mantine/hooks";
 import Login from './pages/Login';
 import PG from './pages/PG';
 import Home from "./pages/Home";
-import NavigationBar from "./components/NavigationBar";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
-import {CategorieProvider} from "./context/Categorie";
 
 
 function App() {
@@ -40,37 +38,34 @@ function App() {
         <MantineProvider withGlobalStyles withNormalizeCSS>
             <NotificationsProvider>
                 <UserProvider>
-                    <CategorieProvider>
-                        {withNavBar(pathname) ? <NavigationBar width={navBarWidth} page={page}/> : ""}
-                        <Container
-                            fluid // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
-                            style={{
-                                margin: "0", //On s'assure qu'il n'y a aucune bordure de type margin ou padding
-                                padding: "0",
-                                // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
-                                // de la nav bar sur le container
-                                marginLeft: (isSmallDevice || !withNavBar(pathname)) ? 0 : navBarWidth,
-                                paddingLeft: "0"
-                            }}>
+                    <Container
+                        fluid // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
+                        style={{
+                            margin: "0", //On s'assure qu'il n'y a aucune bordure de type margin ou padding
+                            padding: "0",
+                            // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
+                            // de la nav bar sur le container
+                            marginLeft: (isSmallDevice || !withNavBar(pathname)) ? 0 : navBarWidth,
+                            paddingLeft: "0"
+                        }}>
 
-                            <Routes>
-                                <Route path="/">
-                                    {/*public routes*/}
-                                    <Route path="login" element={<Login/>}/>
+                        <Routes>
+                            <Route path="/">
+                                {/*public routes*/}
+                                <Route path="login" element={<Login/>}/>
 
-                                    {/*privates routes*/}
-                                    <Route element={<RequireAuth/>}>
-                                        <Route path="/" element={<Home setPage={setPage}/>}/>
-                                        <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
-                                        <Route path="edit" element={<Edit setPage={setPage}/>}/>
-                                        <Route path="finss" element={<Finss setPage={setPage}/>}/>
-                                    </Route>
-
-                                    {/* TODO: 404*/}
+                                {/*privates routes*/}
+                                <Route element={<RequireAuth width={navBarWidth} page={page}/>}>
+                                    <Route path="/" element={<Home setPage={setPage}/>}/>
+                                    <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
+                                    <Route path="edit" element={<Edit setPage={setPage}/>}/>
+                                    <Route path="finss" element={<Finss setPage={setPage}/>}/>
                                 </Route>
-                            </Routes>
-                        </Container>
-                    </CategorieProvider>
+
+                                {/* TODO: 404*/}
+                            </Route>
+                        </Routes>
+                    </Container>
                 </UserProvider>
             </NotificationsProvider>
         </MantineProvider>

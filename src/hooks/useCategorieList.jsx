@@ -45,14 +45,14 @@ export function useCategorieList(){
 
     // get product list
     useEffect(() => {
-        const controller = new AbortController();
+            const controller = new AbortController();
 
-        setLoading(true)
-        retrieveEntities();
+            setLoading(true)
+            retrieveEntities();
 
-        return () => {
-            controller.abort();
-        }
+            return () => {
+                controller.abort();
+            }
         // eslint-disable-next-line
     }, []);
 

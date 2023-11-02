@@ -7,9 +7,9 @@ const CategorieContext = createContext({});
 export const CategorieProvider = ({children}) => {
     const [categorie, setCategorie] = useState("");
     const [catColor, setCatColor] = useState("");
-    const usecategorielist = useCategorieList();
 
     const permissions = usePermissions();
+    const usecategorielist = useCategorieList();
 
     const majColor = (listCategorie,catName) => {
         // console.log("MàJ de la couleur")
