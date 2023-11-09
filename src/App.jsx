@@ -1,15 +1,20 @@
 import {Route, Routes, useLocation,} from 'react-router-dom';
 import {useState} from "react";
 
-import RequireAuth from './components/RequireAuth';
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
+// authentification
+import Autentified from './components/Authentified';
+
+// pages
 import Login from './pages/Login';
 import PG from './pages/PG';
 import Home from "./pages/Home";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
+
+// contexts
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
 
@@ -55,7 +60,7 @@ function App() {
                                 <Route path="login" element={<Login/>}/>
 
                                 {/*privates routes*/}
-                                <Route element={<RequireAuth width={navBarWidth} page={page}/>}>
+                                <Route element={<Autentified width={navBarWidth} page={page}/>}>
                                     <Route path="/" element={<Home setPage={setPage}/>}/>
                                     <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
                                     <Route path="edit" element={<Edit setPage={setPage}/>}/>
