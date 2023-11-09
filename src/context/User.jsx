@@ -46,6 +46,7 @@ export const UserProvider = ({children}) => {
             console.log("Error getting utilisateur", error);
         }
     }
+
     const getPermissions = async () => {
         console.log("UPDATE CONTEXT: PERMISSIONS");
         try {
@@ -64,5 +65,4 @@ export const UserProvider = ({children}) => {
         </UserContext.Provider>
     )
 }
-
 export default UserContext;
