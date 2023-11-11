@@ -72,8 +72,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             const content = tab.map((quantity, index)=>(
                 <tr key={index}>
                     <td>{quantity.nom}</td>
-                    <td>{quantity.preQts}</td>
                     <td>{quantity.qts}</td>
+                    <td>{quantity.preQts}</td>
                 </tr>
             ))
 
@@ -83,8 +83,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                         <thead >
                         <tr>
                             <th>Nom</th>
-                            <th>Pré Qts</th>
-                            <th>Qts</th>
+                            <th style={{width:"28%"}}>Bucqués</th>
+                            <th style={{width:"35%"}}>Commandés</th>
                         </tr>
                         </thead>
                         <tbody>{content}</tbody>
@@ -172,7 +172,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 children: (
                     <Text size="sm">
                         Certains produits ont un prix nul. <br/>
-                        Il seront donc gratuit.<br/>
+                        Ils seront donc gratuits.<br/>
                         Etes vous certain de vouloir continuer ?
                     </Text>
                 ),
