@@ -1,4 +1,4 @@
-import {Center, Paper, Tabs, Button, Modal, Stack, Text} from "@mantine/core"
+import {Center, Paper, Tabs, Button, Modal, Stack, Text, Tooltip} from "@mantine/core"
 import {IconCirclePlus} from "@tabler/icons";
 import FinssProductForm from "./FinssProductForm";
 import {useState} from "react";
@@ -77,9 +77,17 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
                         initialProduct={product}
                         formSubmitCallback={(values) => usefinssproduct.updateProduct(values)}
                         disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted}
-
                     />
-                    <Button disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted} color="red" onClick={(e) => deleteProduct(e, product)}>Supprimer</Button>
+
+                    <Tooltip  label={usefinssinfo.finssInfo.ended || isDebucquageStarted ? "Suppression impossible, debucquage commencé" : "Ajouter un produit"}>
+                            <Button
+                                    disabled = {usefinssinfo.finssInfo.ended || isDebucquageStarted}
+                                    sx={{ '&[disabled]': { pointerEvents: 'all' } }}
+                                    color="red"
+                                    onClick={(e) => deleteProduct(e, product)}
+                            >Supprimer</Button>
+                    </Tooltip>
+
                 </Stack>
             </Tabs.Panel>
         )
@@ -90,11 +98,31 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
         <>
         <Center style={{paddingTop:10}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{width:600, position:'relative'}}>
-                <Tabs keepMounted={false} orientation="vertical" defaultValue={usefinssproduct.productsList.length>0 ? usefinssproduct.productsList[0].id.toString() : ""}>
+                <Tabs
+                    keepMounted={false}
+                    orientation="vertical"
+                    defaultValue={usefinssproduct.productsList.length>0 ? usefinssproduct.productsList[0].id.toString() : ""}
+                    styles={{
+                        tabsList:{display:'flex', flexDirection:'column', flexWrap: 'nowrap', maxWidth: "35%"},
+                        tab:{ paddingLeft:'0.5vw'},
+                        tabLabel: {display: 'inline-block', minWidth:0, wordWrap: 'break-word',  whiteSpace:'normal'},
+                        }}
+                >
 
-                    <Tabs.List>
+                    <Tabs.List >
                         {tabsListProducts}
-                        <Button disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted} variant="subtle" onClick = {()=>setProductModalOpen(true)}><IconCirclePlus color="green"/></Button>
+
+                        {/*Bouton d'ajout de produit*/}
+                        <Tooltip  label={usefinssinfo.finssInfo.ended || isDebucquageStarted ? "Ajout impossible, debucquage commencé" : "Ajouter un produit"}>
+                            <Button
+                                disabled = {usefinssinfo.finssInfo.ended || isDebucquageStarted}
+                                sx={{ '&[disabled]': { pointerEvents: 'all' } }}
+                                variant="subtle"
+                                onClick = {()=>{setProductModalOpen(true)}}
+                            >
+                                <IconCirclePlus color="green"/>
+                            </Button>
+                        </Tooltip>
                     </Tabs.List>
 
                     {tabsPanelList}
