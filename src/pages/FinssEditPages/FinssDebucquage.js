@@ -6,13 +6,14 @@ import errorNotif from "../../components/ErrorNotif";
 import {useConsommateursList} from "../../hooks/useConsommateursList";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {DataTable} from "mantine-datatable";
-import openFinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
+import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 
 
 //TODO : Permettre le débucquage en negat'ss si permission.
 const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const useconsommateurlist = useConsommateursList()
 
+    const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false)
     const [selectedRecords, selectedRecordsChange] = useState([])
     const [displayDebucque, setDisplayDebucque] = useState(false);
     const [data, setData] = useState([])
@@ -334,7 +335,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                                         </Tooltip>
 
                                         <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
-                                            <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>openFinssProductRecapModal(usefinssproduct)}>Recap prix</Button>
+                                            <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>setFinssProductRecapModalOpened(true)}>Recap prix</Button>
                                         </Tooltip>
                                     </Group>
                                     }
@@ -344,6 +345,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                 />
             </Paper>
+
+            <FinssProductRecapModal opened={finssProductRecapModalOpened} setOpened={setFinssProductRecapModalOpened} usefinssproduct={usefinssproduct}/>
         </Box>
 
     )

@@ -25,6 +25,7 @@ Retours:
                 "prix_unitaire" : Prix unitaire calculé (read only),
                 "obligatoire": Si le produit est obligatoire,
                 "quantite_prebucque": Quantité totale de participation inscrite.
+                "quantite_bucque": Quantité totale de participation bucqué.
             },
             ...
         ]

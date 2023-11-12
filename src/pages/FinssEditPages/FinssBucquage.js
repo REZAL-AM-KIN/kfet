@@ -15,8 +15,8 @@ import errorNotif from "../../components/ErrorNotif";
 import FinssBucquageModal from "../../components/Finss/FinssBucquageModal";
 import {useState} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
-import openFinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 import {useMediaQuery} from "@mantine/hooks";
+import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 
 
 
@@ -25,6 +25,7 @@ import {useMediaQuery} from "@mantine/hooks";
 const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     const [bucquageModalOpened, setBucquageModalOpened] = useState(false);
+    const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false);
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
 
@@ -226,7 +227,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                                             </ActionIcon>
                                         </Tooltip>
                                         <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
-                                            <ActionIcon size={33} color="blue" onClick={()=>openFinssProductRecapModal(usefinssproduct)}>
+                                            <ActionIcon size={33} color="blue" onClick={()=>setFinssProductRecapModalOpened(true)}>
                                                 <IconNotes size={33}/>
                                             </ActionIcon>
                                         </Tooltip>
@@ -246,6 +247,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             </Paper>
 
             <FinssBucquageModal opened={bucquageModalOpened} setOpened={setBucquageModalOpened} usefinssproduct={usefinssproduct} usebucquage={usebucquage}/>
+            <FinssProductRecapModal opened={finssProductRecapModalOpened} setOpened={setFinssProductRecapModalOpened} usefinssproduct={usefinssproduct}/>
         </Box>
 
     );
