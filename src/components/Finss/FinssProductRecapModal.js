@@ -38,7 +38,7 @@ const FinssProductRecapModal = ({opened, setOpened, usefinssproduct})=> {
                                fetching={usefinssproduct.isLoading}
                     />
                 </Box>
-                <Button fullWidth onClick={closeAllModals} mt="md">Fermer</Button>
+                <Button fullWidth onClick={()=>setOpened(false)} mt="md">Fermer</Button>
             </>
 
         </Modal>

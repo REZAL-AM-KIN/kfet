@@ -14,7 +14,7 @@ import {
 import {useForm} from '@mantine/form';
 import {useEffect, useState} from "react";
 import {DataTable} from "mantine-datatable";
-import {useMediaQuery} from "@mantine/hooks";
+import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {useUser} from "../../hooks/useUser";
 import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
 import {showNotification} from "@mantine/notifications";
@@ -34,6 +34,8 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     const useParticipation = useUserParticipation()
 
 
+
+
     const [isSending, setSending] = useState(false)
     const [selectedPG, setSelectedPG] = useState()
     const [pgselectorValue, setPgselectorValue] = useState()
@@ -49,6 +51,9 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     })
 
 
+    useHotkeys([
+        ['Enter', () => alert('Enter')],
+    ]);
 
     //on remplie la liste des produits en renommant l'attribue id en "key"
     //On rajoute les quantités pré-bucquées pour pouvoir les affichés facilement dans le tableau
@@ -179,8 +184,8 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
 
     return (
-        <Modal opened={opened} onClose={closeModal}>
-            <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})}>
+        <Modal opened={opened} onClose={closeModal} >
+            <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})} >
                <Box sx={{height: isSmallDevice ? 300:400}}>
                    {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                    <Group  spacing="0">
@@ -211,18 +216,15 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                                {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%", render: (product) => (<QtsInput item={product}/>) }
                            ]}
                            noRecordsText="Aucun produit n'existe pour ce fin'ss"
-
-
-
-
+                           onKeyDown={()=>alert("keydown")}
                        />
                    </Box>
 
 
                </Box>
                 <Group spacing="0">
-                    <Button style={{flex:"auto", marginTop: 10, marginRight: "3px"}} type="submit" disabled={!selectedPG}>Valider</Button>
-                    <Button style={{flex:"auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6]}} type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                    <Button style={{flex:"auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6], order:2}} type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                    <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}  type="submit" disabled={!selectedPG}>Valider</Button>
                 </Group>
             </form>
         </Modal>
