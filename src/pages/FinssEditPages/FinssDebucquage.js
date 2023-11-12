@@ -14,7 +14,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const useconsommateurlist = useConsommateursList()
 
     const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false)
-    const [selectedRecords, selectedRecordsChange] = useState([])
+    const [selectedRecords, setSelectedRecords] = useState([])
     const [displayDebucque, setDisplayDebucque] = useState(false);
     const [data, setData] = useState([])
 
@@ -187,7 +187,9 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         }
 
         function debucquer() {
+            closeAllModals()
             usebucquage.debucquage(debucquageList)
+            setSelectedRecords([])
         }
 
 
@@ -322,7 +324,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     }}
 
                     selectedRecords = {selectedRecords}
-                    onSelectedRecordsChange = {selectedRecordsChange}
+                    onSelectedRecordsChange = {setSelectedRecords}
 
                     //On regarde si le pg est débucquable
                     isRecordSelectable = {(record)=> record.solde_pg>=record.prix_total}
