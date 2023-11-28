@@ -61,9 +61,9 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>
                         </Container>
                         <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>
                             <Center>
-                                <CategorieSelector/>
                             </Center>
                             <Stack align="center" spacing="xs">
+                                <CategorieSelector/>
                                 {links}
                             </Stack>
 
@@ -100,13 +100,9 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                 <Center>
                     <NormalSearchPgButton/>
                 </Center>
-                <Navbar.Section mt={"sm"}>
-                    <Stack justify="center" spacing={0}>
-                        <CategorieSelector/>
-                    </Stack>
-                </Navbar.Section>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
+                        <CategorieSelector/>
                         {links}
                     </Stack>
                 </Navbar.Section>
