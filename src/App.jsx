@@ -1,11 +1,12 @@
-import {Route, Routes, useLocation,} from 'react-router-dom';
+import {Outlet, Route, Routes, useLocation,} from 'react-router-dom';
 import {useState} from "react";
 
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 // authentification
-import Autentified from './components/Authentified';
+import RequireAuth from './components/RequireAuth';
+import NavigationBar from "./components/NavigationBar";
 
 // pages
 import Login from './pages/Login';
@@ -17,6 +18,7 @@ import Finss from "./pages/Finss";
 // contexts
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
+import { CategorieProvider } from './context/Categorie';
 
 
 function App() {
@@ -60,11 +62,13 @@ function App() {
                                 <Route path="login" element={<Login/>}/>
 
                                 {/*privates routes*/}
-                                <Route element={<Autentified width={navBarWidth} page={page}/>}>
-                                    <Route path="/" element={<Home setPage={setPage}/>}/>
-                                    <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
-                                    <Route path="edit" element={<Edit setPage={setPage}/>}/>
-                                    <Route path="finss" element={<Finss setPage={setPage}/>}/>
+                                <Route element={<RequireAuth/>}>
+                                    <Route element={<CategorieProvider><NavigationBar width={navBarWidth} page={page}/><Outlet/></CategorieProvider>}>
+                                        <Route path="/" element={<Home setPage={setPage}/>}/>
+                                        <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
+                                        <Route path="edit" element={<Edit setPage={setPage}/>}/>
+                                        <Route path="finss" element={<Finss setPage={setPage}/>}/>
+                                    </Route>
                                 </Route>
 
                                 {/* TODO: 404*/}
