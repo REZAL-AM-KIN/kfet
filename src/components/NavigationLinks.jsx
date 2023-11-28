@@ -196,62 +196,83 @@ export function NormalSearchPgButton() {
 
 
 export function CategorieSelector() {
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+
     const {classes, cx} = useStyles();
 
-    const ref = useClickOutside(() => setActive(false));
-
-    const Icon = IconBoxMultiple;
     const label = "Catégorie";
+    const Icon = IconBoxMultiple;
     const [categorie, ] = useCategorieCtxt();
     const [catColor, ] = useCatColor();
 
     const [active, setActive] = useState(false);
 
-    function onClick() {
-        setActive(!active);
-    }
 
-    const CategorieButton = forwardRef((props, ref) => (
-
-        <Tooltip
-            label={label}
-            opened={active ? false : undefined}
-            position="right"
-            transitionDuration={0}
-            events={{hover: true, focus: true, touch: false}}>
-            <UnstyledButton
-                ref={ref}
-                {...props}
-                onClick={onClick}
-                className={cx(classes.link, {[classes.active]: active})}
-                style={{backgroundColor:catColor}}
+    if (!isSmallDevice) {
+        return (
+            <Popover
+                width={300}
+                opened={active}
+                onChange={setActive}
+                position="right"
+                shadow="md"
+                offset={15}
+                trapFocus
             >
-                <Stack align="center" spacing="0">
-                    <Icon size={34} stroke={1.5}/>
-                    <Text size="10px">{categorie}</Text>
-                </Stack>
-            </UnstyledButton>
-        </Tooltip>
+                <Popover.Target>
+                    <Tooltip
+                        label={categorie.length > 8 ? categorie : label}
+                        opened={active ? false : undefined}
+                        position="right"
+                        transitionDuration={0}
+                        events={{hover: true, focus: true, touch: false}}>
+                        <UnstyledButton
+                            onClick={() => {setActive((active) => !active)}}
+                            className={cx(classes.link, {[classes.active]: active})}
+                            style={{backgroundColor:catColor}}
+                        >
+                            <Stack align="center" spacing="0">
+                                <Icon size={34} stroke={1.5}/>
+                                <Text size="10px">{categorie.length > 8 ? categorie.slice(0,6)+ ".." : categorie}</Text>
+                            </Stack>
+                        </UnstyledButton>
+                    </Tooltip>
+                </Popover.Target>
 
-    ));
-
-
-    return (
+                <Popover.Dropdown>
+                    <CategoriesSelector setActive={setActive}/>
+                </Popover.Dropdown>
+            </Popover>
+        );
+    } else {
+      return (
         <Popover
             width={300}
             opened={active}
-            position="right"
+            onChange={setActive}
+            position="bottom"
             shadow="md"
             offset={15}
             trapFocus
         >
             <Popover.Target>
-                <CategorieButton/>
+                <UnstyledButton
+                    onClick={() => {setActive((active) => !active)}}
+                    className={cx(classes.link, {[classes.active]: active})}
+                    style={{backgroundColor:catColor, width: "80%"}}
+                >
+                    <Group style={{width: "100%"}}>
+                        <Icon size={34} stroke={1.5}/>
+                        <Text>{categorie}</Text>
+                    </Group>
+                </UnstyledButton>
             </Popover.Target>
 
             <Popover.Dropdown>
-                <CategoriesSelector refForOutsideClick={ref} setActive={setActive}/>
+                <CategoriesSelector setActive={setActive}/>
             </Popover.Dropdown>
         </Popover>
-    );
+      );
+    }
 }

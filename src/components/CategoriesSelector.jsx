@@ -4,7 +4,7 @@ import {Button, Group, useMantineTheme} from "@mantine/core";
 import {useCategorieList} from "../hooks/useCategorieList";
 
 
-function CategoriesSelector({refForOutsideClick, setActive}) {
+function CategoriesSelector({setActive}) {
     const theme = useMantineTheme()
 
     const [categorie, setCategorie] = useCategorieCtxt();
@@ -36,7 +36,7 @@ function CategoriesSelector({refForOutsideClick, setActive}) {
     }
 
     return (
-        <Group ref={refForOutsideClick}>
+        <Group>
             {usecategorielist.entitiesList.map((cat, key) => {
                 return (
                     <Button key={key}
