@@ -1,5 +1,4 @@
 import { useLocation, Outlet, Navigate } from 'react-router-dom';
-import {CategorieProvider} from "../context/Categorie";
 
 const RequireAuth = ({width, page}) => {
   const location = useLocation();
