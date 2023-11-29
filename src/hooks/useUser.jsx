@@ -10,5 +10,5 @@ export function usePermissions() {
 }
 
 export function useIsLogged() {
-    return useContext(UserContext)["isLogged"];
+    return [useContext(UserContext)["isLogged"], useContext(UserContext)["setIsLogged"]];
 }

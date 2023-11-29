@@ -28,20 +28,10 @@ function App() {
     const navBarWidth = 80
 
 
-    const LayoutRoute = () => {
+    function LayoutRoute() {
         return (
             <CategorieProvider>
-                <NavigationBar width={navBarWidth}/>
-                <Outlet />
-            </CategorieProvider>
-        )
-    };
-
-    return (
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-            <NotificationsProvider>
-                <UserProvider>
-                    <Container
+                 <Container
                         fluid // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
                         style={{
                             margin: "0", //On s'assure qu'il n'y a aucune bordure de type margin ou padding
@@ -51,26 +41,35 @@ function App() {
                             marginLeft: isSmallDevice ? 0 : navBarWidth,
                             paddingLeft: "0"
                         }}>
+                    <NavigationBar width={navBarWidth}/>
+                    <Outlet />
+                </Container>
+            </CategorieProvider>
+        )
+    };
 
-                        <Routes>
-                            <Route path="/">
-                                {/*public routes*/}
-                                <Route path="login" element={<Login/>}/>
+    return (
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+            <NotificationsProvider>
+                <UserProvider>
+                    <Routes>
+                        <Route path="/">
+                            {/*public routes*/}
+                            <Route path="login" element={<Login/>}/>
 
-                                {/*privates routes*/}
-                                <Route element={<RequireAuth/>}>
-                                    <Route element={<LayoutRoute/>}>
-                                        <Route path="/" element={<Home/>}/>
-                                        <Route path="pg/:pgId" element={<PG/>}/>
-                                        <Route path="edit" element={<Edit/>}/>
-                                        <Route path="finss" element={<Finss/>}/>
-                                    </Route>
+                            {/*privates routes*/}
+                            <Route element={<RequireAuth/>}>
+                                <Route element={<LayoutRoute/>}>
+                                    <Route path="/" element={<Home/>}/>
+                                    <Route path="pg/:pgId" element={<PG/>}/>
+                                    <Route path="edit" element={<Edit/>}/>
+                                    <Route path="finss" element={<Finss/>}/>
                                 </Route>
-
-                                {/* TODO: 404*/}
                             </Route>
-                        </Routes>
-                    </Container>
+
+                            {/* TODO: 404*/}
+                        </Route>
+                    </Routes>
                 </UserProvider>
             </NotificationsProvider>
         </MantineProvider>

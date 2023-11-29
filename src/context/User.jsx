@@ -27,8 +27,11 @@ export const UserProvider = ({children}) => {
                 controller.abort();
             }
         } else {
+            // clear the context
             setPgData({});
             setPermissions({});
+            // clear the sessionStorage (and the tokens)
+            sessionStorage.clear();
         }
         // eslint-disable-next-line
     }, [isLogged])
@@ -60,7 +63,7 @@ export const UserProvider = ({children}) => {
     }
 
     return (
-        <UserContext.Provider value={{pgData, permissions, isLogged}}>
+        <UserContext.Provider value={{pgData, permissions, isLogged, setIsLogged}}>
             {children}
         </UserContext.Provider>
     )
