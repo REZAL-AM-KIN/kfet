@@ -222,7 +222,7 @@ export function CategorieSelector() {
             >
                 <Popover.Target>
                     <Tooltip
-                        label={categorie.length > 8 ? categorie : label}
+                        label={categorie}
                         opened={active ? false : undefined}
                         position="right"
                         transitionDuration={0}
