@@ -20,6 +20,7 @@ function CategoriesSelector({setActive}) {
                         setCatColor(cat.color);
                         setActive(false);
                     }}
+                    radius="md"
                     style={{minWidth: 'fit-content', flexGrow: 1, backgroundColor:cat.color}}
                 >{cat.nom}</Button>
             );
