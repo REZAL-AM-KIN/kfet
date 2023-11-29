@@ -40,6 +40,14 @@ function App() {
         return !pathWithoutNav.includes(path)
     }
 
+    const LayoutRoute = () => {
+        return (
+            <CategorieProvider>
+                <NavigationBar width={navBarWidth} page={page}/>
+                <Outlet />
+            </CategorieProvider>
+        )
+    };
 
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
@@ -63,7 +71,7 @@ function App() {
 
                                 {/*privates routes*/}
                                 <Route element={<RequireAuth/>}>
-                                    <Route element={<CategorieProvider><NavigationBar width={navBarWidth} page={page}/><Outlet/></CategorieProvider>}>
+                                    <Route element={<LayoutRoute/>}>
                                         <Route path="/" element={<Home setPage={setPage}/>}/>
                                         <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
                                         <Route path="edit" element={<Edit setPage={setPage}/>}/>
