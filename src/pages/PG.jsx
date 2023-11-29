@@ -13,10 +13,7 @@ import {usePermissions} from "../hooks/useUser";
 import {useCategorieCtxt} from "../hooks/useCategorieCtxt";
 
 
-function PG({setPage}) {
-    useEffect(() => {
-        setPage("Debucquage")
-    })
+function PG() {
 
     // current displayed pgId from url
     let params = useParams();

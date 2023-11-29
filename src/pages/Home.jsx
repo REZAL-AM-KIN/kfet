@@ -9,8 +9,7 @@ import {GeneralHistory, PgHistory} from "../components/History";
 import {useMediaQuery} from "@mantine/hooks";
 import {useUser} from "../hooks/useUser";
 
-const Home = ({setPage}) => {
-    useEffect(() => {setPage("Home")});
+const Home = () => {
     const navigate = useNavigate();
 
     const theme = useMantineTheme();

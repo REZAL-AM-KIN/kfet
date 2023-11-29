@@ -1,5 +1,4 @@
-import {Outlet, Route, Routes, useLocation,} from 'react-router-dom';
-import {useState} from "react";
+import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
@@ -23,27 +22,16 @@ import { CategorieProvider } from './context/Categorie';
 
 function App() {
     const theme = useMantineTheme()
-    const {pathname} = useLocation();
-
-    const [page, setPage] = useState("Finss")
-    /*
-    A chaque nouvelle page, il faut bien passer setPage à la page et penser à faire setPage(NomDeLaPage) avec
-    NomDeLaPage identique à pageName spécifié dans la table des liens dans NavigationBar.js
-     */
 
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
 
     const navBarWidth = 80
-    const pathWithoutNav = ["/login"]
 
-    const withNavBar = (path) => {
-        return !pathWithoutNav.includes(path)
-    }
 
     const LayoutRoute = () => {
         return (
             <CategorieProvider>
-                <NavigationBar width={navBarWidth} page={page}/>
+                <NavigationBar width={navBarWidth}/>
                 <Outlet />
             </CategorieProvider>
         )
@@ -60,7 +48,7 @@ function App() {
                             padding: "0",
                             // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
                             // de la nav bar sur le container
-                            marginLeft: (isSmallDevice || !withNavBar(pathname)) ? 0 : navBarWidth,
+                            marginLeft: isSmallDevice ? 0 : navBarWidth,
                             paddingLeft: "0"
                         }}>
 
@@ -72,10 +60,10 @@ function App() {
                                 {/*privates routes*/}
                                 <Route element={<RequireAuth/>}>
                                     <Route element={<LayoutRoute/>}>
-                                        <Route path="/" element={<Home setPage={setPage}/>}/>
-                                        <Route path="pg/:pgId" element={<PG setPage={setPage}/>}/>
-                                        <Route path="edit" element={<Edit setPage={setPage}/>}/>
-                                        <Route path="finss" element={<Finss setPage={setPage}/>}/>
+                                        <Route path="/" element={<Home/>}/>
+                                        <Route path="pg/:pgId" element={<PG/>}/>
+                                        <Route path="edit" element={<Edit/>}/>
+                                        <Route path="finss" element={<Finss/>}/>
                                     </Route>
                                 </Route>
 
