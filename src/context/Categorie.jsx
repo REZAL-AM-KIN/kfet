@@ -38,6 +38,7 @@ export const CategorieProvider = ({children}) => {
     // update the categories
     useEffect(() => {
         if (Object.keys(permissions).length) {
+            // Set the categorie only if the user has permissions
             // console.log("permission trouvé! affectation de la catégorie")
             if (localStorage.getItem("categorie")) {
                 // Check if the categorie is already in the localStorage

@@ -201,7 +201,6 @@ export function CategorieSelector() {
 
     const {classes, cx} = useStyles();
 
-    const label = "Catégorie";
     const Icon = IconBoxMultiple;
     const [categorie, ] = useCategorieCtxt();
     const [catColor, ] = useCatColor();
