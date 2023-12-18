@@ -8,7 +8,7 @@ import {IconAlertCircle} from '@tabler/icons';
 
 // images
 import bkgImg from '../assets/101516.jpg';
-import { useIsLogged, useUser } from "../hooks/useUser";
+import { useIsLogged } from "../hooks/useUser";
 
 
 const LOGIN_URL = 'token/';

@@ -1,6 +1,6 @@
 import { useLocation, Outlet, Navigate } from 'react-router-dom';
 
-const RequireAuth = ({width, page}) => {
+const RequireAuth = () => {
   const location = useLocation();
   // if the user is authenticated, we render the Outlet, else, we navigate him to the login page
   return (

@@ -1,10 +1,10 @@
-import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
+import {forwardRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
+import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons";
 import {handleLogout} from "../auth/logout";
-import {forwardRef, useState} from "react";
 import SearchPg from "./SearchPg";
-import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
 import CategoriesSelector from "./CategoriesSelector";
 

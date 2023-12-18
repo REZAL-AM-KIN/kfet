@@ -44,11 +44,11 @@ export const CategorieProvider = ({children}) => {
                 // Check if the categorie is already in the localStorage
                 setCategorie(localStorage.getItem("categorie"));
                 majColor(usecategorielist.entitiesList,localStorage.getItem("categorie"));
-            } else if (permissions.entities_manageable.length) {
+            } else if (permissions.entities_manageable?.length) {
                 // Check if the user has a categorie manageable
                 setCategorie(permissions.entities_manageable[0]);
                 majColor(usecategorielist.entitiesList,permissions.entities_manageable[0]);
-            } else if (permissions.entities.length) {
+            } else if (permissions.entities?.length) {
                 // Check if the user has a categorie
                 setCategorie(permissions.entities[0]);
                 majColor(usecategorielist.entitiesList,permissions.entities[0]);

@@ -47,7 +47,6 @@ export function useCategorieList(){
     useEffect(() => {
             const controller = new AbortController();
 
-            setLoading(true)
             retrieveEntities();
 
             return () => {
