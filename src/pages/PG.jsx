@@ -4,16 +4,16 @@ import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid} from "@mantine/core";
+import {Grid, SimpleGrid, Text} from "@mantine/core";
 import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
+import {useCategorieCtxt} from "../hooks/useCategorieCtxt";
 
 
-function PG({setPage}) {
-    useEffect(()=>{setPage("Debucquage")})
+function PG() {
 
     // current displayed pgId from url
     let params = useParams();
@@ -25,7 +25,8 @@ function PG({setPage}) {
 
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
-
+    const [allProduits, setAllProduits] = useState([]);
+    const [categorie, ] = useCategorieCtxt();
 
     const getHistory = async () => {
         try {
@@ -39,7 +40,7 @@ function PG({setPage}) {
 
     const getPG = async () => {
         try {
-            const response = await axiosPrivate.get("consommateurs/" + pgId);
+            const response = await axiosPrivate.get("consommateurs/" + pgId + "/");
             if (response.data) {
                 setPgData(response.data);
             } else {
@@ -53,29 +54,39 @@ function PG({setPage}) {
 
 
     useEffect(() => {
-        console.log("UPDATE: PG");
+        console.log("UPDATE: PG and HISTORY");
         // make the api call for pg info:
         const controller = new AbortController();
         getPG();
+        getHistory()
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
     }, [pgId]);
 
+
     useEffect(() => {
-        console.log("UPDATE: PgHistory");
+        /* Retrieves the produits list from the server and extracts the categories list */
         const controller = new AbortController();
-        getHistory()
+        const getProduits = async () => {
+            try {
+                const response = await axiosPrivate.get("produits/");
+                setAllProduits(response.data.results);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getProduits();
         return () => {
             controller.abort();
         }
         // eslint-disable-next-line
-    }, [pgData])
+    }, [])
 
 
     //callbacks
-    const handleRecharge = () =>{
+    const handleRecharge = () => {
         // update pgdata and history
         getHistory();
         getPG();
@@ -83,19 +94,20 @@ function PG({setPage}) {
 
 
     return (
-        <Grid style={{backgroundColor: "pink"}}>
+        <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pgData}/>
                 <SimpleGrid>
                     {permissions.recharge
-                        ?<RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
-                        :<></>}
+                        ? <RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        : <></>}
                     {/*check lydia permissions*/}
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
+                {/*<Produits produits={allProduits} categorie={categorie}/>*/}
+                <Text>{categorie}</Text>
             </Grid.Col>
             <Grid.Col md={4}>
-
                 <PgHistory history={history}/>
             </Grid.Col>
         </Grid>

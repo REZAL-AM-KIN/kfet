@@ -8,6 +8,7 @@ import {IconAlertCircle} from '@tabler/icons';
 
 // images
 import bkgImg from '../assets/101516.jpg';
+import { useIsLogged } from "../hooks/useUser";
 
 
 const LOGIN_URL = 'token/';
@@ -18,6 +19,7 @@ const Login = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
 
+    const [,setIsLogged] = useIsLogged();
 
     const userRef = useRef();
     const errRef = useRef();
@@ -60,6 +62,7 @@ const Login = () => {
             setUser('');
             setPwd('');
             // on renvoie a l'endroit ou il était si il s'est fait dégager
+            setIsLogged(true);
             navigate(from);
         } catch (err) {
             if (!err?.response) {
