@@ -25,7 +25,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
 
     const modalClose = () => {
         setOpened(false);
-        setMontant(null);
+        setMontant('');
         setShowQrScanner(false);
         setQrcode("");
         setNumberError(false);
@@ -51,7 +51,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
             } catch (error) {
                 errorNotif("QR Submit", error?.message);
                 // reset the fields without closing modal
-                setMontant(null);
+                setMontant('');
                 setQrcode("");
             }
         }
