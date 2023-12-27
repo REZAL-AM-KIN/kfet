@@ -4,7 +4,7 @@ import axios from "../auth/axios";
 
 // style
 import {Alert, Anchor, Button, Container, Group, Paper, PasswordInput, Text, TextInput, Title,} from '@mantine/core';
-import {IconAlertCircle} from '@tabler/icons';
+import {IconAlertCircle} from '@tabler/icons-react';
 
 // images
 import bkgImg from '../assets/101516.jpg';
