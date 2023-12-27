@@ -20,7 +20,7 @@ Retours :
         ]
  */
 
-export function useCategorieList(){
+export function useEntiteList(){
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -34,11 +34,11 @@ export function useCategorieList(){
             if (response.data) {
                 setEntitiesList(response.data.results);
             } else {
-                errorNotif("Catégories","Impossible de récupérer la liste des catégories");
+                errorNotif("Entités","Impossible de récupérer la liste des entités");
             }
         } catch (error) {
             errorNotif("Catégories", error.message)
-            console.log("Error getting categories", error);
+            console.log("Error getting entities", error);
         }
         setLoading(false)
     }

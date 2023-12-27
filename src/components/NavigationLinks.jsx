@@ -5,8 +5,8 @@ import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons";
 import {handleLogout} from "../auth/logout";
 import SearchPg from "./SearchPg";
-import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
-import CategoriesSelector from "./CategoriesSelector";
+import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
+import CategoriesSelector from "./EntiteSelector";
 
 const useStyles = createStyles((theme) => ({
 
@@ -195,18 +195,16 @@ export function NormalSearchPgButton() {
 }
 
 
-export function CategorieSelector() {
+export function EntiteSelector() {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
 
     const {classes, cx} = useStyles();
 
     const Icon = IconBoxMultiple;
-    const [categorie, ] = useCategorieCtxt();
-    const [catColor, ] = useCatColor();
+    const [entite, ] = useEntiteCtxt();
 
     const [active, setActive] = useState(false);
-
 
     if (!isSmallDevice) {
         return (
@@ -221,7 +219,7 @@ export function CategorieSelector() {
             >
                 <Popover.Target>
                     <Tooltip
-                        label={categorie}
+                        label={entite.nom}
                         opened={active ? false : undefined}
                         position="right"
                         transitionDuration={0}
@@ -229,11 +227,11 @@ export function CategorieSelector() {
                         <UnstyledButton
                             onClick={() => {setActive((active) => !active)}}
                             className={cx(classes.link, {[classes.active]: active})}
-                            style={{backgroundColor:catColor}}
+                            style={{backgroundColor:entite.color}}
                         >
                             <Stack align="center" spacing="0">
                                 <Icon size={34} stroke={1.5}/>
-                                <Text size="10px">{categorie.length > 8 ? categorie.slice(0,6)+ ".." : categorie}</Text>
+                                <Text size="10px">{entite.nom.length > 8 ? entite.nom.slice(0,6)+ ".." : entite.nom}</Text>
                             </Stack>
                         </UnstyledButton>
                     </Tooltip>
@@ -259,11 +257,11 @@ export function CategorieSelector() {
                 <UnstyledButton
                     onClick={() => {setActive((active) => !active)}}
                     className={cx(classes.link, {[classes.active]: active})}
-                    style={{backgroundColor:catColor, width: "80%"}}
+                    style={{backgroundColor:entite.color, width: "80%"}}
                 >
                     <Group style={{width: "100%"}}>
                         <Icon size={34} stroke={1.5}/>
-                        <Text>{categorie}</Text>
+                        <Text>{entite.nom}</Text>
                     </Group>
                 </UnstyledButton>
             </Popover.Target>
