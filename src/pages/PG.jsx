@@ -1,16 +1,16 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useParams} from 'react-router-dom';
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
-
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid, Text} from "@mantine/core";
-import errorNotif from "../components/ErrorNotif";
+import {Grid, SimpleGrid, Text, TextInput} from "@mantine/core";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
 import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
+import { usePGHistory } from '../hooks/useHistory';
+import { usePG } from '../hooks/usePG';
+import { useProduitByEntite } from '../hooks/useProduitByEntite';
 
 
 function PG() {
@@ -20,95 +20,55 @@ function PG() {
     const pgId = params.pgId;
 
     // here we get user's permissions
-    const axiosPrivate = useAxiosPrivate();
     const permissions = usePermissions();
 
-    const [pgData, setPgData] = useState({});
-    const [history, setHistory] = useState([]);
-    const [allProduits, setAllProduits] = useState([]);
+    const pghistory = usePGHistory(pgId);
+    const pg = usePG(pgId);
+
     const [entite, ] = useEntiteCtxt();
 
-    const getHistory = async () => {
-        try {
-            const response = await axiosPrivate.get("history/" + pgId + "/");
-            setHistory(response.data);
-        } catch (error) {
-            errorNotif("PgHistory/pg", error.message);
-            console.log(error);
-        }
-    }
+    const produits = useProduitByEntite(entite.id);
 
-    const getPG = async () => {
-        try {
-            const response = await axiosPrivate.get("consommateurs/" + pgId + "/");
-            if (response.data) {
-                setPgData(response.data);
-            } else {
-                errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
-            }
-        } catch (error) {
-            errorNotif("Consommateur/", error.message);
-            console.log("Error getting consommateur", error);
-        }
-    }
-
-
-    useEffect(() => {
-        console.log("UPDATE: PG and HISTORY");
-        // make the api call for pg info:
-        const controller = new AbortController();
-        getPG();
-        getHistory()
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [pgId]);
-
-
-    useEffect(() => {
-        /* Retrieves the produits list from the server and extracts the categories list */
-        const controller = new AbortController();
-        const getProduits = async () => {
-            try {
-                const response = await axiosPrivate.get("produits/");
-                setAllProduits(response.data.results);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getProduits();
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [])
+    const [recherche, setRecherche] = useState("");
 
 
     //callbacks
     const handleRecharge = () => {
         // update pgdata and history
-        getHistory();
-        getPG();
+        pghistory.retrieve();
+        pg.retrieve();
     }
 
 
     return (
         <Grid>
             <Grid.Col md={8}>
-                <PgCard data={pgData}/>
+                <PgCard data={pg.data}/>
                 <SimpleGrid>
                     {permissions.recharge
-                        ? <RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
+                        ? <RechargeButton pgData={pg.data} onRecharge={handleRecharge}/>
                         : <></>}
                     {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
+                    <RechargeLydiaButton pgData={pg.data} onRecharge={handleRecharge}/>
+                    <Text>Entite : {entite.name}</Text>
+                    <TextInput
+                          placeholder="Rechercher un produit"
+                          value={recherche}
+                          onChange={(event) => setRecherche(event.currentTarget.value)}
+                    />
+                    {produits.data.filter((produit) => {
+                        return produit.raccourci.toLowerCase().includes(recherche.toLowerCase())
+                    }).map((produit) => {
+                        return (
+                            <Text key={produit.id}>{produit.raccourci} - {produit.nom}</Text>
+                        )
+                    }
+                    )}
                 </SimpleGrid>
-                {/*<Produits produits={allProduits} categorie={categorie}/>*/}
-                <Text>{entite.name}</Text>
+                {/*<Produits produits={produits} categorie={categorie}/>*/}
             </Grid.Col>
             <Grid.Col md={4}>
-                <PgHistory history={history}/>
+                <PgHistory history={pghistory.data}/>
             </Grid.Col>
         </Grid>
     );
