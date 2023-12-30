@@ -11,10 +11,11 @@ Retours :
     data :
         [
             {
-                "id": id due l'entité (int),
-                "nom": "Nom de l'entité",
-                "description": description,
-                "color": code hexadecimal de la couleur de l'entité ("#xxxxxx"),
+                "id": int,
+                "raccourci": str,
+                "nom": str,
+                "prix": str,
+                "entite": str
             },
             ...
         ]
