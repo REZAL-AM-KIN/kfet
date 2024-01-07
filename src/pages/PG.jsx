@@ -1,16 +1,18 @@
-import {useState} from 'react';
+import {forwardRef, useEffect, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 
+import {Grid, SimpleGrid, Text} from "@mantine/core";
+
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid, Text, TextInput} from "@mantine/core";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
+import Produits from "../components/Produits";
+
 import {usePermissions} from "../hooks/useUser";
 import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
 import { usePGHistory } from '../hooks/useHistory';
 import { usePG } from '../hooks/usePG';
-import { useProduitByEntite } from '../hooks/useProduitByEntite';
 
 
 function PG() {
@@ -27,10 +29,14 @@ function PG() {
 
     const [entite, ] = useEntiteCtxt();
 
-    const produits = useProduitByEntite(entite.id);
+    const produitRef = useRef(null);
 
-    const [recherche, setRecherche] = useState("");
+    const ProduitFwdRef = forwardRef(Produits);
 
+    // focus on the use input refferenced by userRef when the component mounts
+    useEffect(() => {
+        produitRef.current.focus();
+    }, [produitRef, pgId, entite]);
 
     //callbacks
     const handleRecharge = () => {
@@ -39,6 +45,9 @@ function PG() {
         pg.retrieve();
     }
 
+    const handleSubmit = (produit) => {
+        console.log(produit);
+    }
 
     return (
         <Grid>
@@ -50,20 +59,9 @@ function PG() {
                         : <></>}
                     {/*check lydia permissions*/}
                     <RechargeLydiaButton pgData={pg.data} onRecharge={handleRecharge}/>
-                    <Text>Entite : {entite.name}</Text>
-                    <TextInput
-                          placeholder="Rechercher un produit"
-                          value={recherche}
-                          onChange={(event) => setRecherche(event.currentTarget.value)}
-                    />
-                    {produits.data.filter((produit) => {
-                        return produit.raccourci.toLowerCase().includes(recherche.toLowerCase())
-                    }).map((produit) => {
-                        return (
-                            <Text key={produit.id}>{produit.raccourci} - {produit.nom}</Text>
-                        )
-                    }
-                    )}
+
+                    <Text>Entite : {entite.nom}</Text>
+                    <ProduitFwdRef entiteId={entite.id} ref={produitRef} length={7} onSubmit={handleSubmit}/>
                 </SimpleGrid>
                 {/*<Produits produits={produits} categorie={categorie}/>*/}
             </Grid.Col>
