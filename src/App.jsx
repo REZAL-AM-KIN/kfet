@@ -19,6 +19,8 @@ import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
 import { EntiteProvider } from './context/Entite';
 
+// theme
+import { kfetTheme } from './theme';
 
 function App() {
     const theme = useMantineTheme()
@@ -49,7 +51,7 @@ function App() {
     };
 
     return (
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
             <NotificationsProvider>
                 <UserProvider>
                     <Routes>
