@@ -1,12 +1,31 @@
 import {useState, forwardRef, useEffect} from "react";
 
-import {Input, Stack, Text} from "@mantine/core";
+import {Input, Stack, Text, createStyles} from "@mantine/core";
 import {getHotkeyHandler} from "@mantine/hooks";
 
 import {useProduitByEntite} from "../hooks/useProduitByEntite";
 
 
+const useStyles = createStyles((theme) => {
+    console.log(theme);
+    return {
+    selected: {
+        backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
+        color: theme.colors.gray[0],
+    },
+    // to distinguish the odd/even rows
+    even: {
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[1],
+    },
+    odd: {
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+    },
+}})
+
+
 function Produits({entiteId, length, onSubmit, ...others}, ref) {
+
+    const {classes} = useStyles();
 
     const produits = useProduitByEntite(entiteId);
 
@@ -42,7 +61,7 @@ function Produits({entiteId, length, onSubmit, ...others}, ref) {
                 onClick={()=>{onItemSubmit(item); ref.current.focus();}}
                 // TODO : onMouseEnter sets the selected item bypassing the axrrow navigation
                 // change the style with mouse enter, juts for feeodback, keeping independent arrow nav and mouse nav
-                onMouseEnter={()=>{setSelected(filteredProduits.indexOf(item))}}
+                // onMouseEnter={()=>{setSelected(filteredProduits.indexOf(item))}}
                 {...others}
             >{raccourci} - {nom} - {prix}</Text>
         )
@@ -79,10 +98,17 @@ function Produits({entiteId, length, onSubmit, ...others}, ref) {
                             nom={item.nom}
                             prix={item.prix}
                             key={itemId-1}
-                            sx={{
-                                backgroundColor: itemId-1 === selected ? "blue" : "white",
-                                color: itemId-1 === selected ? "white" : "black"
-                            }}
+                            className={itemId-1 === selected
+                                        ? classes.selected
+                                        : itemId % 2 === 0
+                                            ? classes.even
+                                            : classes.odd}
+                            sx={(theme) => ({
+                                "&:hover": {
+                                    backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
+                                    color: theme.colors.gray[0],
+                                },
+                            })}
                         />
                     )
                 })}

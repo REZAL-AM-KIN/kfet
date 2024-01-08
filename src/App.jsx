@@ -20,6 +20,8 @@ import { UserProvider } from "./context/User";
 import { EntiteProvider } from './context/Entite';
 
 
+// theme
+import { kfetTheme } from './theme';
 
 function App() {
     const theme = useMantineTheme()
@@ -50,13 +52,13 @@ function App() {
     };
 
     return (
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-            <Notifications />
-            <UserProvider>
-                <Routes>
-                    <Route path="/">
-                        {/*public routes*/}
-                        <Route path="login" element={<Login/>}/>
+        <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
+            <NotificationsProvider>
+                <UserProvider>
+                    <Routes>
+                        <Route path="/">
+                            {/*public routes*/}
+                            <Route path="login" element={<Login/>}/>
 
                         {/*privates routes*/}
                         <Route element={<RequireAuth/>}>
