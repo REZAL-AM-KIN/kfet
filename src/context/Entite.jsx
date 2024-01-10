@@ -65,7 +65,7 @@ export const EntiteProvider = ({children}) => {
     }, [permissions,entiteList.entitiesList])
 
     return (
-        <EntiteContext.Provider value={[entite, setEntite]}>
+        <EntiteContext.Provider value={{entite, setEntite}}>
             {children}
         </EntiteContext.Provider>
     )

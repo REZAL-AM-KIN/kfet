@@ -26,7 +26,7 @@ function PG() {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [entite, ] = useEntiteCtxt();
+    const { entite } = useEntiteCtxt();
 
     const getHistory = async () => {
         try {
