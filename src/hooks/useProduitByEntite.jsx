@@ -43,7 +43,6 @@ export function useProduitByEntite(entiteId){
 
     // get general history
     useEffect(() => {
-        console.log("useProduitByEntite: entite ID:", entiteId);
         if (!entiteId) return;
         const controller = new AbortController();
         retrieve();

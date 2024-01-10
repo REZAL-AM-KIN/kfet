@@ -36,7 +36,7 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
     const {classes} = useStyles();
 
     const produits = useProduitByEntite(entite.id);
-    const {isLoading, bucquage} = useBucquage();
+    const {bucquage} = useBucquage();
 
     const [filteredProduits, setFilteredProduits] = useState(produits.data);
     const [recherche, setRecherche] = useState("");
@@ -45,20 +45,15 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
     var itemId = 0;
 
     const onItemSubmit = (item) => {
+        if (!item) return;
         // console.log("Produits: Submit item");
-        bucquage(pgData.id, item.id);
+        bucquage(pgData.id, item.id, onSubmit);
         // console.log("Produits: Submit item: bucquage done", isLoading);
-        // ref.current.focus()
+        console.log("ref", ref)
+        ref.current.focus()
     }
 
-    // useEffect(() => {
-    //     console.log("Produits changed!", produits);
-    // }, [produits]);
-
-    useEffect(() => {
-        console.log("entite changed!", entite);
-    }, [entite]);
-
+    // TODO: chemin de la flemme. Ecrire un onChange plutot que de faire un useEffect
     useEffect(() => {
         if (!produits.data) return;
         // function to filter the products
@@ -76,7 +71,9 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
     const ProduitItem = forwardRef(
         ({item, raccourci, nom, prix, ...others}, itemRef) => (
             <Text ref={itemRef}
-                onClick={()=>{onItemSubmit(item); ref.current.focus();}}
+                onClick={()=>{
+                    onItemSubmit(item);
+                    ref.current.focus();}}
                 {...others}
             >{raccourci} - {nom} - {prix}</Text>
         )
@@ -91,7 +88,6 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
 
     return (
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
-            <Text>Selected: {selected}</Text>
             <Input
                 placeholder="Rechercher un produit"
                 value={recherche}
