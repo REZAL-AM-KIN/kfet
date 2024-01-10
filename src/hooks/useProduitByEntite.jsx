@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -27,7 +27,7 @@ export function useProduitByEntite(entiteId){
     const [isLoading, setLoading] = useState(true)
     const [data, setProduitList] = useState([])
 
-    const retrieve = async () => {
+    const retrieve = useCallback(async () => {
         console.log("useProduitByEntite: Update produit by entite list");
         setLoading(true);
         try {
@@ -38,18 +38,20 @@ export function useProduitByEntite(entiteId){
             console.log("Error getting produit by entite", error);
         }
         setLoading(false);
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[entiteId]);
 
     // get general history
     useEffect(() => {
+        console.log("useProduitByEntite: entite ID:", entiteId);
         if (!entiteId) return;
         const controller = new AbortController();
         retrieve();
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, [entiteId]);
 
-    return {data, isLoading, retrieve}
+    }, [entiteId, retrieve]);
+
+    return {data, isLoading, retrieve};
 }
