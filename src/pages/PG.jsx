@@ -1,7 +1,7 @@
-import {forwardRef, useCallback, useEffect, useRef, memo} from 'react';
+import {forwardRef, useCallback, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {Button, Grid, SimpleGrid, Text} from "@mantine/core";
+import {Grid, SimpleGrid, Text} from "@mantine/core";
 
 import {PgCard} from '../components/PgCard';
 import {PgHistory} from "../components/History";
@@ -14,6 +14,7 @@ import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
 import { usePGHistory } from '../hooks/useHistory';
 import { usePG } from '../hooks/usePG';
 
+const ProduitsFwdRef = forwardRef(Produits);
 
 function PG() {
 
@@ -29,13 +30,7 @@ function PG() {
 
     const { entite } = useEntiteCtxt();
 
-    useEffect(() => {
-        console.log("entite CHANGED");
-    }, [entite]);
-
-    const produitRef = useRef("produitRef");
-
-    const ProduitFwdRef = forwardRef(Produits);
+    const produitRef = useRef(null);
 
     // // focus on the use input refferenced by userRef when the component mounts
     // useEffect(() => {
@@ -55,7 +50,7 @@ function PG() {
             <Grid.Col md={8}>
                 <PgCard data={pg.data}/>
                 <SimpleGrid>
-                    <Button onClick={handleSubmit}>Refresh</Button>
+                    {/* <Button onClick={handleSubmit}>Refresh</Button> */}
                     {permissions.recharge
                         ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
                         : <></>}
@@ -63,7 +58,7 @@ function PG() {
                     <RechargeLydiaButton pgData={pg.data} onRecharge={handleSubmit}/>
 
                     <Text>Entite : {entite.nom}</Text>
-                    <ProduitFwdRef
+                    <ProduitsFwdRef
                         ref={produitRef}
                         entite={entite}
                         pgData={pg.data}

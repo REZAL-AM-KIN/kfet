@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -15,7 +15,7 @@ export function useBucquage(){
 
     const [isLoading, setLoading] = useState(true)
 
-    const bucquage = async (pgId, produitId, callback) => {
+    const bucquage = useCallback(async (pgId, produitId, callback) => {
         console.log("useBucquage: Create bucquage");
         setLoading(true);
         try {
@@ -32,7 +32,8 @@ export function useBucquage(){
             console.log("Error creating bucquage", error);
         }
         setLoading(false);
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     return {isLoading, bucquage}
 }
