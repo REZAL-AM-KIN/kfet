@@ -12,7 +12,7 @@ The buttons are styled with the color of the entite
 and there is a shadow to make them pop out
 */
 function EntiteSelector({setActive}) {
-    const [, setEntity] = useEntiteCtxt();
+    const { setEntite } = useEntiteCtxt();
     const entiteList = useEntiteList();
 
     return (
@@ -21,7 +21,7 @@ function EntiteSelector({setActive}) {
             return (
                 <Button key={key}
                     onClick={() => {
-                        setEntity(entite.id);
+                        setEntite(entite.id);
                         setActive(false);
                     }}
                     radius="md"

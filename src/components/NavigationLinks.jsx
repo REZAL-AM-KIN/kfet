@@ -202,7 +202,7 @@ export function EntiteSelector() {
     const {classes, cx} = useStyles();
 
     const Icon = IconBoxMultiple;
-    const [entite, ] = useEntiteCtxt();
+    const { entite } = useEntiteCtxt();
 
     const [active, setActive] = useState(false);
 
