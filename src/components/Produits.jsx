@@ -4,30 +4,39 @@ import {Input, Stack, Text, createStyles} from "@mantine/core";
 import {getHotkeyHandler} from "@mantine/hooks";
 
 import {useProduitByEntite} from "../hooks/useProduitByEntite";
+import { useBucquage } from "../hooks/useBucquage";
 
 
-const useStyles = createStyles((theme) => {
-    console.log(theme);
-    return {
+const useStyles = createStyles((theme) => ({
     selected: {
         backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
         color: theme.colors.gray[0],
+        "&:hover": {
+            backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]-2],
+        },
     },
     // to distinguish the odd/even rows
     even: {
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[1],
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0],
+        "&:hover": {
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1],
+        },
     },
     odd: {
-        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+        backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white,
+        "&:hover": {
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[1],
+        },
     },
-}})
+}));
 
 
-function Produits({entiteId, length, onSubmit, ...others}, ref) {
+function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
 
     const {classes} = useStyles();
 
-    const produits = useProduitByEntite(entiteId);
+    const produits = useProduitByEntite(entite.id);
+    const {isLoading, bucquage} = useBucquage();
 
     const [filteredProduits, setFilteredProduits] = useState(produits.data);
     const [recherche, setRecherche] = useState("");
@@ -36,13 +45,22 @@ function Produits({entiteId, length, onSubmit, ...others}, ref) {
     var itemId = 0;
 
     const onItemSubmit = (item) => {
-        if (onSubmit) {
-            onSubmit(item);
-        }
+        // console.log("Produits: Submit item");
+        bucquage(pgData.id, item.id);
+        // console.log("Produits: Submit item: bucquage done", isLoading);
         // ref.current.focus()
     }
 
+    // useEffect(() => {
+    //     console.log("Produits changed!", produits);
+    // }, [produits]);
+
     useEffect(() => {
+        console.log("entite changed!", entite);
+    }, [entite]);
+
+    useEffect(() => {
+        if (!produits.data) return;
         // function to filter the products
         setFilteredProduits(produits.data.filter((item) => {
             if (recherche.startsWith("!")) {
@@ -59,9 +77,6 @@ function Produits({entiteId, length, onSubmit, ...others}, ref) {
         ({item, raccourci, nom, prix, ...others}, itemRef) => (
             <Text ref={itemRef}
                 onClick={()=>{onItemSubmit(item); ref.current.focus();}}
-                // TODO : onMouseEnter sets the selected item bypassing the axrrow navigation
-                // change the style with mouse enter, juts for feeodback, keeping independent arrow nav and mouse nav
-                // onMouseEnter={()=>{setSelected(filteredProduits.indexOf(item))}}
                 {...others}
             >{raccourci} - {nom} - {prix}</Text>
         )
@@ -98,17 +113,11 @@ function Produits({entiteId, length, onSubmit, ...others}, ref) {
                             nom={item.nom}
                             prix={item.prix}
                             key={itemId-1}
-                            className={itemId-1 === selected
+                            className={itemId-1 === selected // if selected
                                         ? classes.selected
                                         : itemId % 2 === 0
-                                            ? classes.even
+                                            ? classes.even // else, distinguish rows
                                             : classes.odd}
-                            sx={(theme) => ({
-                                "&:hover": {
-                                    backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
-                                    color: theme.colors.gray[0],
-                                },
-                            })}
                         />
                     )
                 })}

@@ -1,7 +1,7 @@
-import {forwardRef, useEffect, useRef} from 'react';
+import {forwardRef, useCallback, useEffect, useRef, memo} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {Grid, SimpleGrid, Text} from "@mantine/core";
+import {Button, Grid, SimpleGrid, Text} from "@mantine/core";
 
 import {PgCard} from '../components/PgCard';
 import {PgHistory} from "../components/History";
@@ -27,41 +27,48 @@ function PG() {
     const pghistory = usePGHistory(pgId);
     const pg = usePG(pgId);
 
-    const [entite, ] = useEntiteCtxt();
+    const { entite } = useEntiteCtxt();
 
-    const produitRef = useRef(null);
+    useEffect(() => {
+        console.log("entite CHANGED");
+    }, [entite]);
+
+    const produitRef = useRef("produitRef");
 
     const ProduitFwdRef = forwardRef(Produits);
 
-    // focus on the use input refferenced by userRef when the component mounts
-    useEffect(() => {
-        produitRef.current.focus();
-    }, [produitRef, pgId, entite]);
+    // // focus on the use input refferenced by userRef when the component mounts
+    // useEffect(() => {
+    //     produitRef.current.focus();
+    // }, [produitRef, pgId, entite]);
 
     //callbacks
-    const handleRecharge = () => {
+    const handleSubmit = useCallback(() => {
         // update pgdata and history
         pghistory.retrieve();
         pg.retrieve();
-    }
-
-    const handleSubmit = (produit) => {
-        console.log(produit);
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pg.data}/>
                 <SimpleGrid>
+                    <Button onClick={handleSubmit}>Refresh</Button>
                     {permissions.recharge
-                        ? <RechargeButton pgData={pg.data} onRecharge={handleRecharge}/>
+                        ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
                         : <></>}
                     {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pg.data} onRecharge={handleRecharge}/>
+                    <RechargeLydiaButton pgData={pg.data} onRecharge={handleSubmit}/>
 
                     <Text>Entite : {entite.nom}</Text>
-                    <ProduitFwdRef entiteId={entite.id} ref={produitRef} length={7} onSubmit={handleSubmit}/>
+                    <ProduitFwdRef
+                        ref={produitRef}
+                        entite={entite}
+                        pgData={pg.data}
+                        length={7}
+                        onSubmit={handleSubmit}/>
                 </SimpleGrid>
                 {/*<Produits produits={produits} categorie={categorie}/>*/}
             </Grid.Col>
