@@ -65,7 +65,7 @@ function RechargeButton({pgData, onRecharge, sx}) {
 
     const modalClose = () => {
         setOpened(false);
-        setMontant(null);
+        setMontant('');
     }
 
 
