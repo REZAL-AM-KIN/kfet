@@ -17,7 +17,8 @@ import Finss from "./pages/Finss";
 // contexts
 import { Notifications } from '@mantine/notifications';
 import { UserProvider } from "./context/User";
-import { CategorieProvider } from './context/Categorie';
+import { EntiteProvider } from './context/Categorie';
+
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
 
     function LayoutRoute() {
         return (
-            <CategorieProvider>
+            <EntiteProvider>
                  <Container
                         fluid // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
                         style={{
@@ -44,7 +45,7 @@ function App() {
                     <NavigationBar width={navBarWidth}/>
                     <Outlet />
                 </Container>
-            </CategorieProvider>
+            </EntiteProvider>
         )
     };
 

@@ -2,7 +2,7 @@ import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme
 import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons-react";
 import {Fragment, useState} from "react";
 import {useMediaQuery} from "@mantine/hooks";
-import {CategorieSelector, LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
+import {EntiteSelector, LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
 import SearchPg from "./SearchPg";
 
 
@@ -12,7 +12,6 @@ const mockdata = [
     { icon: IconToolsKitchen2, label: "Fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
 
 ];
-
 
 
 /*
@@ -61,7 +60,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>
                         </Container>
                         <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>
                             <Stack align="center" spacing="xs">
-                                <CategorieSelector/>
+                                <EntiteSelector/>
                                 {links}
                             </Stack>
 
@@ -100,7 +99,7 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                 </Center>
                 <Navbar.Section grow mt={50}>
                     <Stack justify="center" spacing={0}>
-                        <CategorieSelector/>
+                        <EntiteSelector/>
                         {links}
                     </Stack>
                 </Navbar.Section>
