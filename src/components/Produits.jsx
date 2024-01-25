@@ -1,6 +1,6 @@
 import {useState, forwardRef, useEffect} from "react";
 
-import {Input, Stack, Text, createStyles} from "@mantine/core";
+import {Input, Stack, Text, Tooltip, createStyles} from "@mantine/core";
 import {getHotkeyHandler} from "@mantine/hooks";
 
 import {useProduitByEntite} from "../hooks/useProduitByEntite";
@@ -88,14 +88,16 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
 
     return (
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
-            <Input
-                placeholder="Rechercher un produit"
-                value={recherche}
-                onChange={(event) => {
-                    setRecherche(event.currentTarget.value);
-                    setSelected(0)}} // reset selected item when user types
-                ref={ref}
-            />
+            <Tooltip label="! pour rechercher par nom" position="right" withArrow>
+                <Input
+                    placeholder="Rechercher un produit"
+                    value={recherche}
+                    onChange={(event) => {
+                        setRecherche(event.currentTarget.value);
+                        setSelected(0)}} // reset selected item when user types
+                    ref={ref}
+                />
+            </Tooltip>
             <Stack spacing="xxs">
                 {filteredProduits.map((item) => {
                     itemId ++;
