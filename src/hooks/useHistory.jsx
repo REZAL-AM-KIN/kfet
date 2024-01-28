@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -25,23 +25,34 @@ Retours :
 
 export function useHistory(){
 
-    const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate();
 
-    const [isLoading, setLoading] = useState(true)
-    const [data, setHistory] = useState([])
+    const [isLoading, setLoading] = useState(true);
+    const [data, setHistory] = useState([]);
+    const [limit, setLimit] = useState(10);
 
-    const retrieve = async () => {
-        console.log("useHistory: update history");
+    const retrieve = useCallback(async (limit, offset) => {
+        if (!!!limit) {
+            limit = 10;
+        }
+        if (!!!offset) {
+            offset = 0;
+        }
+        console.log("useHistory: Update pg history | limit:", limit, "offset:", offset);
         setLoading(true);
         try {
-            const response = await axiosPrivate.get("history/");
+            const response = await axiosPrivate.get("history/", {params: {limit:limit, offset:offset}});
             setHistory(response.data?.results);
         } catch (error) {
             errorNotif("History", error.message);
             console.log("Error getting general history", error);
         }
         setLoading(false);
-    }
+    }, []);
+
+    const loadMore = useCallback(() => {
+        setLimit(limit => limit + 15);
+    }, [])
 
     // get general history
     useEffect(() => {
@@ -53,33 +64,45 @@ export function useHistory(){
         // eslint-disable-next-line
     }, []);
 
-    return {data, isLoading, retrieve}
+    return {data, isLoading, retrieve, loadMore}
 }
 
 
 export function usePGHistory(pgId){
 
-    const axiosPrivate = useAxiosPrivate()
+    const axiosPrivate = useAxiosPrivate();
 
-    const [isLoading, setLoading] = useState(true)
-    const [data, setPgHistory] = useState([])
+    const [isLoading, setLoading] = useState(true);
+    const [data, setPgHistory] = useState([]);
 
-    const retrieve = async () => {
-        console.log("usePGHistory: Update pg history");
+    const [loaded, setLoaded] = useState(10);
+
+    const retrieve = useCallback(async (limit, offset) => {
+        if (!!!limit) {
+            limit = 10
+        }
+        if (!!!offset) {
+            offset = 0
+        }
         setLoading(true);
         try {
-            const response = await axiosPrivate.get("history/" + pgId + "/");
+            // limit is the number of data loaded at once, offset is "load data until <loaded> number of lines"
+            const response = await axiosPrivate.get("history/" + pgId + "/", {params: {limit:limit, offset:offset}});
             setPgHistory(response.data);
         } catch (error) {
             errorNotif("History", error.message);
             console.log("Error getting general history", error);
         }
         setLoading(false);
-    }
+    }, [pgId]);
+
+    const loadMore = useCallback(() => {
+        // load more of the history
+    }, []);
 
     // get general history
     useEffect(() => {
-        if (!pgId) return;
+        if (!!!pgId) return;
         const controller = new AbortController();
         retrieve();
         return () => {
@@ -88,5 +111,5 @@ export function usePGHistory(pgId){
         // eslint-disable-next-line
     }, [pgId]);
 
-    return {data, isLoading, retrieve}
+    return {data, isLoading, retrieve, loadMore}
 }
