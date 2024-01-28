@@ -43,7 +43,7 @@ function PG() {
         pghistory.retrieve();
         pg.retrieve();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [pghistory, pg]);
 
     return (
         <Grid>
