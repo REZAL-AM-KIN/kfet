@@ -113,6 +113,8 @@ function RechargeButton({pgData, onRecharge, sx}) {
                             value={montant}
                             onChange={setMontant}
                             min={0}
+                            precision={2}
+                            step={0.01}
                         />
                         <SegmentedControl
                             radius="lg"
