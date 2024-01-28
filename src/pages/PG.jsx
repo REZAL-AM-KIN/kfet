@@ -1,7 +1,7 @@
 import {forwardRef, useCallback, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {Grid, SimpleGrid, Text} from "@mantine/core";
+import {Grid, Stack, Group} from "@mantine/core";
 
 import {PgCard} from '../components/PgCard';
 import {PgHistory} from "../components/History";
@@ -49,23 +49,22 @@ function PG() {
         <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pg.data}/>
-                <SimpleGrid>
-                    {/* <Button onClick={handleSubmit}>Refresh</Button> */}
-                    {permissions.recharge
-                        ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
-                        : <></>}
-                    {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pg.data} onRecharge={handleSubmit}/>
-
-                    <Text>Entite : {entite.nom}</Text>
+                <Group grow px="md">
                     <ProduitsFwdRef
                         ref={produitRef}
                         entite={entite}
                         pgData={pg.data}
                         length={7}
                         onSubmit={handleSubmit}/>
-                </SimpleGrid>
-                {/*<Produits produits={produits} categorie={categorie}/>*/}
+                    <Stack>
+                        {/* <Button onClick={handleSubmit}>Refresh</Button> */}
+                        {permissions.recharge
+                            ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
+                            : <></>}
+                        {/*check lydia permissions*/}
+                        <RechargeLydiaButton pgData={pg.data} onRecharge={handleSubmit}/>
+                    </Stack>
+                </Group>
             </Grid.Col>
             <Grid.Col md={4}>
                 <PgHistory history={pghistory.data}/>
