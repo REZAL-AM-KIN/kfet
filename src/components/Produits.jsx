@@ -49,7 +49,6 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
         // console.log("Produits: Submit item");
         bucquage(pgData.id, item.id, onSubmit);
         // console.log("Produits: Submit item: bucquage done", isLoading);
-        console.log("ref", ref)
         ref.current.focus()
     }
 

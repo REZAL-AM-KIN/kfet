@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -30,7 +30,7 @@ export function usePG(pgId){
     const [isLoading, setLoading] = useState(true)
     const [data, setPgData] = useState([])
 
-    const retrieve = async () => {
+    const retrieve = useCallback(async () => {
         console.log("usePG: Update pg data");
         setLoading(true);
         try {
@@ -45,7 +45,7 @@ export function usePG(pgId){
             console.log("Error getting consommateur", error);
         }
         setLoading(false);
-    }
+    }, [pgId]);
 
     // get general history
     useEffect(() => {
