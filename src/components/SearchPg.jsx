@@ -25,8 +25,7 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({refForOutsideClick, setActive})=>{
-
+const SearchPg = ({setActive})=>{
 
     const theme = useMantineTheme()
 
@@ -54,7 +53,6 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 })
                 console.log(error);
             }
-
         }
         getUsers();
         return () => {
@@ -102,7 +100,6 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
-            ref={refForOutsideClick} //on passe en ref le useOutSideClick pour fermer la popover lorsqu'on clique en dehors du champ
             onKeyDown={getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
                 ['escape', ()=>setActive(false)],       //En appuyant sur escape.
             ])}
