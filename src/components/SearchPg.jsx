@@ -71,7 +71,6 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
 
 
     const onItemSubmit = (e)=>{
-        console.log("ee")
         setActive(false) //On ferme le popover quand un pg est sélectionné
         navigate("pg/"+e.id)
     }
