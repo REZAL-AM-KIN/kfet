@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import NavigationBar from "./components/NavigationBar";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
+import Statistiques_PG from "./pages/Stats_PG";
 import {NotificationsProvider} from '@mantine/notifications';
 import {UserProvider} from "./context/User";
 
