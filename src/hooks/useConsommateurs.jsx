@@ -6,7 +6,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 Permet de récupérer la liste des consommateurs
 
 Retours :
-    isLoading : isLoading : bool qui donne l'état de chargement des informations
+    isLoading : bool qui donne l'état de chargement des informations
     retrieveConsommateurs : Fonction qui force l'actualisation de consommateurList
     consommateurList :
         [

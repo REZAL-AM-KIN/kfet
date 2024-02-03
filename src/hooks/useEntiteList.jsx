@@ -6,7 +6,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 Permet de récupérer la liste des entités
 
 Retours :
-    isLoading : isLoading : bool qui donne l'état de chargement des informations
+    isLoading : bool qui donne l'état de chargement des informations
     retrieveEntities : Fonction qui force l'actualisation de productsList
     entitiesList :
         [
