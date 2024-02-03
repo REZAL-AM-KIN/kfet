@@ -1,9 +1,7 @@
-import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
-import {forwardRef, useEffect, useState} from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import {forwardRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {showNotification} from "@mantine/notifications";
-import {IconX} from "@tabler/icons";
+import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import { useConsommateurList } from "../hooks/useConsommateurs";
 
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
         <div ref={ref} {...others}>
@@ -28,38 +26,9 @@ const SearchPg = ({onSubmit})=>{
 
     const theme = useMantineTheme()
 
-    const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
 
-    const [consommateurList, setConsommateurList] = useState([]);
-
-    //retrieve All consomateur
-    useEffect(() => {
-
-        const controller = new AbortController();
-        const getUsers = async () => {
-            try {
-                const response = await axiosPrivate.get("consommateurs/");
-                setConsommateurList(response.data.results);
-            } catch (error) {
-
-                showNotification({
-                    icon: <IconX size={18} />,
-                    color: "red",
-                    autoClose: false,
-                    title: 'Oh Oh....',
-                    message: 'Une erreur est survenue: '+error.message,
-                })
-                console.log(error);
-            }
-        }
-        getUsers();
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, []);
-
+    const {consommateurList} = useConsommateurList();
 
     //Pour que autocompltete fonctionne, il faut obligatoirement un champ value. On transforme donc le champ bucque en value
     const data = consommateurList.map((pg) =>{
