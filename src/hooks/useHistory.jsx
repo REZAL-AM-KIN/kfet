@@ -7,7 +7,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 Permet de récupérer l'historique général
 
 Retours :
-    isLoading : isLoading : bool qui donne l'état de chargement des informations
+    isLoading : bool qui donne l'état de chargement des informations
     retrieve : Fonction qui force l'actualisation de l'historique
     data :
         [

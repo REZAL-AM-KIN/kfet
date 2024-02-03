@@ -6,7 +6,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 Permet de créer un bucquage
 
 Retours :
-    isLoading : isLoading : bool qui donne l'état de chargement
+    isLoading : bool qui donne l'état de chargement
     bucquage(pgId, produitId) : Fonction qui créer le bucquage
  */
 export function useBucquage(){
