@@ -25,7 +25,7 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({setActive})=>{
+const SearchPg = ({onSubmit})=>{
 
     const theme = useMantineTheme()
 
@@ -67,10 +67,11 @@ const SearchPg = ({setActive})=>{
         return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
     })
 
-
     const onItemSubmit = (e)=>{
-        setActive(false) //On ferme le popover quand un pg est sélectionné
-        navigate("pg/"+e.id)
+        if (onSubmit) {
+            onSubmit(e);
+        }
+        navigate("pg/"+e.id);
     }
 
     return (
@@ -100,9 +101,6 @@ const SearchPg = ({setActive})=>{
                 item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
-            onKeyDown={getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
-                ['escape', ()=>setActive(false)],       //En appuyant sur escape.
-            ])}
         />
 
 
