@@ -1,7 +1,8 @@
+import {useState} from "react";
 import {Button, createStyles, Modal, NumberInput, SegmentedControl, Stack} from "@mantine/core";
+
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import errorNotif from "./ErrorNotif";
-import {useState} from "react";
 
 
 const useStyles = createStyles((theme) => ({

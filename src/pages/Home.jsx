@@ -1,10 +1,13 @@
-import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {useCallback, useEffect, useState} from "react";
-import {PgCard} from "../components/PgCard";
 import {useNavigate} from "react-router-dom";
+
+import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {Carousel} from "@mantine/carousel";
-import {GeneralHistory, PgHistory} from "../components/History";
 import {useMediaQuery} from "@mantine/hooks";
+
+import {PgCard} from "../components/PgCard";
+import {GeneralHistory, PgHistory} from "../components/History";
+
 import {useUser} from "../hooks/useUser";
 import { useHistory, usePGHistory } from "../hooks/useHistory";
 

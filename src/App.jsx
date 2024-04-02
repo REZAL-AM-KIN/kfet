@@ -15,15 +15,12 @@ import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 
 // contexts
-import { Notifications } from '@mantine/notifications';
 import { UserProvider } from "./context/User";
 import { EntiteProvider } from './context/Entite';
 
 // theme
 import { kfetTheme } from './theme';
 
-// theme
-import { kfetTheme } from './theme';
 
 function App() {
     const theme = useMantineTheme()
@@ -55,24 +52,24 @@ function App() {
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
-            <NotificationsProvider>
-                <UserProvider>
-                    <Routes>
-                        <Route path="/">
-                            {/*public routes*/}
-                            <Route path="login" element={<Login/>}/>
+            <UserProvider>
+                <Routes>
+                    <Route path="/">
+                        {/*public routes*/}
+                        <Route path="login" element={<Login/>}/>
 
-                        {/*privates routes*/}
-                        <Route element={<RequireAuth/>}>
-                            <Route element={<LayoutRoute/>}>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path="pg/:pgId" element={<PG/>}/>
-                                <Route path="edit" element={<Edit/>}/>
-                                <Route path="finss" element={<Finss/>}/>
-                            </Route>
+                    {/*privates routes*/}
+                    <Route element={<RequireAuth/>}>
+                        <Route element={<LayoutRoute/>}>
+                            <Route path="/" element={<Home/>}/>
+                            <Route path="pg/:pgId" element={<PG/>}/>
+                            <Route path="edit" element={<Edit/>}/>
+                            <Route path="finss" element={<Finss/>}/>
                         </Route>
+                    </Route>
 
-                        {/* TODO: 404*/}
+                    {/* TODO: 404*/}
+                    
                     </Route>
                 </Routes>
             </UserProvider>

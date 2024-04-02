@@ -1,10 +1,12 @@
-import {Button, Modal, NumberInput, Stack, TextInput, useMantineTheme} from "@mantine/core";
 import {useState} from "react";
 import QrReader from 'react-qr-reader'
-import errorNotif from "./ErrorNotif";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import {Button, Modal, NumberInput, Stack, TextInput, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconQrcode} from "@tabler/icons-react";
+
+import errorNotif from "./ErrorNotif";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+
 
 function RechargeLydiaButton({pgData, onRecharge, sx}) {
     const theme = useMantineTheme();

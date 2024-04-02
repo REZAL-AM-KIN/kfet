@@ -1,6 +1,6 @@
+import {useNavigate} from "react-router-dom";
 import {Table} from "@mantine/core";
 import {SmallPgCard} from "./PgCard";
-import {useNavigate} from "react-router-dom";
 
 
 function GeneralHistory({history, style}) {
