@@ -17,7 +17,7 @@ import Finss from "./pages/Finss";
 // contexts
 import { Notifications } from '@mantine/notifications';
 import { UserProvider } from "./context/User";
-import { EntiteProvider } from './context/Categorie';
+import { EntiteProvider } from './context/Entite';
 
 
 
