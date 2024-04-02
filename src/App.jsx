@@ -19,6 +19,8 @@ import { Notifications } from '@mantine/notifications';
 import { UserProvider } from "./context/User";
 import { EntiteProvider } from './context/Entite';
 
+// theme
+import { kfetTheme } from './theme';
 
 // theme
 import { kfetTheme } from './theme';
