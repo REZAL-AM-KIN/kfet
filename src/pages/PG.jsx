@@ -1,17 +1,20 @@
-import {useEffect, useState} from 'react';
+import {forwardRef, useCallback, useRef, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
+import {Grid, Stack, Group} from "@mantine/core";
 
 import {PgCard} from '../components/PgCard';
-import {Grid, SimpleGrid, Text} from "@mantine/core";
-import errorNotif from "../components/ErrorNotif";
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
+import Produits from "../components/Produits";
+
 import {usePermissions} from "../hooks/useUser";
 import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
+import { usePGHistory } from '../hooks/useHistory';
+import { usePG } from '../hooks/usePG';
 
+const ProduitsFwdRef = forwardRef(Produits);
 
 function PG() {
 
@@ -20,95 +23,51 @@ function PG() {
     const pgId = params.pgId;
 
     // here we get user's permissions
-    const axiosPrivate = useAxiosPrivate();
     const permissions = usePermissions();
 
-    const [pgData, setPgData] = useState({});
-    const [history, setHistory] = useState([]);
-    const [allProduits, setAllProduits] = useState([]);
+    const pghistory = usePGHistory(pgId);
+    const pg = usePG(pgId);
+
     const { entite } = useEntiteCtxt();
 
-    const getHistory = async () => {
-        try {
-            const response = await axiosPrivate.get("history/" + pgId + "/");
-            setHistory(response.data);
-        } catch (error) {
-            errorNotif("PgHistory/pg", error.message);
-            console.log(error);
-        }
-    }
+    const produitRef = useRef(null);
 
-    const getPG = async () => {
-        try {
-            const response = await axiosPrivate.get("consommateurs/" + pgId + "/");
-            if (response.data) {
-                setPgData(response.data);
-            } else {
-                errorNotif("Consommateur/pg", "Pas de PG activé correspondant");
-            }
-        } catch (error) {
-            errorNotif("Consommateur/", error.message);
-            console.log("Error getting consommateur", error);
-        }
-    }
-
-
+    // // focus on the use input refferenced by userRef when the component mounts
     useEffect(() => {
-        console.log("UPDATE: PG and HISTORY");
-        // make the api call for pg info:
-        const controller = new AbortController();
-        getPG();
-        getHistory()
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [pgId]);
-
-
-    useEffect(() => {
-        /* Retrieves the produits list from the server and extracts the categories list */
-        const controller = new AbortController();
-        const getProduits = async () => {
-            try {
-                const response = await axiosPrivate.get("produits/");
-                setAllProduits(response.data.results);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getProduits();
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [])
-
+        produitRef.current.focus();
+    }, [produitRef, pgId, entite]);
 
     //callbacks
-    const handleRecharge = () => {
+    const handleSubmit = useCallback(() => {
         // update pgdata and history
-        getHistory();
-        getPG();
-    }
-
+        pghistory.retrieve();
+        pg.retrieve();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pghistory, pg]);
 
     return (
         <Grid>
             <Grid.Col md={8}>
-                <PgCard data={pgData}/>
-                <SimpleGrid>
-                    {permissions.recharge
-                        ? <RechargeButton pgData={pgData} onRecharge={handleRecharge}/>
-                        : <></>}
-                    {/*check lydia permissions*/}
-                    <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
-                </SimpleGrid>
-                {/*<Produits produits={allProduits} categorie={categorie}/>*/}
-                <Text>{entite.name}</Text>
+                <PgCard data={pg.data}/>
+                <Group grow px="md">
+                    <ProduitsFwdRef
+                        ref={produitRef}
+                        entite={entite}
+                        pgData={pg.data}
+                        length={7}
+                        onSubmit={handleSubmit}/>
+                    <Stack>
+                        {/* <Button onClick={handleSubmit}>Refresh</Button> */}
+                        {permissions.recharge
+                            ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
+                            : <></>}
+                        {/*check lydia permissions*/}
+                        <RechargeLydiaButton pgData={pg.data} onRecharge={handleSubmit}/>
+                    </Stack>
+                </Group>
             </Grid.Col>
             <Grid.Col md={4}>
-                <PgHistory history={history}/>
+                <PgHistory history={pghistory.data}/>
             </Grid.Col>
         </Grid>
     );

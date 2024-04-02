@@ -1,8 +1,8 @@
-import {forwardRef, useState} from "react";
+import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
-import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
-import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons-react";
+import {useHotkeys, useMediaQuery} from "@mantine/hooks";
+import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons";
 import {handleLogout} from "../auth/logout";
 import SearchPg from "./SearchPg";
 import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
@@ -128,49 +128,19 @@ export function LogOutLink() {
 export function NormalSearchPgButton() {
     const {classes, cx} = useStyles();
 
-    const ref = useClickOutside(() => setActive(false));
-
     const Icon = IconUserSearch
     const label = "Rechercher un pg"
     const shortcut = "alt+P"
 
     const [active, setActive] = useState(false)
 
-    useHotkeys([[shortcut, onClick]])
-
-
-    function onClick() {
-        setActive(!active)
-    }
-
-    const SearchPgButton = forwardRef((props, ref) => (
-
-        <Tooltip
-            label={label}
-            opened={active ? false : undefined}
-            position="right"
-            transitionDuration={0}
-            events={{hover: true, focus: true, touch: false}}>
-            <UnstyledButton
-                ref={ref}
-                {...props}
-                onClick={onClick}
-                className={cx(classes.link, {[classes.active]: active})}
-            >
-                <Stack align="center" spacing="0">
-                    <Icon size={34} stroke={1.5}/>
-                    <Text size="10px">{shortcut}</Text>
-                </Stack>
-            </UnstyledButton>
-        </Tooltip>
-
-    ));
-
+    useHotkeys([[shortcut, () => setActive((o) => !o)]])
 
     return (
         <Popover
             width={300}
             opened={active}
+            onChange={setActive}
             position="right"
             styles={{
                 dropdown: {
@@ -184,11 +154,27 @@ export function NormalSearchPgButton() {
             trapFocus
         >
             <Popover.Target>
-                <SearchPgButton/>
+                <Tooltip
+                    label={label}
+                    opened={active ? false : undefined}
+                    position="right"
+                    transitionDuration={0}
+                    events={{hover: true, focus: true, touch: false}}
+                >
+                    <UnstyledButton
+                        onClick={() => setActive((o) => !o)}
+                        className={cx(classes.link, {[classes.active]: active})}
+                    >
+                        <Stack align="center" spacing="0">
+                            <Icon size={34} stroke={1.5}/>
+                            <Text size="10px">{shortcut}</Text>
+                        </Stack>
+                    </UnstyledButton>
+                </Tooltip>
             </Popover.Target>
 
             <Popover.Dropdown>
-                <SearchPg refForOutsideClick={ref} setActive={setActive}/>
+                <SearchPg onSubmit={() => setActive(false)}/>
             </Popover.Dropdown>
         </Popover>
     );
