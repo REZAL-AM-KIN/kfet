@@ -10,7 +10,7 @@ import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
 import {usePermissions} from "../hooks/useUser";
-import {useCategorieCtxt} from "../hooks/useCategorieCtxt";
+import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
 
 
 function PG() {
@@ -26,7 +26,7 @@ function PG() {
     const [pgData, setPgData] = useState({});
     const [history, setHistory] = useState([]);
     const [allProduits, setAllProduits] = useState([]);
-    const [categorie, ] = useCategorieCtxt();
+    const { entite } = useEntiteCtxt();
 
     const getHistory = async () => {
         try {
@@ -105,7 +105,7 @@ function PG() {
                     <RechargeLydiaButton pgData={pgData} onRecharge={handleRecharge}/>
                 </SimpleGrid>
                 {/*<Produits produits={allProduits} categorie={categorie}/>*/}
-                <Text>{categorie}</Text>
+                <Text>{entite.name}</Text>
             </Grid.Col>
             <Grid.Col md={4}>
                 <PgHistory history={history}/>

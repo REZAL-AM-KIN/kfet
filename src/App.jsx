@@ -15,9 +15,10 @@ import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 
 // contexts
-import {NotificationsProvider} from '@mantine/notifications';
-import {UserProvider} from "./context/User";
-import { CategorieProvider } from './context/Categorie';
+import { Notifications } from '@mantine/notifications';
+import { UserProvider } from "./context/User";
+import { EntiteProvider } from './context/Categorie';
+
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
 
     function LayoutRoute() {
         return (
-            <CategorieProvider>
+            <EntiteProvider>
                  <Container
                         fluid // Permet de s'assurer que le container prend la largeur maximale (largeur totale de la page)
                         style={{
@@ -44,34 +45,33 @@ function App() {
                     <NavigationBar width={navBarWidth}/>
                     <Outlet />
                 </Container>
-            </CategorieProvider>
+            </EntiteProvider>
         )
     };
 
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
-            <NotificationsProvider>
-                <UserProvider>
-                    <Routes>
-                        <Route path="/">
-                            {/*public routes*/}
-                            <Route path="login" element={<Login/>}/>
+            <Notifications />
+            <UserProvider>
+                <Routes>
+                    <Route path="/">
+                        {/*public routes*/}
+                        <Route path="login" element={<Login/>}/>
 
-                            {/*privates routes*/}
-                            <Route element={<RequireAuth/>}>
-                                <Route element={<LayoutRoute/>}>
-                                    <Route path="/" element={<Home/>}/>
-                                    <Route path="pg/:pgId" element={<PG/>}/>
-                                    <Route path="edit" element={<Edit/>}/>
-                                    <Route path="finss" element={<Finss/>}/>
-                                </Route>
+                        {/*privates routes*/}
+                        <Route element={<RequireAuth/>}>
+                            <Route element={<LayoutRoute/>}>
+                                <Route path="/" element={<Home/>}/>
+                                <Route path="pg/:pgId" element={<PG/>}/>
+                                <Route path="edit" element={<Edit/>}/>
+                                <Route path="finss" element={<Finss/>}/>
                             </Route>
-
-                            {/* TODO: 404*/}
                         </Route>
-                    </Routes>
-                </UserProvider>
-            </NotificationsProvider>
+
+                        {/* TODO: 404*/}
+                    </Route>
+                </Routes>
+            </UserProvider>
         </MantineProvider>
     );
 

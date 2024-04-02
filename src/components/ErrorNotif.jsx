@@ -1,5 +1,5 @@
 import {showNotification} from "@mantine/notifications";
-import {IconX} from "@tabler/icons";
+import {IconX} from "@tabler/icons-react";
 
 export default function errorNotif (localisation, message) {
     showNotification({
