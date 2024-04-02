@@ -1,13 +1,8 @@
 import {forwardRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import { useConsommateurList } from "../hooks/useConsommateurs";
-import {forwardRef, useEffect, useState} from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import {useNavigate} from "react-router-dom";
-import {showNotification} from "@mantine/notifications";
-import {IconX} from "@tabler/icons-react";
-import {getHotkeyHandler} from "@mantine/hooks";
+import Autocomplete from "./Autocomplete";
 
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
         <div ref={ref} {...others}>
@@ -75,6 +70,7 @@ const SearchPg = ({onSubmit})=>{
                 item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
+            hoverOnSearchChange
         />
 
 

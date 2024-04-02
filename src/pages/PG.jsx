@@ -1,4 +1,4 @@
-import {forwardRef, useCallback, useRef} from 'react';
+import {forwardRef, useCallback, useRef, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Grid, Stack, Group} from "@mantine/core";
@@ -33,9 +33,9 @@ function PG() {
     const produitRef = useRef(null);
 
     // // focus on the use input refferenced by userRef when the component mounts
-    // useEffect(() => {
-    //     produitRef.current.focus();
-    // }, [produitRef, pgId, entite]);
+    useEffect(() => {
+        produitRef.current.focus();
+    }, [produitRef, pgId, entite]);
 
     //callbacks
     const handleSubmit = useCallback(() => {
