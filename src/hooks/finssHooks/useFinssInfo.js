@@ -1,5 +1,6 @@
+import {useEffect, useState, useCallback} from "react";
 import useAxiosPrivate from "../useAxiosPrivate";
-import {useEffect, useState} from "react";
+
 import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons";
@@ -38,7 +39,23 @@ export function useFinssInfo(finssId) {
     const [isLoading, setLoading] = useState(true)
     const [finssInfo, setFinssInfo] = useState([])
 
-    const endFinss = async ()=>{
+    const retrieveFinssInfo = useCallback(async () => {
+        setLoading(true)
+        try {
+            const response = await axiosPrivate.get("event/"+finssId);
+            if (response.data) {
+                setFinssInfo(response.data);
+            } else {
+                errorNotif("Finss","Impossible de récupérer la liste des produits");
+            }
+        } catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error getting Finss", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, finssId])
+
+    const endFinss = useCallback(async ()=>{
         try {
             await retrieveFinssInfo()
             finssInfo.can_subscribe=false
@@ -67,9 +84,9 @@ export function useFinssInfo(finssId) {
             errorNotif("Finss", error.message)
             console.log("Error sending Finss parameters", error);
         }
-    }
+    },[axiosPrivate, retrieveFinssInfo, finssId, finssInfo])
 
-    const changeInfo = async (finssInfo)=>{
+    const changeInfo = useCallback(async (finssInfo)=>{
         try {
 
             const response = await axiosPrivate.put("event/"+finssId+"/", finssInfo)
@@ -94,23 +111,7 @@ export function useFinssInfo(finssId) {
             errorNotif("Finss", error.message)
             console.log("Error sending Finss parameters", error);
         }
-    }
-
-    const retrieveFinssInfo = async () => {
-        setLoading(true)
-        try {
-            const response = await axiosPrivate.get("event/"+finssId);
-            if (response.data) {
-                setFinssInfo(response.data);
-            } else {
-                errorNotif("Finss","Impossible de récupérer la liste des produits");
-            }
-        } catch (error) {
-            errorNotif("Finss", error.message)
-            console.log("Error getting Finss", error);
-        }
-        setLoading(false)
-    }
+    }, [axiosPrivate, retrieveFinssInfo, finssId])
 
     // get Finss list
     useEffect(() => {
@@ -123,8 +124,7 @@ export function useFinssInfo(finssId) {
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, [finssId]);
+    }, [retrieveFinssInfo, finssId]);
 
     return {isLoading, finssInfo, retrieveFinssInfo, changeInfo, endFinss}
 

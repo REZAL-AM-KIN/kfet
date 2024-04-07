@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
 import {showNotification} from "@mantine/notifications";
@@ -41,7 +41,24 @@ export function useFinssProducts(finssId){
     const [isLoading, setLoading] = useState(true)
     const [productsList, setProductsList] = useState([])
 
-    const updateProduct = async (productInfo)=>{
+    const retrieveProducts = useCallback(async () => {
+        setLoading(true)
+        try {
+
+            const response = await axiosPrivate.get("productevent?finss="+finssId);
+            if (response.data) {
+                setProductsList(response.data.results);
+            } else {
+                errorNotif("Bucquage","Impossible de récupérer les bucquage du Fin'ss");
+            }
+        } catch (error) {
+            errorNotif("Bucquage", error.message)
+            console.log("Error getting Bucquage", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, finssId])
+
+    const updateProduct = useCallback(async (productInfo)=>{
         try {
 
             const response = await axiosPrivate.put("productevent/"+productInfo.id+"/", productInfo)
@@ -66,9 +83,9 @@ export function useFinssProducts(finssId){
             errorNotif("Finss", error.message)
             console.log("Error sending product parameters", error);
         }
-    }
+    },[axiosPrivate, retrieveProducts])
 
-    const deleteProduct = async (productInfo)=>{
+    const deleteProduct = useCallback(async (productInfo)=>{
         try {
 
             const response = await axiosPrivate.delete("productevent/"+productInfo.id+"/")
@@ -94,9 +111,9 @@ export function useFinssProducts(finssId){
             errorNotif("Finss", error.message)
             console.log("Error deleting product", error);
         }
-    }
+    }, [axiosPrivate, retrieveProducts])
 
-    const addProduct = async (productInfo)=>{
+    const addProduct = useCallback(async (productInfo)=>{
         try {
             productInfo.parent_event = finssId      // on remplis l'id de l'event parent.
 
@@ -123,24 +140,7 @@ export function useFinssProducts(finssId){
             errorNotif("Finss", error.message)
             console.log("Error sending product parameters", error);
         }
-    }
-
-    const retrieveProducts = async () => {
-        setLoading(true)
-        try {
-
-            const response = await axiosPrivate.get("productevent?finss="+finssId);
-            if (response.data) {
-                setProductsList(response.data.results);
-            } else {
-                errorNotif("Bucquage","Impossible de récupérer les bucquage du Fin'ss");
-            }
-        } catch (error) {
-            errorNotif("Bucquage", error.message)
-            console.log("Error getting Bucquage", error);
-        }
-        setLoading(false)
-    }
+    }, [axiosPrivate, retrieveProducts, finssId])
 
     // get product list
     useEffect(() => {
@@ -156,8 +156,7 @@ export function useFinssProducts(finssId){
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, [finssId]);
+    }, [retrieveProducts, finssId]);
 
     return {productsList, isLoading, retrieveProducts, updateProduct, addProduct, deleteProduct}
 

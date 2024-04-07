@@ -1,5 +1,5 @@
 
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import useAxiosPrivate from "../useAxiosPrivate";
 import errorNotif from "../../components/ErrorNotif";
 
@@ -9,7 +9,24 @@ export function useUserParticipation(){
     const [isLoading, setLoading] = useState(true)
     const [participations, setParticipations] = useState([])
 
-    const sendParticipations = async (participations) =>{
+    const retrieveParticipations = useCallback(async () => {
+
+        setLoading(true)
+        try {
+            const response = await axiosPrivate.get("bucquagevent/my_bucquages/");
+            if (response.data) {
+                setParticipations(response.data);
+            } else {
+                errorNotif("Participation","Impossible de récupérer les participations de l'utilisateur");
+            }
+        } catch (error) {
+            errorNotif("Participation", error.message)
+            console.log("Error getting Participations", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate])
+
+    const sendParticipations = useCallback(async (participations) =>{
         try {
 
             const response = await axiosPrivate.post("bucquagevent/",participations)
@@ -28,24 +45,7 @@ export function useUserParticipation(){
             console.log("Error sending Participations", error);
         }
         return false
-    }
-
-    const retrieveParticipations = async () => {
-
-        setLoading(true)
-        try {
-            const response = await axiosPrivate.get("bucquagevent/my_bucquages/");
-            if (response.data) {
-                setParticipations(response.data);
-            } else {
-                errorNotif("Participation","Impossible de récupérer les participations de l'utilisateur");
-            }
-        } catch (error) {
-            errorNotif("Participation", error.message)
-            console.log("Error getting Participations", error);
-        }
-        setLoading(false)
-    }
+    }, [axiosPrivate, retrieveParticipations])
 
     // get Finss list
     useEffect(() => {
@@ -57,8 +57,7 @@ export function useUserParticipation(){
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, []);
+    }, [retrieveParticipations]);
 
     return {participations, isLoading, retrieveParticipations, sendParticipations}
 }

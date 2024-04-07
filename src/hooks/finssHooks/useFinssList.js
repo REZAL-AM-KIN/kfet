@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
 import {showNotification} from "@mantine/notifications";
@@ -39,7 +39,22 @@ export function useFinssList(){
     const [isSending, setSending] = useState(false)
     const [finssList, setFinssList] = useState([])
 
-    const createFinss = async (finssInfo)=>{
+    const retrieveFinssList = useCallback(async () => {
+        try {
+            const response = await axiosPrivate.get("event/");
+            if (response.data) {
+                setFinssList(response.data.results);
+            } else {
+                errorNotif("Finss","Impossible de récupérer la liste des finss");
+            }
+        } catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error getting Finss", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, setFinssList])
+
+    const createFinss = useCallback(async (finssInfo)=>{
         try {
             setSending(true)
             const response = await axiosPrivate.post("event/", finssInfo)
@@ -69,23 +84,7 @@ export function useFinssList(){
             errorNotif("Finss", error.message)
             console.log("Error creating finss", error);
         }
-    }
-
-
-    const retrieveFinssList = async () => {
-        try {
-            const response = await axiosPrivate.get("event/");
-            if (response.data) {
-                setFinssList(response.data.results);
-            } else {
-                errorNotif("Finss","Impossible de récupérer la liste des finss");
-            }
-        } catch (error) {
-            errorNotif("Finss", error.message)
-            console.log("Error getting Finss", error);
-        }
-        setLoading(false)
-    }
+    }, [axiosPrivate, retrieveFinssList])
 
     // get Finss list
     useEffect(() => {
@@ -96,8 +95,7 @@ export function useFinssList(){
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, []);
+    }, [retrieveFinssList]);
 
     return {isLoading, finssList, isSending, retrieveFinssList, createFinss}
 }

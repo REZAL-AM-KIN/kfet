@@ -1,5 +1,5 @@
 import useAxiosPrivate from "../useAxiosPrivate";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons";
@@ -45,8 +45,24 @@ export function useBucquage(finssId) {
 
     const [isLoading, setLoading] = useState(true)
     const [bucquages, setBucquages] = useState([])
+    
+    const retrieveBucquages = useCallback(async () => {
+        setLoading(true)
+        try {
+            const response = await axiosPrivate.get("bucquagevent?finss="+finssId);
+            if (response.data) {
+                setBucquages(response.data.results);
+            } else {
+                errorNotif("Bucquage","Impossible de récupérer les bucquage du Fin'ss");
+            }
+        } catch (error) {
+            errorNotif("Bucquage", error.message)
+            console.log("Error getting Bucquage", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, finssId])
 
-    const debucquage = async (debucquagesList)=>{
+    const debucquage = useCallback(async (debucquagesList)=>{
         try {
 
             const response = await axiosPrivate.post("bucquagevent/debucquage/", debucquagesList)
@@ -73,23 +89,7 @@ export function useBucquage(finssId) {
             errorNotif("Débucquage", error.message)
             console.log("Error sending débucquages", error);
         }
-    }
-
-    const retrieveBucquages = async () => {
-        setLoading(true)
-        try {
-            const response = await axiosPrivate.get("bucquagevent?finss="+finssId);
-            if (response.data) {
-                setBucquages(response.data.results);
-            } else {
-                errorNotif("Bucquage","Impossible de récupérer les bucquage du Fin'ss");
-            }
-        } catch (error) {
-            errorNotif("Bucquage", error.message)
-            console.log("Error getting Bucquage", error);
-        }
-        setLoading(false)
-    }
+    },[axiosPrivate, retrieveBucquages])
 
     // get Bucquage list
     useEffect(() => {
@@ -101,8 +101,7 @@ export function useBucquage(finssId) {
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, [finssId]);
+    }, [retrieveBucquages, finssId]);
 
     return {bucquages, isLoading, retrieveBucquages, debucquage}
 
