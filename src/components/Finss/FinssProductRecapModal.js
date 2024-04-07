@@ -9,7 +9,9 @@ const FinssProductRecapModal = ({opened, setOpened, usefinssproduct})=> {
         if(opened){
             usefinssproduct.retrieveProducts()
         }
-    }, [opened, usefinssproduct])
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [opened, usefinssproduct.retrieveProducts])
 
     return (
         <Modal
