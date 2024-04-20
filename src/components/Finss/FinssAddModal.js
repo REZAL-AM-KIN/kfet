@@ -8,7 +8,7 @@ const openFinssAddModal = (useFinssList)=> {
         centered: true,
         children: (
             <>
-                <FinssGeneralParameters forCreation useFinssList={useFinssList}/>
+                <FinssGeneralParameters useFinssList={useFinssList}/>
             </>
         ),
     });

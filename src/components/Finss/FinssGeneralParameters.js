@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {
     Box,
@@ -12,9 +13,9 @@ import {
     useMantineTheme
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {useEffect} from "react";
 import {DatePicker} from "@mantine/dates";
 import {IconCalendar} from "@tabler/icons";
+
 import ManagersSelector from "../ManagersSelector";
 
 function endEvent(usefinss, usebucquage) {
@@ -85,19 +86,14 @@ function endEvent(usefinss, usebucquage) {
     confirmModal()
 }
 
-const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFinssList})=>{
+const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
     const theme = useMantineTheme()
 
-    if((useFinssList && !forCreation ) ||(!useFinssList && forCreation)){
-        throw "forCreation option require useFinssList."
-    }
-
     //Si on est dans le cas d'une création, on créer un faux objet usefinssinfo vide.
-    if(forCreation){
+    if(!usefinssinfo){
         const date = new Date()
-       usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString(), can_subscribe:true, ended:false}}
+        usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString(), can_subscribe:true, ended:false}};
     }
-
 
 
     // Initialisation de la Form des paramètres du fin'ss
@@ -129,10 +125,11 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFins
         const data = usefinssinfo.finssInfo
         data.date_event = new Date(data.date_event)
         form.setValues(data)
-    }, [usefinssinfo.finssInfo])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     function formSubmit(values) {
-        if(forCreation){
+        if(!usebucquage){
             useFinssList.createFinss(values).then(()=>closeAllModals())
 
         }else{
@@ -196,7 +193,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, forCreation, useFins
                     </form>
 
                     {/* S'il ne s'agit pas d'une création de finss, on affiche le bouton de cloture*/}
-                    {!forCreation ?
+                    {usebucquage ?
                         <Button disabled={usefinssinfo.finssInfo.ended} style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(usefinssinfo, usebucquage)}}>Clôturer le Fin'ss</Button>
                         : ""}
                     </Box>

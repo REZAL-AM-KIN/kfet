@@ -1,9 +1,10 @@
-import {Center, Stack,Box} from "@mantine/core"
 import {useEffect, useState} from "react";
-import FinssSelector from "../components/Finss/FinssSelector";
-import {useFinssList} from "../hooks/finssHooks/useFinssList";
-import FinssRegisterModal from "../components/Finss/FinssRegisterModal";
 import {useParams} from "react-router-dom";
+import {Center, Stack,Box} from "@mantine/core"
+
+import {useFinssList} from "../hooks/finssHooks/useFinssList";
+import FinssSelector from "../components/Finss/FinssSelector";
+import FinssRegisterModal from "../components/Finss/FinssRegisterModal";
 
 const Finss = ({setPage}) => {
     let params = useParams()
@@ -22,7 +23,8 @@ const Finss = ({setPage}) => {
         if(modalOpened===false){
             usefinsslist.retrieveFinssList()
         }
-    }, [modalOpened])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalOpened, usefinsslist.retrieveFinssList])
 
     useEffect(()=>{
         if(params.applyto){

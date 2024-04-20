@@ -52,6 +52,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
             return {key:id, ...product, qts: (prebucque_quantity ? prebucque_quantity : (product.obligatoire ? 1: 0))}
         })
         form.setValues({products:data})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[productsList, useParticipation.participations, useParticipation.isLoading])
 
     //Fonction de submit de la form

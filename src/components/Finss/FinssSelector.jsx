@@ -1,3 +1,6 @@
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+
 import {
     ActionIcon,
     Button,
@@ -10,10 +13,9 @@ import {
     Tooltip, useMantineTheme, Switch
 } from "@mantine/core"
 import {IconCircleX, IconEdit} from "@tabler/icons";
-import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import SearchableDataTable from "../SearchableDataTable";
 import {useMediaQuery} from "@mantine/hooks";
+
+import SearchableDataTable from "../SearchableDataTable";
 import openFinssAddModal from "./FinssAddModal";
 
 const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
