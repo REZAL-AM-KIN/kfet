@@ -1,10 +1,7 @@
 
 import {Stack, Text} from "@mantine/core"
-import {useEffect} from "react";
 
-const Edit = ({setPage}) => {
-    useEffect(()=>{setPage("Edition")})
-
+const Edit = () => {
     return(
         <Stack>
             <Text>Edition Page</Text>

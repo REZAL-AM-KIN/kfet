@@ -1,9 +1,8 @@
-import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
-import {forwardRef, useEffect, useState} from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import {showNotification} from "@mantine/notifications";
-import {IconX} from "@tabler/icons";
-import {getHotkeyHandler} from "@mantine/hooks";
+import {forwardRef} from "react";
+import {useNavigate} from "react-router-dom";
+import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import { useConsommateurList } from "../hooks/useConsommateurs";
+import Autocomplete from "./Autocomplete";
 
 /*
 Composant qui propose la sélection d'un pg.
@@ -30,51 +29,24 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({refForOutsideClick, setActive, onSelectCallBack, withBorder, ...othersProps})=>{
+const SearchPg = ({onSubmit})=>{
+
     const theme = useMantineTheme()
 
-    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
 
-    const [consommateurList, setConsommateurList] = useState([]);
-
-
-    //retrieve All consomateur
-    useEffect(() => {
-
-        const controller = new AbortController();
-        const getUsers = async () => {
-            try {
-                const response = await axiosPrivate.get("consommateurs/");
-                setConsommateurList(response.data.results);
-            } catch (error) {
-
-                showNotification({
-                    icon: <IconX size={18} />,
-                    color: "red",
-                    autoClose: false,
-                    title: 'Oh Oh....',
-                    message: 'Une erreur est survenue: '+error.message,
-                })
-                console.log(error);
-            }
-
-        }
-        getUsers();
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, []);
-
+    const {consommateurList} = useConsommateurList();
 
     //Pour que autocompltete fonctionne, il faut obligatoirement un champ value. On transforme donc le champ bucque en value
     const data = consommateurList.map(({bucque, ...pg}) =>{
         return { value: bucque, ...pg}
     })
 
-
-    const onItemSubmit = (pg)=>{
-        onSelectCallBack(pg)
+    const onItemSubmit = (e)=>{
+        if (onSubmit) {
+            onSubmit(e);
+        }
+        navigate("pg/"+e.id);
     }
 
     return (
@@ -105,15 +77,7 @@ const SearchPg = ({refForOutsideClick, setActive, onSelectCallBack, withBorder, 
                 item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
-            ref={refForOutsideClick} //on passe en ref le useOutSideClick pour fermer la popover lorsqu'on clique en dehors du champ
-
-
-            onKeyDown={setActive ? getHotkeyHandler([       // On ajoute un handler pour le onKeyDown pour fermer le Popover
-                ['escape', ()=>setActive(false)],       //En appuyant sur escape.
-            ]) : undefined}
-
-            {...othersProps}
-
+            hoverOnSearchChange
         />
 
 

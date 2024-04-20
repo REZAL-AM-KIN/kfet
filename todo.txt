@@ -1,0 +1,12 @@
+A finir le 15 janvier
+
+Auto identification des pian'ss avec clé ssh like?
+
+Voir dev niki admin -> permissions acces consommateur  / utilisateur
+
+hooks requetes -> OPENAPI generated code
+
+nombre d'ojects maximum par requête
+
+regarder tous les TODO!
+

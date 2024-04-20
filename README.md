@@ -1,10 +1,12 @@
 # Objectif
-L'objeectif de ce projet est de refaire entièrement le front Kfet
+L'objectif de ce projet est de refaire entièrement le front Kfet
+*[TODO](./todo.txt)*
 
-# Table des matières
+
+# Table des matieres
 <!-- TOC -->
 * [Objectif](#objectif)
-* [Table des matières](#table-des-matires)
+* [Table des matières](#table-des-matieres)
 * [Cahier des Charges](#cahier-des-charges)
   * [Pouvoir Débucquer](#pouvoir-dbucquer)
   * [Pouvoir recharger](#pouvoir-recharger)
@@ -98,10 +100,22 @@ L'objeectif de ce projet est de refaire entièrement le front Kfet
 | Un PG doit pouvoir se connecter de chez soi.                                                             |          5 | ~          |
 
 # Setup
+/!\ Ce n'est pas le setup pour un environnement de prod!
+
+Il faut avoir setup le serveur de dev niki: [doc](https://github.com/REZAL-AM-KIN/niki-s)
+___
+
 - cloner le dépot
-- installer les dependencies: `npm install` a la racine
-- lancer le projet `npm start`
-- lancer le serveur de dev niki: [doc](https://github.com/REZAL-AM-KIN/niki-s)
+- créer le ficier `.env` à partir de `.env-template` et remplir l'adresse de l'api niki (généralement http://localhost:8000/api)
+
+## Sur la machine
+- installer les dependencies: `npm install --legacy-peer-deps`
+- lancer le projet: `npm start`
+
+## Docker
+- build et lancer le docker : `sudo docker build -t kfet .` puis `sudo docker run -p 3000:3000 kfet`
+
+Le site est lancé. On peut y accéder sur http://localhost:3000/.
 
 # Structure
 Tu fait comme ce qui est montré qui a été fait
