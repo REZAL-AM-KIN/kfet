@@ -1,5 +1,5 @@
 import {Box, Stack, TextInput, Group, ActionIcon} from "@mantine/core";
-import {IconCirclePlus, IconRefresh, IconSearch} from "@tabler/icons";
+import {IconCirclePlus, IconRefresh, IconSearch} from "@tabler/icons-react";
 import {DataTable} from "mantine-datatable";
 import {useEffect, useState} from "react";
 

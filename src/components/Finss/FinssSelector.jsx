@@ -12,7 +12,7 @@ import {
     Center,
     Tooltip, useMantineTheme, Switch
 } from "@mantine/core"
-import {IconCircleX, IconEdit} from "@tabler/icons";
+import {IconCircleX, IconEdit} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 
 import SearchableDataTable from "../SearchableDataTable";

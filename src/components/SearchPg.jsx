@@ -61,7 +61,6 @@ const SearchPg = ({onSubmit})=>{
                 input: {
                     width: "100%",
                     borderRadius: 9,
-                    borderStyle: withBorder ? "solid" : "none",
                     borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}),
                     borderWidth: 2,
                     '&:focus': {

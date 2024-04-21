@@ -1,3 +1,4 @@
+import {useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -12,13 +13,11 @@ import {
     FocusTrap
 } from "@mantine/core";
 import {useForm} from '@mantine/form';
-import {useEffect, useState} from "react";
 import {DataTable} from "mantine-datatable";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
-import {useUser} from "../../hooks/useUser";
 import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck, IconX} from "@tabler/icons";
+import {IconCheck, IconX} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
 
 // Ce composant permet de faire le bucquage d'un fin'ss

@@ -1,5 +1,4 @@
 //Modal pour afficher le recap des prix et Qts des produits
-import {closeAllModals} from "@mantine/modals";
 import {Box, Button, Modal} from "@mantine/core";
 import {DataTable} from "mantine-datatable";
 import {useEffect} from "react";

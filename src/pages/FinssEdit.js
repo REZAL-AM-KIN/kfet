@@ -8,13 +8,12 @@ import {useFinssProducts} from "../hooks/finssHooks/useFinssProduct";
 import {useFinssInfo} from "../hooks/finssHooks/useFinssInfo";
 import FinssBucquage from "./FinssEditPages/FinssBucquage";
 import FinssDebucquage from "./FinssEditPages/FinssDebucquage";
-import {IconAlertTriangle} from "@tabler/icons";
+import {IconAlertTriangle} from "@tabler/icons-react";
 
-const FinssEdit = ({setPage}) => {
+const FinssEdit = () => {
     let params = useParams()
     const finssId = params.finssid
 
-    useEffect(()=>{setPage("Finss")})
     const usebucquage = useBucquage(finssId)
     const usefinssproduct = useFinssProducts(finssId)
     const usefinssinfo = useFinssInfo(finssId)

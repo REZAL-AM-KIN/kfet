@@ -3,7 +3,7 @@ import useAxiosPrivate from "../useAxiosPrivate";
 
 import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons";
+import {IconCheck} from "@tabler/icons-react";
 
 /*
 Permet d'obtenir et de changer les informations d'un Fin'ss

@@ -10,11 +10,11 @@ import {
     Text,
     Textarea,
     TextInput,
-    useMantineTheme
+    useMantineTheme, 
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {DatePicker} from "@mantine/dates";
-import {IconCalendar} from "@tabler/icons";
+import {DatePickerInput} from "@mantine/dates";
+import { IconCalendar } from "@tabler/icons-react";
 
 import ManagersSelector from "../ManagersSelector";
 
@@ -166,7 +166,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                         />
 
 
-                        <DatePicker
+                        <DatePickerInput
                             withAsterisk
                             label = "Date de Fin'ss"
                             inputFormat="DD/MM/YYYY"

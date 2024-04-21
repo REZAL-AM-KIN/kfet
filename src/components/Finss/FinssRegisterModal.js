@@ -7,7 +7,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {useUser} from "../../hooks/useUser";
 import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons";
+import {IconCheck} from "@tabler/icons-react";
 
 
 const FinssRegisterModal = ({opened, setOpened, finssId})=>{

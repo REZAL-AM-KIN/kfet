@@ -2,7 +2,7 @@ import useAxiosPrivate from "../useAxiosPrivate";
 import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons";
+import {IconCheck} from "@tabler/icons-react";
 
 /*
 Permet de récupérer une liste de participations pour un fin'ss

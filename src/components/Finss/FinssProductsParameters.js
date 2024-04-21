@@ -1,8 +1,9 @@
-import {Center, Paper, Tabs, Button, Modal, Stack, Text, Tooltip} from "@mantine/core"
-import {IconCirclePlus} from "@tabler/icons";
-import FinssProductForm from "./FinssProductForm";
 import {useState} from "react";
+import {Center, Paper, Tabs, Button, Modal, Stack, Text, Tooltip} from "@mantine/core"
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
+import {IconCirclePlus} from "@tabler/icons-react";
+
+import FinssProductForm from "./FinssProductForm";
 
 const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) => {
 

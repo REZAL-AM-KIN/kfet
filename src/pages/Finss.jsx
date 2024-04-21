@@ -6,10 +6,8 @@ import {useFinssList} from "../hooks/finssHooks/useFinssList";
 import FinssSelector from "../components/Finss/FinssSelector";
 import FinssRegisterModal from "../components/Finss/FinssRegisterModal";
 
-const Finss = ({setPage}) => {
+const Finss = () => {
     let params = useParams()
-
-    useEffect(()=>{setPage("Finss")})
 
     const [modalOpened, setModalOpened] = useState(false)
     const [finssBucquage, setFinssBucquage] = useState()
@@ -32,28 +30,6 @@ const Finss = ({setPage}) => {
             setModalOpened(true)
         }
     },[params])
-
-    /*
-    return(
-        <Stack style={{height:"100%"}}>
-           <Center>
-               <h1>Listes des fin'ss</h1>
-           </Center>
-            <FinssSelector
-                data={finssList}
-                isLoading={isLoading}
-                setFinssId={setFinssBucquage}
-                setModalOpened={setModalOpened}
-            />
-
-            <FinssRegisterModal
-                opened={modalOpened}
-                setOpened={setModalOpened}
-                finssId={finssBucquage}
-            />
-        </Stack>
-    );
-     */
 
     return(
         <Stack spacing="0" style={{ display: "flex", flexDirection: "column", height: "100%" }}>

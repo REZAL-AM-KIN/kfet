@@ -1,17 +1,12 @@
-import {openModal} from "@mantine/modals";
+import { Modal } from "@mantine/core";
 import FinssGeneralParameters from "./FinssGeneralParameters";
 
 //Modal pour ajouter un finss
-const openFinssAddModal = (useFinssList)=> {
-    openModal({
-        title: "Ajouter un fin'ss",
-        centered: true,
-        children: (
-            <>
-                <FinssGeneralParameters useFinssList={useFinssList}/>
-            </>
-        ),
-    });
+const openFinssAddModal = (useFinssList)=> { (
+        <Modal centered title="Ajouter une fin'ss">
+            <FinssGeneralParameters useFinssList={useFinssList}/>
+        </Modal>
+    );
 }
 
 export default openFinssAddModal;

@@ -1,7 +1,7 @@
 import SearchableDataTable from "../../components/SearchableDataTable";
 import {Paper, Box, Center, Switch, Stack, Group, Text, Button, List, Tooltip} from "@mantine/core"
 import {useEffect, useState} from "react";
-import {IconAlertTriangle, IconCircleCheck, IconCircleX} from "@tabler/icons";
+import {IconAlertTriangle, IconCircleCheck, IconCircleX} from "@tabler/icons-react";
 import errorNotif from "../../components/ErrorNotif";
 import {useConsommateursList} from "../../hooks/useConsommateursList";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";

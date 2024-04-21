@@ -2,7 +2,7 @@ import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
 import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons";
+import {IconCheck} from "@tabler/icons-react";
 
 /*
 Permet d'obtenir la liste des fin'ss

@@ -10,7 +10,7 @@ import {
     Table,
     useMantineTheme, Tooltip
 } from "@mantine/core"
-import {IconAlertTriangle, IconNotes, IconUserPlus} from "@tabler/icons";
+import {IconAlertTriangle, IconNotes, IconUserPlus} from "@tabler/icons-react";
 import errorNotif from "../../components/ErrorNotif";
 import FinssBucquageModal from "../../components/Finss/FinssBucquageModal";
 import {useState} from "react";
