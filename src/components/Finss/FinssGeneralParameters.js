@@ -119,7 +119,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
 
 
     //0n remplie la form avec les valeurs du finss
-    //update de la date à chaque chargement de fin'ss (il faut créer un objet "Date" pour le component "DatePicker")
+    //update de la date à chaque chargement de fin'ss (il faut créer un objet "Date" pour le component "DatePickerInput")
     useEffect(()=>{
         // On crée un objet Date à partir du string date_event
         const data = usefinssinfo.finssInfo
@@ -169,8 +169,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                         <DatePickerInput
                             withAsterisk
                             label = "Date de Fin'ss"
-                            inputFormat="DD/MM/YYYY"
-                            dropdownPosition="bottom-start"
+                            valueFormat="DD MMMM YYYY"
                             icon={<IconCalendar size={16} />}
                             {...form.getInputProps('date_event')}
 
