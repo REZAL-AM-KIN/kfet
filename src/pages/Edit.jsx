@@ -4,9 +4,7 @@ import ProductsSelector from "../components/editProduct/ProductsSelector";
 import {useProductsList} from "../hooks/products/useProductsList";
 import ProductParameters from "../components/editProduct/ProductParameters";
 
-const Edit = ({setPage}) => {
-    useEffect(()=>{setPage("Edition")})
-
+const Edit = () => {
     //Le context pour l'entité sera à implémenter ici, et dev dans une autre branche.
     //Il faudra possiblement enlever les props des components appelés ici et utilise le context dans ceux-ci
     const entityId = 2;

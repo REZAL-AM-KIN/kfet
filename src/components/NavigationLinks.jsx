@@ -48,7 +48,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
     const {classes, cx} = useStyles();
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionduration={0}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     component={(link !== undefined) ? Link : undefined}
@@ -96,7 +96,7 @@ export function LogOutLink() {
 
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionduration={0}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     onClick={handleLogout}
@@ -159,7 +159,7 @@ export function NormalSearchPgButton() {
                     label={label}
                     opened={active ? false : undefined}
                     position="right"
-                    transitionDuration={0}
+                    transitionduration={0}
                     events={{hover: true, focus: true, touch: false}}
                 >
                     <UnstyledButton
@@ -209,7 +209,7 @@ export function EntiteSelector() {
                         label={entite.nom}
                         opened={active ? false : undefined}
                         position="right"
-                        transitionDuration={0}
+                        transitionduration={0}
                         events={{hover: true, focus: true, touch: false}}>
                         <UnstyledButton
                             onClick={() => {setActive((active) => !active)}}
