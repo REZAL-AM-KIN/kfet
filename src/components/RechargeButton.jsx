@@ -1,7 +1,8 @@
+import {useState} from "react";
 import {Button, createStyles, Modal, NumberInput, SegmentedControl, Stack} from "@mantine/core";
+
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import errorNotif from "./ErrorNotif";
-import {useState} from "react";
 
 
 const useStyles = createStyles((theme) => ({
@@ -65,7 +66,7 @@ function RechargeButton({pgData, onRecharge, sx}) {
 
     const modalClose = () => {
         setOpened(false);
-        setMontant(null);
+        setMontant('');
     }
 
 
@@ -113,6 +114,8 @@ function RechargeButton({pgData, onRecharge, sx}) {
                             value={montant}
                             onChange={setMontant}
                             min={0}
+                            precision={2}
+                            step={0.01}
                         />
                         <SegmentedControl
                             radius="lg"

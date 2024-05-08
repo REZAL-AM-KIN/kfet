@@ -1,10 +1,12 @@
-import {Button, Modal, NumberInput, Stack, TextInput, useMantineTheme} from "@mantine/core";
 import {useState} from "react";
 import QrReader from 'react-qr-reader'
+import {Button, Modal, NumberInput, Stack, TextInput, useMantineTheme} from "@mantine/core";
+import {useMediaQuery} from "@mantine/hooks";
+import {IconQrcode} from "@tabler/icons-react";
+
 import errorNotif from "./ErrorNotif";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import {useMediaQuery} from "@mantine/hooks";
-import {IconQrcode} from "@tabler/icons";
+
 
 function RechargeLydiaButton({pgData, onRecharge, sx}) {
     const theme = useMantineTheme();
@@ -25,7 +27,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
 
     const modalClose = () => {
         setOpened(false);
-        setMontant(null);
+        setMontant('');
         setShowQrScanner(false);
         setQrcode("");
         setNumberError(false);
@@ -51,7 +53,7 @@ function RechargeLydiaButton({pgData, onRecharge, sx}) {
             } catch (error) {
                 errorNotif("QR Submit", error?.message);
                 // reset the fields without closing modal
-                setMontant(null);
+                setMontant('');
                 setQrcode("");
             }
         }

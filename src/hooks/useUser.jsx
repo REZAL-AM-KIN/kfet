@@ -8,3 +8,7 @@ export function useUser() {
 export function usePermissions() {
     return useContext(UserContext)["permissions"];
 }
+
+export function useIsLogged() {
+    return [useContext(UserContext)["isLogged"], useContext(UserContext)["setIsLogged"]];
+}
