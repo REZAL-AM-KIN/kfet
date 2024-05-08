@@ -24,6 +24,7 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
     const [canManageEntity, setCanManageEntity] = useState(false)
     const useproductinfo = useProductInfo();
 
+
     useEffect(()=>{
         if(permissions.entities_manageable){
             setCanManageEntity(permissions.entities_manageable.some(item => category === item))
@@ -105,14 +106,29 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
 
                 <SearchableDataTable
                     noRecordsText="Aucun produit n'a été trouvé"
-                    searchPlaceHolder="Rechercher un produit sur n'importe quel critère"
+                    searchPlaceHolder="Rechercher un produit suivant le nom/raccourcit/prix"
                     striped
                     highlightOnHover
                     data={tabData}
                     columns={[
-                        {accessor: "nom", title:"Nom", sortable: true, titleStyle: {minWidth:"360px"}, width: "15%", render: (product) => (<NameRowRender product={product}/>)},
-                        {accessor: "raccourci", title:"Raccourci", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                        {accessor: "prix", title:"prix (€)", textAlignment:"center", width:140,  sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)') },
+                        {accessor: "nom",
+                            title:"Nom",
+                            titleStyle: {minWidth:"360px"},
+                            width: "15%",
+                            sortable: true,
+                            render: (product) => (<NameRowRender product={product}/>)},
+                        {accessor: "raccourci",
+                            title:"Raccourci",
+                            textAlignment:"center",
+                            width:160,
+                            sortable: true,
+                            visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "prix",
+                            title:"prix (€)",
+                            textAlignment:"center",
+                            width:140,
+                            sortable: true,
+                            visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') },
                     ]}
                     defaultSortedColumn="nom"
                     idAccessor="id"
