@@ -30,10 +30,16 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
     //Vérification de la présence des callbacks si reload ou add
     if(withAddIcon && !addCallback){
-        throw "withAddIcon option require addCallback. \n addCallback should be a function that handle add logic"
+        throw Object.assign(
+            new Error("withAddIcon option require addCallback. \n addCallback should be a function that handle add logic"),
+            { code: 501 }
+        );
     }
     if(withReloadIcon && !reloadCallback){
-        throw "withReloadIcon option require reloadCallBack. \n reloadCallBack should be a function that handle reload logic"
+        throw Object.assign(
+            new Error("withReloadIcon option require reloadCallBack. \n reloadCallBack should be a function that handle reload logic"),
+            { code: 501 }
+        );
     }
 
 
@@ -82,7 +88,7 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     useEffect(() => {
         const sorted_data = sortData(data, {sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search:search});
         setSortedData(sorted_data);
-
+    // eslint-disable-next-line
     }, [data, sortStatus]);
 
     const handleSearchChange = (event) => {
