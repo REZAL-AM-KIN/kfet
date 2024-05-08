@@ -10,7 +10,6 @@
     "@mantine/notifications": "^6.0.21",
     "@mantine/form": "^6.0.21",
     "@mantine/modals": "^6.0.21",
-    "@tabler/icons": "^2.44.0",
     "@tabler/icons-react": "^2.44.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -24,6 +23,12 @@
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "react-qr-reader": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   },
   "scripts": {
     "start": "react-scripts start",

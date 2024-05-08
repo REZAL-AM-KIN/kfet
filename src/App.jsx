@@ -14,7 +14,7 @@ import Home from "./pages/Home";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 
-import {NotificationsProvider} from '@mantine/notifications';
+import {Notifications} from '@mantine/notifications';
 import {ModalsProvider} from '@mantine/modals';
 
 // contexts
@@ -55,7 +55,7 @@ function App() {
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
-            <NotificationsProvider>
+            <Notifications />
             <ModalsProvider>
             <UserProvider>
                 <Routes>
@@ -79,7 +79,6 @@ function App() {
                 </Routes>
             </UserProvider>
             </ModalsProvider>
-            </NotificationsProvider>
         </MantineProvider>
     );
 
