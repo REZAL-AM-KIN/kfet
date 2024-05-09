@@ -129,6 +129,13 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
                             width:140,
                             sortable: true,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') },
+                        {accessor: "stock",
+                            title:"Stock",
+                            textAlignment:"center",
+                            width:140,
+                            sortable: true,
+                            visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')'),
+                            render: (product) => product.suivi_stock ? product.stock : '-'},
                     ]}
                     defaultSortedColumn="nom"
                     idAccessor="id"

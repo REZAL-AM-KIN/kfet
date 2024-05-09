@@ -47,7 +47,6 @@ export function useProductsList(entityId){
             }
         } catch (error) {
             errorNotif("Produits", error.message)
-            console.log("Error getting products", error);
         }
         setLoading(false)
     }

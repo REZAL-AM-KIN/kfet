@@ -5,6 +5,8 @@ import {
     Stack,
     TextInput,
     NumberInput,
+    Checkbox,
+    Space,
     useMantineTheme
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
@@ -26,7 +28,9 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             nom: "",
             raccourci : "",
             prix : 0,
-            entite: ""
+            entite: "",
+            suivi_stock: false,
+            stock: 0
         },
         validateInputOnChange:["nom", "raccourci", "prix"],
 
@@ -45,9 +49,10 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
     })
     useEffect(()=>{
         if(Object.keys(useproductinfo.productInfo).length>0){
-            form.setValues({ ...useproductinfo.productInfo, prix:parseFloat(useproductinfo.productInfo.prix)})
+            form.setValues({ ...useproductinfo.productInfo, prix:parseFloat(useproductinfo.productInfo.prix),
+                stock:useproductinfo.productInfo.stock === null ? 0 : useproductinfo.productInfo.stock})
         }else{
-            form.setValues({ nom:"", raccourci:"", prix:0, entite:entity}) //on met des valeurs nulles et on définit l'entité à celle de travail actuel
+            form.setValues({ nom:"", raccourci:"", prix:0, entite:entity, suivi_stock: false, stock: 0}) //on met des valeurs nulles et on définit l'entité à celle de travail actuel
         }
     }, [useproductinfo.productInfo])
 
@@ -90,6 +95,22 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                             withAsterisk
                             {...form.getInputProps('entite')}
                         />
+
+                        <Checkbox
+                            label="Suivi de stock"
+                            mt={theme.spacing.xs}
+                            checked={form.values.suivi_stock}
+                            {...form.getInputProps('suivi_stock')}
+                        />
+
+                        {form.values.suivi_stock && (
+                            <NumberInput
+                                label="Stock"
+                                placeholder = "Stock"
+                                hideControls
+                                {...form.getInputProps('stock')}
+                            />
+                        )}
 
                         <Button disabled={!form.isValid()} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
                     </form>

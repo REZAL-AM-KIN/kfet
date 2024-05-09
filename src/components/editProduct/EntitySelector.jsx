@@ -8,6 +8,7 @@ const EntitySelector = ({entitiesManageable, entite, ...props})=>{
             searchable
             nothingFound="Aucune entité trouvée..."
             maxDropdownHeight={280}
+            withinPortal
             {...props}
         />
     );
