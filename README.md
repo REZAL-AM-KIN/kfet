@@ -6,24 +6,26 @@ L'objectif de ce projet est de refaire entièrement le front Kfet
 # Table des matieres
 <!-- TOC -->
 * [Objectif](#objectif)
-* [Table des matières](#table-des-matieres)
+* [Table des matieres](#table-des-matieres)
 * [Cahier des Charges](#cahier-des-charges)
-  * [Pouvoir Débucquer](#pouvoir-dbucquer)
+  * [Pouvoir débucquer](#pouvoir-débucquer)
   * [Pouvoir recharger](#pouvoir-recharger)
   * [Pouvoir rentrer des remises](#pouvoir-rentrer-des-remises)
   * [Pouvoir rentrer les produits](#pouvoir-rentrer-les-produits)
-  * [Pouvoir gérer les fin’sss](#pouvoir-grer-les-finsss)
+  * [Pouvoir gérer les fin’sss](#pouvoir-gérer-les-finsss)
   * [Bucquage](#bucquage)
   * [Debucquage](#debucquage)
   * [Pouvoir se connecter](#pouvoir-se-connecter)
     * [Au pian’sss](#au-piansss)
     * [Chez soi](#chez-soi)
 * [Setup](#setup)
+  * [Sur la machine](#sur-la-machine)
+  * [Docker](#docker)
 * [Structure](#structure)
 <!-- TOC -->
 
 # Cahier des Charges
-## Pouvoir Débucquer
+## Pouvoir débucquer
 | Fonction                                                                                                                    | importance | logique ok |
 |-----------------------------------------------------------------------------------------------------------------------------|------------|------------|
 | Accessible sur permission uniquement (pour les vp seulement sur les pian’ss)                                                |          5 | ~          |
@@ -118,4 +120,4 @@ ___
 Le site est lancé. On peut y accéder sur http://localhost:3000/.
 
 # Structure
-Tu fait comme ce qui est montré qui a été fait
+Tu fais comme ce qui est montré qui a été fait
