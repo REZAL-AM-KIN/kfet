@@ -55,6 +55,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             form.setValues({ nom:"", raccourci:"", prix:0, entite:entity, suivi_stock: false, stock: 0})
             //on met des valeurs nulles et on définit l'entité à celle de travail actuel
         }
+    // eslint-disable-next-line
     }, [useproductinfo.productInfo])
 
     function formSubmit(values) {

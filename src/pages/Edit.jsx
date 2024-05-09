@@ -19,6 +19,7 @@ const Edit = () => {
         if(modalOpened===false){
             useproductslist.retrieveProducts()
         }
+    // eslint-disable-next-line
     }, [modalOpened])
 
     return(

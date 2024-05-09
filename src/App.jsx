@@ -51,7 +51,7 @@ function App() {
                 </Container>
             </EntiteProvider>
         )
-    };
+    }
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
