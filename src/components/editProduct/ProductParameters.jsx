@@ -37,14 +37,14 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             nom: (value) => (value.length>50 ? "Le nom doit faire moins de 50 caractères" :
                 value.length===0 ? "Le titre est obligatoire !": null),
             raccourci: (value) => (value.length>3 ? "Le raccourci doit faire moins de 3 caractères" : null),
-            prix: (value) => (value === undefined
+            prix: (value) => (value === null || value === ''
                 ? 'Le prix est obligatoire !'
                 : value >= 1000
                 ? 'Le prix doit être inférieur à 1000€'
                 : value < 0
                 ? 'Le prix doit être positif'
                 : null),
-            stock: (value) => (value < 0 ? "Le stock doit être positif" : null),
+            stock: (value) => (value === '' ? 'Le stock doit être définit si on le suit' : value < 0 ? "Le stock doit être positif" : null),
         },
     })
     useEffect(()=>{
@@ -76,7 +76,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                         <TextInput
                             label="Nom"
                             placeholder = "Nom"
-                            withAsterisk
+                            required
                             {...form.getInputProps('nom')}
                         />
                         <TextInput
@@ -89,20 +89,26 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                             placeholder = "Prix"
                             precision={2}
                             hideControls
-                            withAsterisk
+                            required
                             {...form.getInputProps('prix')}
                         />
 
                         <EntitySelector entitiesManageable={entitiesManageable}
-                            withAsterisk
+                            required
                             {...form.getInputProps('entite')}
                         />
 
                         <Checkbox
                             label="Suivi de stock"
                             mt={theme.spacing.xs}
-                            checked={form.values.suivi_stock}
                             {...form.getInputProps('suivi_stock')}
+                            checked={form.values.suivi_stock}
+                            onChange={(event) => {
+                                form.setFieldValue('suivi_stock', event.currentTarget.checked);
+                                if (!event.currentTarget.checked && form.values.stock === '') {
+                                    form.setFieldValue('stock', 0);
+                                }
+                            }}
                         />
 
                         {form.values.suivi_stock && (
@@ -110,6 +116,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                                 label="Stock"
                                 placeholder = "Stock"
                                 hideControls
+                                required
                                 {...form.getInputProps('stock')}
                             />
                         )}
