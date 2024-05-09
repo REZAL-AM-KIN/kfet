@@ -50,7 +50,7 @@ function Autocomplete({data, filter, itemComponent, limit, onItemSubmit, placeho
         if (!data) return;
         // function to filter the products
         setFilteredData(data.filter((item) => {
-            return item.toLowerCase().includes(recherche.substring(1).toLowerCase().trim())
+            return item.value.toLowerCase().includes(recherche.substring(1).toLowerCase().trim())
         }));
     }, [recherche, data]);
 
