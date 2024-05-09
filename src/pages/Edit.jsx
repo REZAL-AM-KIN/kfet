@@ -40,7 +40,7 @@ const Edit = () => {
                     setModalOpened={setModalOpened}
                 />
 
-                <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title="Ajouter un produit">
+                <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
                     <ProductParameters
                         productId={productId}
                         entity={entite.nom}
