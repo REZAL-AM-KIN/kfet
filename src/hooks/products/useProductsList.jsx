@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
-import {showNotification} from "@mantine/notifications";
-import {IconCheck} from "@tabler/icons-react";
 
 /*
 Permet de récupérer la liste des produits d'une entité

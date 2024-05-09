@@ -6,7 +6,6 @@ import {
     TextInput,
     NumberInput,
     Checkbox,
-    Space,
     useMantineTheme
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
