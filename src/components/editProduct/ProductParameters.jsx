@@ -32,7 +32,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             suivi_stock: false,
             stock: 0
         },
-        validateInputOnChange:["nom", "raccourci", "prix"],
+        validateInputOnChange:["nom", "raccourci", "prix", "stock"],
 
         validate:{
             nom: (value) => (value.length>50 ? "Le nom doit faire moins de 50 caractères" :
@@ -45,6 +45,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                 : value < 0
                 ? 'Le prix doit être positif'
                 : null),
+            stock: (value) => (value < 0 ? "Le stock doit être positif" : null),
         },
     })
     useEffect(()=>{
@@ -52,7 +53,8 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
             form.setValues({ ...useproductinfo.productInfo, prix:parseFloat(useproductinfo.productInfo.prix),
                 stock:useproductinfo.productInfo.stock === null ? 0 : useproductinfo.productInfo.stock})
         }else{
-            form.setValues({ nom:"", raccourci:"", prix:0, entite:entity, suivi_stock: false, stock: 0}) //on met des valeurs nulles et on définit l'entité à celle de travail actuel
+            form.setValues({ nom:"", raccourci:"", prix:0, entite:entity, suivi_stock: false, stock: 0})
+            //on met des valeurs nulles et on définit l'entité à celle de travail actuel
         }
     }, [useproductinfo.productInfo])
 
