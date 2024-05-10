@@ -29,7 +29,7 @@ function BadCard(style) {
 
 function PgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
 
     const style = generateStyle(data, sx, onClick, theme);
 
@@ -66,7 +66,7 @@ function PgCard({data, onClick, sx}) {
 
 function SmallPgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
 
     const style = generateStyle(data, sx, onClick, theme);
 

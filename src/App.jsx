@@ -23,7 +23,7 @@ import { CategorieProvider } from './context/Categorie';
 function App() {
     const theme = useMantineTheme()
 
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const navBarWidth = 80
 

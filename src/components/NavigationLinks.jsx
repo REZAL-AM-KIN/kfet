@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
 
 export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick, currentPage}) {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const navigate = useNavigate()
 
@@ -83,7 +83,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
 
 export function LogOutLink() {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const {classes, cx} = useStyles();
 
@@ -197,7 +197,7 @@ export function NormalSearchPgButton() {
 
 export function CategorieSelector() {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const {classes, cx} = useStyles();
 
