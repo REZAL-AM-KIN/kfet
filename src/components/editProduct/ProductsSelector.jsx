@@ -18,7 +18,7 @@ import {useProductInfo} from "../../hooks/products/useProductInfo";
 const ProductsSelector = ({useproductslist, category, setProductId, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     const permissions = usePermissions();
     const [canManageEntity, setCanManageEntity] = useState(false)
@@ -42,8 +42,9 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
     const rowExpansionContent = (record)=>{
         return (
             <Stack spacing="0" style={{marginBottom:7.5, marginTop:7.5, marginLeft:15}}>
-                <Text>raccourci : {record.raccourci}</Text>
-                <Text>prix (€) : {record.prix}</Text>
+                <Text>Raccourci : {record.raccourci}</Text>
+                <Text>Prix (€) : {record.prix}</Text>
+                <Text>Stock : {record.suivi_stock ? record.stock : '-'}</Text>
             </Stack>
         )
     }
@@ -106,33 +107,32 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
 
                 <SearchableDataTable
                     noRecordsText="Aucun produit n'a été trouvé"
-                    searchPlaceHolder="Rechercher un produit suivant le nom/raccourcit/prix"
+                    searchPlaceHolder="Rechercher suivant le nom/raccourcit/prix"
                     striped
                     highlightOnHover
                     data={tabData}
                     columns={[
                         {accessor: "nom",
                             title:"Nom",
-                            titleStyle: {minWidth:"360px"},
-                            width: "15%",
+                            titleStyle: {minWidth:"160px"},
                             sortable: true,
                             render: (product) => (<NameRowRender product={product}/>)},
                         {accessor: "raccourci",
                             title:"Raccourci",
                             textAlignment:"center",
-                            width:160,
+                            width: theme.breakpoints.sm/2,
                             sortable: true,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                         {accessor: "prix",
-                            title:"prix (€)",
+                            title:"Prix (€)",
                             textAlignment:"center",
-                            width:140,
+                            width: theme.breakpoints.sm/2,
                             sortable: true,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') },
                         {accessor: "stock",
                             title:"Stock",
                             textAlignment:"center",
-                            width:140,
+                            width: theme.breakpoints.sm/2,
                             sortable: true,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')'),
                             render: (product) => product.suivi_stock ? product.stock : '-'},
