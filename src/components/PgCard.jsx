@@ -29,7 +29,7 @@ function BadCard(style) {
 
 function PgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')');
 
     const style = generateStyle(data, sx, onClick, theme);
 
@@ -43,16 +43,17 @@ function PgCard({data, onClick, sx}) {
                onClick={onClick}>
             <Group position={"apart"} spacing={0}>
                 <Stack spacing={0}>
-                    <Text size={isSmallDevice ? 25 : 45} style={{lineHeight: 1}}>{data.bucque} {data.fams}</Text>
-                    <Group position={"apart"}><Text size={isSmallDevice ? 12 : 20} color={theme.colors.gray[9]}
+                    <Text size={isSmallDevice ? theme.headings.sizes.h2.fontSize : theme.headings.sizes.h1.fontSize} style={{lineHeight: theme.fontSizes.md}}>{data.bucque} {data.fams}</Text>
+                    <Group position={"apart"}>
+                        <Text size={isSmallDevice ? theme.headings.sizes.h5.fontSize : theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
                                                     style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
-                        <Text size={isSmallDevice ? 12 : 20} color={theme.colors.gray[9]}
+                        <Text size={isSmallDevice ? theme.headings.sizes.h5.fontSize : theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
                               style={{lineHeight: 1}}>{data.proms}</Text>
                     </Group>
-                    <Text size={isSmallDevice ? 12 : 20}>{data.commentaire}</Text>
+                    <Text size={isSmallDevice ? theme.headings.sizes.h6.fontSize : theme.headings.sizes.h5.fontSize}>{data.commentaire}</Text>
                 </Stack>
                 {/* make the solde stick to the right of the card*/}
-                <Text size={isSmallDevice ? 20 : 35}
+                <Text size={isSmallDevice ? theme.headings.sizes.h3.fontSize : theme.headings.sizes.h2.fontSize}
                       sx={{
                           '@media (max-width: 300px)': {
                               width: "100%",
@@ -66,22 +67,23 @@ function PgCard({data, onClick, sx}) {
 
 function SmallPgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
+    console.log(theme)
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')');
 
     const style = generateStyle(data, sx, onClick, theme);
 
     return (
-        <Paper shadow="sm"
-               radius="lg"
-               p={isSmallDevice ? "5px" : "xs"}
+        <Paper shadow={theme.shadows.sm}
+               radius={theme.radius.lg}
+               p={isSmallDevice ? 'calc('+theme.spacing.xs+'/2)' : theme.spacing.xs}
                sx={style}
                withBorder
                onClick={onClick}>
             <Group position="apart" spacing={0}>
                 <Text size={isSmallDevice ? theme.fontSizes.sm : theme.fontSizes.md}
-                      sx={{lineHeight: ".9em"}}>{data.bucque}</Text>
-                <Text size={isSmallDevice ? theme.fontSizes.xs : theme.fontSizes.md}
-                      sx={{lineHeight: ".9em"}}>{data.fams}</Text>
+                      sx={{lineHeight: theme.fontSizes.sm}}>{data.bucque}</Text>
+                <Text size={isSmallDevice ? theme.fontSizes.xs : theme.fontSizes.sm}
+                      sx={{lineHeight: theme.fontSizes.sm}}>{data.fams}</Text>
             </Group>
         </Paper>
     );

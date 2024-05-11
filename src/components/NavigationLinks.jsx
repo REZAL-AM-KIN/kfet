@@ -9,10 +9,15 @@ import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
 import CategoriesSelector from "./CategoriesSelector";
 
 const useStyles = createStyles((theme) => ({
+    icon: {
+        width : "2rem",
+        height: "2rem",
+        "stroke-width" : 1.5,
+    },
 
     link: {
-        width: 50,
-        height: 50,
+        width: "3rem",
+        height: "3rem",
         borderRadius: theme.radius.md,
         display: 'flex',
         alignItems: 'center',
@@ -56,8 +61,8 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
                     className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
                 >
                     <Stack align="center" spacing="0">
-                        <Icon size={34} stroke={1.5}/>
-                        <Text size="10px">{shortcut}</Text>
+                        <Icon className={classes.icon}/>
+                        <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                     </Stack>
                 </UnstyledButton>
             </Tooltip>
@@ -72,7 +77,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
                 style={{width: "80%", justifyContent: "left"}}
             >
                 <Group>
-                    <Icon size={34} stroke={1.5}/>
+                    <Icon className={classes.icon}/>
                     <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
@@ -102,8 +107,8 @@ export function LogOutLink() {
                     className={cx(classes.link)}
                 >
                     <Stack align="center" spacing="0">
-                        <Icon size={34} stroke={1.5}/>
-                        <Text size="10px">{shortcut}</Text>
+                        <Icon className={classes.icon}/>
+                        <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                     </Stack>
                 </UnstyledButton>
             </Tooltip>
@@ -116,7 +121,7 @@ export function LogOutLink() {
                 style={{width: "80%"}}
             >
                 <Group>
-                    <Icon size={34} stroke={1.5}/>
+                    <Icon className={classes.icon}/>
                     <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
@@ -126,6 +131,7 @@ export function LogOutLink() {
 
 
 export function NormalSearchPgButton() {
+    const theme = useMantineTheme()
     const {classes, cx} = useStyles();
 
     const ref = useClickOutside(() => setActive(false));
@@ -158,8 +164,8 @@ export function NormalSearchPgButton() {
                 className={cx(classes.link, {[classes.active]: active})}
             >
                 <Stack align="center" spacing="0">
-                    <Icon size={34} stroke={1.5}/>
-                    <Text size="10px">{shortcut}</Text>
+                    <Icon className={classes.icon}/>
+                    <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                 </Stack>
             </UnstyledButton>
         </Tooltip>
@@ -232,8 +238,8 @@ export function CategorieSelector() {
                             style={{backgroundColor:catColor}}
                         >
                             <Stack align="center" spacing="0">
-                                <Icon size={34} stroke={1.5}/>
-                                <Text size="10px">{categorie.length > 8 ? categorie.slice(0,6)+ ".." : categorie}</Text>
+                                <Icon className={classes.icon}/>
+                                <Text size={theme.fontSizes.xs}>{categorie.length > 8 ? categorie.slice(0,6)+ ".." : categorie}</Text>
                             </Stack>
                         </UnstyledButton>
                     </Tooltip>
@@ -262,7 +268,7 @@ export function CategorieSelector() {
                     style={{backgroundColor:catColor, width: "80%"}}
                 >
                     <Group style={{width: "100%"}}>
-                        <Icon size={34} stroke={1.5}/>
+                        <Icon className={classes.icon}/>
                         <Text>{categorie}</Text>
                     </Group>
                 </UnstyledButton>
