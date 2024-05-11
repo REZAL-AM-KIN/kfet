@@ -38,7 +38,7 @@ export function useProduitByEntite(entiteId){
             console.log("Error getting produit by entite", error);
         }
         setLoading(false);
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[entiteId]);
 
     // get general history
