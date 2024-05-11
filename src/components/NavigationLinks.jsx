@@ -52,7 +52,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
     const {classes, cx} = useStyles();
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     component={(link !== undefined) ? Link : undefined}
@@ -100,7 +100,7 @@ export function LogOutLink() {
 
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     onClick={handleLogout}
@@ -155,7 +155,7 @@ export function NormalSearchPgButton() {
             label={label}
             opened={active ? false : undefined}
             position="right"
-            transitionDuration={0}
+            transitionProps={{ duration: 0 }}
             events={{hover: true, focus: true, touch: false}}>
             <UnstyledButton
                 ref={ref}
@@ -230,7 +230,7 @@ export function CategorieSelector() {
                         label={categorie}
                         opened={active ? false : undefined}
                         position="right"
-                        transitionDuration={0}
+                        transitionProps={{ duration: 0 }}
                         events={{hover: true, focus: true, touch: false}}>
                         <UnstyledButton
                             onClick={() => {setActive((active) => !active)}}
