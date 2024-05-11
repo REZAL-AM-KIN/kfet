@@ -2,24 +2,26 @@ import {Group, Paper, Stack, Text, Title, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 
-function generateStyle(data, style, onClick, theme) {
-    style = {borderWidth: ".2em", ...style};
+function generateGeneralCardStyle(color, style, onClick) {
     if (onClick) {
-        // TODO: just change the gradient, not the color (don't make it green if it was red)
-        style = {"&:hover": {backgroundColor: theme.colors.green[1]}, ...style};
+        style = {"&:hover": {backgroundColor: color[2]}, ...style};
     }
-    if (data.solde > 0) {
-        style = {backgroundColor: theme.colors.green[3], borderColor: theme.colors.green[6], ...style};
-    } else {
-        style = {backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[7], ...style};
-    }
+    style = {backgroundColor: color[4], '&[data-with-border]': {border: color[7], borderWidth:"0.125rem", borderStyle: "solid"}, ...style};
 
     return style;
 }
 
+
+function generateStyle(data, style, onClick, theme) {
+    if (data.solde > 0) {
+        return generateGeneralCardStyle(theme.colors.green, style, onClick);
+    } else {
+        return generateGeneralCardStyle(theme.colors.red, style, onClick);
+    }
+}
+
 function BadCard(style) {
     const theme = useMantineTheme();
-
     return (
         <Paper sx={{...style, backgroundColor: theme.colors.red[5], borderColor: theme.colors.red[8]}} withBorder>
             <Text>Une Erreur est survenue !</Text>
@@ -29,6 +31,7 @@ function BadCard(style) {
 
 function PgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
+    console.log(theme)
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')');
 
     const style = generateStyle(data, sx, onClick, theme);
@@ -69,7 +72,7 @@ function SmallPgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')');
 
-    const style = generateStyle(data, sx, onClick, theme);
+    const style = generateGeneralCardStyle(theme.colors.green, sx, onClick);
 
     return (
         <Paper shadow={theme.shadows.sm}
