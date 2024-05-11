@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
 
@@ -34,7 +34,7 @@ export function useProductsList(entityId){
     const [isLoading, setLoading] = useState(true)
     const [productsList, setProductsList] = useState([])
 
-    const retrieveProducts = async () => {
+    const retrieveProducts = useCallback(async () => {
         setLoading(true)
         try {
             const response = await axiosPrivate.get("produitsDansEntite/"+entityId+"/");
@@ -47,7 +47,7 @@ export function useProductsList(entityId){
             errorNotif("Produits", error.message)
         }
         setLoading(false)
-    }
+    },[entityId]);
 
     // get product list
     useEffect(() => {

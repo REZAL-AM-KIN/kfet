@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import useAxiosPrivate from "../useAxiosPrivate";
 import {showNotification} from "@mantine/notifications";
@@ -34,7 +34,7 @@ export function useProductInfo(productId){
     const [isSending, setSending] = useState(false)
     const [productInfo, setProductInfo] = useState({})
 
-    const addProduct = async (productInfo)=>{
+    const addProduct = useCallback( async (productInfo)=>{
         try {
             setSending(true)
             const response = await axiosPrivate.post("produits/", productInfo)
@@ -62,9 +62,9 @@ export function useProductInfo(productId){
             errorNotif("Produits", error.message)
             console.log("Error sending product parameters", error);
         }
-    }
+    }, []);
 
-    const updateProduct = async (productInfo)=>{
+    const updateProduct = useCallback(async (productInfo)=>{
         try {
             setSending(true)
             const response = await axiosPrivate.put("produits/"+productInfo.id+"/", productInfo)
@@ -88,9 +88,9 @@ export function useProductInfo(productId){
             errorNotif("Produit", error.message)
             console.log("Error sending product parameters", error);
         }
-    }
+    },[]);
 
-    const deleteProduct = async (productInfo)=>{
+    const deleteProduct = useCallback(async (productInfo)=>{
         try {
 
             setSending(true)
@@ -119,9 +119,9 @@ export function useProductInfo(productId){
             errorNotif("Produit", error.message)
             console.log("Error deleting product", error);
         }
-    }
+    },[]);
 
-    const retrieveProductInfo = async () => {
+    const retrieveProductInfo = useCallback(async () => {
         setLoading(true)
         if(productId){
             try {
@@ -129,7 +129,7 @@ export function useProductInfo(productId){
                 if (response.data) {
                     setProductInfo(response.data);
                 } else {
-                    errorNotif("Produits","Impossible de récupérer les produits de l'entité");
+                    errorNotif("Produits","Impossible de récupérer les informations du produit")
                 }
             } catch (error) {
                 errorNotif("Produits", error.message)
@@ -137,7 +137,7 @@ export function useProductInfo(productId){
             }
         }
         setLoading(false)
-    }
+    }, [productId]);
 
     // get product list
     useEffect(() => {
