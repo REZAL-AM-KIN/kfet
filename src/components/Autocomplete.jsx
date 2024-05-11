@@ -1,10 +1,6 @@
 import {useState, forwardRef, useEffect} from "react";
-
-import {Input, Stack, Text, Tooltip, createStyles} from "@mantine/core";
+import {Input, Stack, Text, createStyles} from "@mantine/core";
 import {getHotkeyHandler} from "@mantine/hooks";
-
-import {useProduitByEntite} from "../hooks/useProduitByEntite";
-import { useBucquage } from "../hooks/useBucquage";
 
 
 const useStyles = createStyles((theme) => ({
@@ -31,80 +27,73 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
+function Autocomplete({data, filter, itemComponent, limit, onItemSubmit, placeholder, ...others}) {
 
     const {classes} = useStyles();
 
-    const produits = useProduitByEntite(entite.id);
-    const {bucquage} = useBucquage();
 
-    const [filteredProduits, setFilteredProduits] = useState(produits.data);
+    const [filteredData, setFilteredData] = useState(data);
     const [recherche, setRecherche] = useState("");
     const [selected, setSelected] = useState(0);
 
     var itemId = 0;
 
-    const onItemSubmit = (item) => {
+    const submit = (item) => {
         if (!item) return;
-        // console.log("Produits: Submit item");
-        bucquage(pgData.id, item.id, onSubmit);
-        // console.log("Produits: Submit item: bucquage done", isLoading);
-        ref.current.focus()
+        if (onItemSubmit) {
+            onItemSubmit(item);
+        }
     }
 
     // TODO: chemin de la flemme. Ecrire un onChange plutot que de faire un useEffect
     useEffect(() => {
-        if (!produits.data) return;
+        if (!data) return;
         // function to filter the products
-        setFilteredProduits(produits.data.filter((item) => {
-            if (recherche.startsWith("!")) {
-                // ! is a search by produit nom
-                return item.nom.toLowerCase().includes(recherche.substring(1).toLowerCase().trim())
-            } else {
-                // search by raccourci
-                return item.raccourci.toLowerCase().includes(recherche.toLowerCase().trim())
-            }
+        setFilteredData(data.filter((item) => {
+            return item.toLowerCase().includes(recherche.substring(1).toLowerCase().trim())
         }));
-    }, [recherche, produits.data]);
+    }, [recherche, data]);
 
-    const ProduitItem = forwardRef(
-        ({item, raccourci, nom, prix, ...others}, itemRef) => (
-            <Text ref={itemRef}
-                onClick={()=>{
-                    onItemSubmit(item);
-                    ref.current.focus();}}
-                {...others}
-            >{raccourci} - {nom} - {prix}</Text>
-        )
-    );
+
+    const ItemComponent = itemComponent 
+        ? itemComponent
+        : forwardRef(
+            ({item, ...others}, itemRef) => (
+                <Text ref={itemRef}
+                    onClick={()=>{
+                        submit(item);
+                        // ref.current.focus();
+                    }}
+                    {...others}
+                >{item}</Text>
+            )
+        );
 
     const hotkeys = [
         ["ArrowUp", () => setSelected((current) => (current > 0 ? current - 1 : 0))],
-        ["ArrowDown", () => setSelected((current) => (current < filteredProduits.length - 1 ? current + 1 : current))],
-        ["Enter", () => onItemSubmit(filteredProduits[selected])],
+        ["ArrowDown", () => setSelected((current) => (current < filteredData.length - 1 ? current + 1 : current))],
+        ["Enter", () => submit(filteredData[selected])],
         ["Escape", () => {setSelected(0); setRecherche("")}] // reset selected item and search field
     ]
 
     return (
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
-            <Tooltip label="! pour rechercher par nom" position="right" withArrow>
-                <Input
-                    placeholder="Rechercher un produit"
-                    value={recherche}
-                    onChange={(event) => {
-                        setRecherche(event.currentTarget.value);
-                        setSelected(0)}} // reset selected item when user types
-                    ref={ref}
-                />
-            </Tooltip>
+            <Input
+                placeholder={placeholder}
+                value={recherche}
+                onChange={(event) => {
+                    setRecherche(event.currentTarget.value);
+                    setSelected(0)}} // reset selected item when user types
+                // ref={ref}
+            />
             <Stack spacing="xxs">
-                {filteredProduits.map((item) => {
+                {filteredData.map((item) => {
                     itemId ++;
-                    if (itemId > length) {
+                    if (itemId > limit) {
                         return null;
                     }
                     return (
-                        <ProduitItem
+                        <ItemComponent
                             item={item}
                             raccourci={item.raccourci}
                             nom={item.nom}
@@ -123,4 +112,4 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
     );
 }
 
-export default Produits;
+export default Autocomplete;

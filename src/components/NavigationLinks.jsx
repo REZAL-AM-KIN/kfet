@@ -1,12 +1,12 @@
-import {forwardRef, useState} from "react";
+import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
-import {useClickOutside, useHotkeys, useMediaQuery} from "@mantine/hooks";
+import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons-react";
 import {handleLogout} from "../auth/logout";
 import SearchPg from "./SearchPg";
-import {useCatColor, useCategorieCtxt} from "../hooks/useCategorieCtxt";
-import CategoriesSelector from "./CategoriesSelector";
+import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
+import CategoriesSelector from "./EntiteSelector";
 
 const useStyles = createStyles((theme) => ({
     icon: {
@@ -134,49 +134,19 @@ export function NormalSearchPgButton() {
     const theme = useMantineTheme()
     const {classes, cx} = useStyles();
 
-    const ref = useClickOutside(() => setActive(false));
-
     const Icon = IconUserSearch
     const label = "Rechercher un pg"
     const shortcut = "alt+P"
 
     const [active, setActive] = useState(false)
 
-    useHotkeys([[shortcut, onClick]])
-
-
-    function onClick() {
-        setActive(!active)
-    }
-
-    const SearchPgButton = forwardRef((props, ref) => (
-
-        <Tooltip
-            label={label}
-            opened={active ? false : undefined}
-            position="right"
-            transitionProps={{ duration: 0 }}
-            events={{hover: true, focus: true, touch: false}}>
-            <UnstyledButton
-                ref={ref}
-                {...props}
-                onClick={onClick}
-                className={cx(classes.link, {[classes.active]: active})}
-            >
-                <Stack align="center" spacing="0">
-                    <Icon className={classes.icon}/>
-                    <Text size={theme.fontSizes.xs}>{shortcut}</Text>
-                </Stack>
-            </UnstyledButton>
-        </Tooltip>
-
-    ));
-
+    useHotkeys([[shortcut, () => setActive((o) => !o)]])
 
     return (
         <Popover
             width={300}
             opened={active}
+            onChange={setActive}
             position="right"
             styles={{
                 dropdown: {
@@ -190,29 +160,43 @@ export function NormalSearchPgButton() {
             trapFocus
         >
             <Popover.Target>
-                <SearchPgButton/>
+                <Tooltip
+                    label={label}
+                    opened={active ? false : undefined}
+                    position="right"
+                    transitionDuration={0}
+                    events={{hover: true, focus: true, touch: false}}
+                >
+                    <UnstyledButton
+                        onClick={() => setActive((o) => !o)}
+                        className={cx(classes.link, {[classes.active]: active})}
+                    >
+                        <Stack align="center" spacing="0">
+                            <Icon className={classes.icon}/>
+                            <Text size={theme.fontSizes.xs}>{shortcut}</Text>
+                        </Stack>
+                    </UnstyledButton>
+                </Tooltip>
             </Popover.Target>
 
             <Popover.Dropdown>
-                <SearchPg refForOutsideClick={ref} setActive={setActive}/>
+                <SearchPg onSubmit={() => setActive(false)}/>
             </Popover.Dropdown>
         </Popover>
     );
 }
 
 
-export function CategorieSelector() {
+export function EntiteSelector() {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const {classes, cx} = useStyles();
 
     const Icon = IconBoxMultiple;
-    const [categorie, ] = useCategorieCtxt();
-    const [catColor, ] = useCatColor();
+    const { entite } = useEntiteCtxt();
 
     const [active, setActive] = useState(false);
-
 
     if (!isSmallDevice) {
         return (
@@ -227,7 +211,7 @@ export function CategorieSelector() {
             >
                 <Popover.Target>
                     <Tooltip
-                        label={categorie}
+                        label={entite.nom}
                         opened={active ? false : undefined}
                         position="right"
                         transitionProps={{ duration: 0 }}
@@ -235,11 +219,11 @@ export function CategorieSelector() {
                         <UnstyledButton
                             onClick={() => {setActive((active) => !active)}}
                             className={cx(classes.link, {[classes.active]: active})}
-                            style={{backgroundColor:catColor}}
+                            style={{backgroundColor:entite.color}}
                         >
                             <Stack align="center" spacing="0">
                                 <Icon className={classes.icon}/>
-                                <Text size={theme.fontSizes.xs}>{categorie.length > 8 ? categorie.slice(0,6)+ ".." : categorie}</Text>
+                                <Text size={theme.fontSizes.xs}>{entite.nom.length > 8 ? entite.nom.slice(0,6)+ ".." : entite.nom}</Text>
                             </Stack>
                         </UnstyledButton>
                     </Tooltip>
@@ -265,11 +249,11 @@ export function CategorieSelector() {
                 <UnstyledButton
                     onClick={() => {setActive((active) => !active)}}
                     className={cx(classes.link, {[classes.active]: active})}
-                    style={{backgroundColor:catColor, width: "80%"}}
+                    style={{backgroundColor:entite.color, width: "80%"}}
                 >
                     <Group style={{width: "100%"}}>
                         <Icon className={classes.icon}/>
-                        <Text>{categorie}</Text>
+                        <Text>{entite.nom}</Text>
                     </Group>
                 </UnstyledButton>
             </Popover.Target>

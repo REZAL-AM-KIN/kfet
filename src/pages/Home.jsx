@@ -1,13 +1,15 @@
-import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {useCallback, useEffect, useState} from "react";
-import {PgCard} from "../components/PgCard";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
+
+import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
 import {Carousel} from "@mantine/carousel";
-import errorNotif from "../components/ErrorNotif";
-import {GeneralHistory, PgHistory} from "../components/History";
 import {useMediaQuery} from "@mantine/hooks";
+
+import {PgCard} from "../components/PgCard";
+import {GeneralHistory, PgHistory} from "../components/History";
+
 import {useUser} from "../hooks/useUser";
+import { useHistory, usePGHistory } from "../hooks/useHistory";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -18,31 +20,12 @@ const Home = () => {
     const [activeTab, setActiveTab] = useState("1");
     const [embla, setEmbla] = useState(null);
 
-    const axiosPrivate = useAxiosPrivate();
-    const [history, setHistory] = useState([]);
-    let pgHistory = [];
+    const history = useHistory();
 
     // get Utilisateur
     const pgData = useUser();
 
-    // get history (10 000 lines)
-    useEffect(() => {
-        const controller = new AbortController();
-        const getHistory = async () => {
-            try {
-                const response = await axiosPrivate.get("history/");
-                setHistory(response.data.results);
-            } catch (error) {
-                errorNotif("History", error.message);
-                console.log(error);
-            }
-        }
-        getHistory()
-        return () => {
-            controller.abort();
-        }
-        // eslint-disable-next-line
-    }, [])
+    const pgHistory = usePGHistory(pgData.id);
 
     // sync carousel with tabs
     const handleScroll = useCallback(() => {
@@ -56,14 +39,6 @@ const Home = () => {
             handleScroll();
         }
     }, [embla, handleScroll]);
-
-    // populate pg history
-    // TODO: mieux de get history pg?
-    history.forEach((line) => {
-        if (line.cible_evenement.id === pgData.id) {
-            pgHistory.push(line);
-        }
-    });
 
 
     return (
@@ -94,10 +69,10 @@ const Home = () => {
                 </Tabs>
                 <Carousel getEmblaApi={setEmbla} withControls={false}>
                     <Carousel.Slide>
-                        <GeneralHistory history={history}/>
+                        <GeneralHistory history={history.data}/>
                     </Carousel.Slide>
                     <Carousel.Slide>
-                        <PgHistory history={pgHistory}/>
+                        <PgHistory history={pgHistory.data}/>
                     </Carousel.Slide>
                 </Carousel>
             </Grid.Col>
