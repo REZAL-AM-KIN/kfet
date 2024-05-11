@@ -44,7 +44,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
 
     const navigate = useNavigate()
 
-    //Si aucun shortcut n'est spécifié, on associé la key "" à la fonction {} (on fait rien quoi)
+    //Si aucun shortcut n'est spécifié, on associe la key "" à la fonction {} (on ne fait rien quoi)
     const shortcutAssoc = (shortcut !== undefined) ? [shortcut, () => navigate(link)] : ["", () => {
     }];
     useHotkeys([shortcutAssoc]);
@@ -164,7 +164,7 @@ export function NormalSearchPgButton() {
                     label={label}
                     opened={active ? false : undefined}
                     position="right"
-                    transitionDuration={0}
+                    transitionProps={{ duration: 0 }}
                     events={{hover: true, focus: true, touch: false}}
                 >
                     <UnstyledButton

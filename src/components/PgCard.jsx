@@ -67,7 +67,6 @@ function PgCard({data, onClick, sx}) {
 
 function SmallPgCard({data, onClick, sx}) {
     const theme = useMantineTheme();
-    console.log(theme)
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')');
 
     const style = generateStyle(data, sx, onClick, theme);

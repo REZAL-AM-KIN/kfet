@@ -2,7 +2,7 @@ import {forwardRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import { useConsommateurList } from "../hooks/useConsommateurs";
-import Autocomplete from "./Autocomplete";
+import {Autocomplete} from "@mantine/core";
 
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
         <div ref={ref} {...others}>
@@ -31,7 +31,7 @@ const SearchPg = ({onSubmit})=>{
 
     const {consommateurList} = useConsommateurList();
 
-    //Pour que autocompltete fonctionne, il faut obligatoirement un champ value. On transforme donc le champ bucque en value
+    //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
     const data = consommateurList.map((pg) =>{
         return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
     })
