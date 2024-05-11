@@ -82,6 +82,7 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                         <TextInput
                             label="Raccourci"
                             placeholder = "Raccourci"
+                            required
                             {...form.getInputProps('raccourci')}
                         />
                         <NumberInput
