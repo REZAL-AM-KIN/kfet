@@ -61,7 +61,16 @@ const SearchPg = ({onSubmit})=>{
                         borderStyle: "solid",
                         borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}).background
                     }
-                }
+                },
+                item: {
+                    '&[data-hovered]': {
+                        backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
+                        color: theme.colors.gray[0],
+                        "&:hover": {
+                            backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]-1],
+                        },
+                    },
+                },
             }}
             filter={(value, item) =>
                 item.value.toLowerCase().includes(value.toLowerCase().trim()) ||
