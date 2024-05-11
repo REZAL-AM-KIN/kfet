@@ -2,8 +2,7 @@ import {Autocomplete, Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import {forwardRef, useEffect, useState} from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
-import {showNotification} from "@mantine/notifications";
-import {IconX} from "@tabler/icons-react";
+import errorNotif from "./ErrorNotif";
 import {getHotkeyHandler} from "@mantine/hooks";
 
 const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...others }, ref) => (
@@ -44,14 +43,7 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
                 const response = await axiosPrivate.get("consommateurs/");
                 setConsommateurList(response.data.results);
             } catch (error) {
-
-                showNotification({
-                    icon: <IconX size={18} />,
-                    color: "red",
-                    autoClose: false,
-                    title: 'Oh Oh....',
-                    message: 'Une erreur est survenue: '+error.message,
-                })
+                errorNotif("Catégories", error.message);
                 console.log(error);
             }
 
