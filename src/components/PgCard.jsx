@@ -1,4 +1,4 @@
-import {Group, Paper, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Group, Paper, Stack, Text, Title, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 
@@ -43,14 +43,14 @@ function PgCard({data, onClick, sx}) {
                onClick={onClick}>
             <Group position={"apart"} spacing={0}>
                 <Stack spacing={0}>
-                    <Text size={isSmallDevice ? theme.headings.sizes.h2.fontSize : theme.headings.sizes.h1.fontSize} style={{lineHeight: theme.fontSizes.md}}>{data.bucque} {data.fams}</Text>
+                    <Title order={1} size={isSmallDevice ? "h2" : "h1"} >{data.bucque} {data.fams}</Title>
                     <Group position={"apart"}>
-                        <Text size={isSmallDevice ? theme.headings.sizes.h5.fontSize : theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
+                        <Text size={isSmallDevice ? theme.headings.sizes.h4.fontSize : theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
                                                     style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
-                        <Text size={isSmallDevice ? theme.headings.sizes.h5.fontSize : theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
+                        <Text size={isSmallDevice ? theme.headings.sizes.h4.fontSize : theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
                               style={{lineHeight: 1}}>{data.proms}</Text>
                     </Group>
-                    <Text size={isSmallDevice ? theme.headings.sizes.h6.fontSize : theme.headings.sizes.h5.fontSize}>{data.commentaire}</Text>
+                    <Text size={isSmallDevice ? theme.headings.sizes.h6.fontSize : theme.headings.sizes.h5.fontSize } style={{lineHeight: 1}} italic>{data.commentaire}</Text>
                 </Stack>
                 {/* make the solde stick to the right of the card*/}
                 <Text size={isSmallDevice ? theme.headings.sizes.h3.fontSize : theme.headings.sizes.h2.fontSize}
