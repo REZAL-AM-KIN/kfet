@@ -79,7 +79,7 @@ const SearchPg = ({refForOutsideClick, setActive})=>{
             styles={{
                 input: {
                     width: "100%",
-                    borderRadius: 9,
+                    borderRadius: theme.radius.md,
                     borderStyle: "none",
                     borderWidth: 2,
                     '&:focus': {
