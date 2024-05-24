@@ -1,7 +1,7 @@
 import {Fragment, useState} from "react";
 import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
-import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons-react";
+import {IconBuildingStore, IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
 import NavbarLink from "./NavLinks/StandardNavButton";
 import EntiteSelector from "./NavLinks/EntiteSelectorButton";
@@ -98,10 +98,25 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                             .background,
                     })}
                     fixed={true}>
-                <Center>
-                    <NormalSearchPgButton/>
-                </Center>
-                <Navbar.Section grow mt={50}>
+                <Navbar.Section>
+                    <Stack justify="center">
+                        <NormalSearchPgButton/>
+                    </Stack>
+                </Navbar.Section>
+                <Navbar.Section mt={30}>
+                    <Stack justify="center">
+                        <NavbarLink
+                            icon={IconHome}
+                            pageName=""
+                            link="/"
+                            shortcut="alt+H"
+                            key="Accueil"
+                            label="Accueil"
+                            currentPage={currentPage}
+                        />
+                    </Stack>
+                </Navbar.Section>
+                <Navbar.Section grow mt={20}>
                     <Stack justify="center" spacing={0}>
                         <EntiteSelector/>
                         {links}
