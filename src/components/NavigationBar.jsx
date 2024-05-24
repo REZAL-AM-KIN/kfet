@@ -3,7 +3,10 @@ import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme
 import {useMediaQuery} from "@mantine/hooks";
 import {IconBuildingStore, IconListDetails, IconToolsKitchen2} from "@tabler/icons-react";
 
-import {EntiteSelector, LogOutLink, NavbarLink, NormalSearchPgButton} from "./NavigationLinks";
+import NavbarLink from "./NavLinks/StandardNavButton";
+import EntiteSelector from "./NavLinks/EntiteSelectorButton";
+import NormalSearchPgButton from "./NavLinks/SearchPgButton";
+import LogOutLink from "./NavLinks/LogOutButton";
 import SearchPg from "./SearchPg";
 
 
