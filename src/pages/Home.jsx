@@ -15,7 +15,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
 
     const [activeTab, setActiveTab] = useState("1");
     const [embla, setEmbla] = useState(null);

@@ -117,7 +117,7 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
 
 const NavigationBar = ({width, page}) => {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     const [opened, setOpened] = useState(false);
 

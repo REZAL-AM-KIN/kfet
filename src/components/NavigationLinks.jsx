@@ -3,17 +3,21 @@ import {Link, useNavigate} from "react-router-dom";
 import {createStyles, Group, Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple, IconLogout, IconUserSearch} from "@tabler/icons-react";
-
 import {handleLogout} from "../auth/logout";
 import SearchPg from "./SearchPg";
 import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
 import CategoriesSelector from "./EntiteSelector";
 
 const useStyles = createStyles((theme) => ({
+    icon: {
+        width : "2rem",
+        height: "2rem",
+        "stroke-width" : 1.5,
+    },
 
     link: {
-        width: 50,
-        height: 50,
+        width: "3rem",
+        height: "3rem",
         borderRadius: theme.radius.md,
         display: 'flex',
         alignItems: 'center',
@@ -36,11 +40,11 @@ const useStyles = createStyles((theme) => ({
 
 export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick, currentPage}) {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const navigate = useNavigate()
 
-    //Si aucun shortcut n'est spécifié, on associé la key "" à la fonction {} (on fait rien quoi)
+    //Si aucun shortcut n'est spécifié, on associe la key "" à la fonction {} (on ne fait rien quoi)
     const shortcutAssoc = (shortcut !== undefined) ? [shortcut, () => navigate(link)] : ["", () => {
     }];
     useHotkeys([shortcutAssoc]);
@@ -48,7 +52,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
     const {classes, cx} = useStyles();
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     component={(link !== undefined) ? Link : undefined}
@@ -57,8 +61,8 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
                     className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
                 >
                     <Stack align="center" spacing="0">
-                        <Icon size={34} stroke={1.5}/>
-                        <Text size="10px">{shortcut}</Text>
+                        <Icon className={classes.icon}/>
+                        <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                     </Stack>
                 </UnstyledButton>
             </Tooltip>
@@ -73,7 +77,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
                 style={{width: "80%", justifyContent: "left"}}
             >
                 <Group>
-                    <Icon size={34} stroke={1.5}/>
+                    <Icon className={classes.icon}/>
                     <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
@@ -84,7 +88,7 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
 
 export function LogOutLink() {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const {classes, cx} = useStyles();
 
@@ -96,15 +100,15 @@ export function LogOutLink() {
 
     if (!isSmallDevice) {
         return (
-            <Tooltip label={label} position="right" transitionDuration={0}
+            <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
                      events={{hover: true, focus: true, touch: false}}>
                 <UnstyledButton
                     onClick={handleLogout}
                     className={cx(classes.link)}
                 >
                     <Stack align="center" spacing="0">
-                        <Icon size={34} stroke={1.5}/>
-                        <Text size="10px">{shortcut}</Text>
+                        <Icon className={classes.icon}/>
+                        <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                     </Stack>
                 </UnstyledButton>
             </Tooltip>
@@ -117,7 +121,7 @@ export function LogOutLink() {
                 style={{width: "80%"}}
             >
                 <Group>
-                    <Icon size={34} stroke={1.5}/>
+                    <Icon className={classes.icon}/>
                     <Text>{label}</Text>
                 </Group>
             </UnstyledButton>
@@ -127,6 +131,7 @@ export function LogOutLink() {
 
 
 export function NormalSearchPgButton() {
+    const theme = useMantineTheme()
     const {classes, cx} = useStyles();
 
     const Icon = IconUserSearch
@@ -159,7 +164,7 @@ export function NormalSearchPgButton() {
                     label={label}
                     opened={active ? false : undefined}
                     position="right"
-                    transitionDuration={0}
+                    transitionProps={{ duration: 0 }}
                     events={{hover: true, focus: true, touch: false}}
                 >
                     <UnstyledButton
@@ -167,8 +172,8 @@ export function NormalSearchPgButton() {
                         className={cx(classes.link, {[classes.active]: active})}
                     >
                         <Stack align="center" spacing="0">
-                            <Icon size={34} stroke={1.5}/>
-                            <Text size="10px">{shortcut}</Text>
+                            <Icon className={classes.icon}/>
+                            <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                         </Stack>
                     </UnstyledButton>
                 </Tooltip>
@@ -184,7 +189,7 @@ export function NormalSearchPgButton() {
 
 export function EntiteSelector() {
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + 'px)')
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
     const {classes, cx} = useStyles();
 
@@ -209,7 +214,7 @@ export function EntiteSelector() {
                         label={entite.nom}
                         opened={active ? false : undefined}
                         position="right"
-                        transitionDuration={0}
+                        transitionProps={{ duration: 0 }}
                         events={{hover: true, focus: true, touch: false}}>
                         <UnstyledButton
                             onClick={() => {setActive((active) => !active)}}
@@ -217,8 +222,8 @@ export function EntiteSelector() {
                             style={{backgroundColor:entite.color}}
                         >
                             <Stack align="center" spacing="0">
-                                <Icon size={34} stroke={1.5}/>
-                                <Text size="10px">{entite.nom.length > 8 ? entite.nom.slice(0,6)+ ".." : entite.nom}</Text>
+                                <Icon className={classes.icon}/>
+                                <Text size={theme.fontSizes.xs}>{entite.nom.length > 8 ? entite.nom.slice(0,6)+ ".." : entite.nom}</Text>
                             </Stack>
                         </UnstyledButton>
                     </Tooltip>
@@ -247,7 +252,7 @@ export function EntiteSelector() {
                     style={{backgroundColor:entite.color, width: "80%"}}
                 >
                     <Group style={{width: "100%"}}>
-                        <Icon size={34} stroke={1.5}/>
+                        <Icon className={classes.icon}/>
                         <Text>{entite.nom}</Text>
                     </Group>
                 </UnstyledButton>
