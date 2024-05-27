@@ -15,6 +15,7 @@ export const useStyles = createStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         color: theme.white,
+        'text-decoration':'none',
 
         '&:hover': {
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
@@ -23,10 +24,8 @@ export const useStyles = createStyles((theme) => ({
     },
 
     active: {
-        '&, &:hover': {
-            backgroundColor: theme.fn.variant({variant: 'light', color: theme.primaryColor}).background,
-            color: theme.fn.variant({variant: 'light', color: theme.primaryColor}).color,
-        },
+        backgroundColor: theme.fn.variant({variant: theme.colorScheme, color: theme.primaryColor}).background,
+        color: theme.fn.variant({variant: theme.colorScheme, color: theme.primaryColor}).color,
     },
 }));
 

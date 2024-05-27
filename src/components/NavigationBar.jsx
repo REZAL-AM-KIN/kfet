@@ -11,7 +11,6 @@ import SearchPg from "./SearchPg";
 
 
 const mockdata = [
-    { icon : IconBuildingStore, label: "Debucquage", pageName: "Debucquage"}, // pas de link pour l'onglet Debucquage car on y accede via la recherche PG
     { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "alt+E" },
     { icon: IconToolsKitchen2, label: "Fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
 

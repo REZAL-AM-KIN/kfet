@@ -1,8 +1,7 @@
-import {Link, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate, useLocation} from "react-router-dom";
 import {Group, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import useStyles from "./NavbarButtonStyle";
-
 
 export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick, currentPage}) {
     const theme = useMantineTheme()
@@ -17,37 +16,40 @@ export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick
 
     const {classes, cx} = useStyles();
     if (!isSmallDevice) {
-        console.log(currentPage)
         return (
             <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
                      events={{hover: true, focus: true, touch: false}}>
-                <UnstyledButton
-                    component={(link !== undefined) ? Link : undefined}
+                <NavLink
+                    component={UnstyledButton}
                     to={link}
                     onClick={onClick}
-                    className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
+                    className={({ isActive }) => {
+                        return isActive ? cx(classes.link, classes.active) : cx(classes.link);
+                    }}
                 >
                     <Stack align="center" spacing="0">
                         <Icon className={classes.icon}/>
                         <Text size={theme.fontSizes.xs}>{shortcut}</Text>
                     </Stack>
-                </UnstyledButton>
+                </NavLink>
             </Tooltip>
         );
     } else {
         return (
-            <UnstyledButton
-                component={(link !== undefined) ? Link : undefined}
+            <NavLink
+                component={UnstyledButton}
                 to={link}
                 onClick={onClick}
-                className={cx(classes.link, {[classes.active]: (pageName === currentPage)})}
+                className={({ isActive }) => {
+                    return isActive ? cx(classes.link, classes.active) : cx(classes.link);
+                }}
                 style={{width: "80%", justifyContent: "left"}}
             >
                 <Group>
                     <Icon className={classes.icon}/>
                     <Text>{label}</Text>
                 </Group>
-            </UnstyledButton>
+            </NavLink>
         );
     }
 
