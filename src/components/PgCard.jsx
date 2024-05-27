@@ -54,11 +54,6 @@ function PgCard({data, onClick, sx}) {
                     </Stack>
                     {/* make the solde stick to the right of the card*/}
                     <Text size={theme.headings.sizes.h3.fontSize}
-                        sx={{
-                            '@media (max-width: 300px)': {
-                                width: "100%",
-                            }
-                        }}
                         align="right">{data.solde}€</Text>
                 </Group>
                 <Text size={theme.headings.sizes.h6.fontSize} style={{lineHeight: 1}} italic>{data.commentaire}</Text>
@@ -82,7 +77,7 @@ function PgCard({data, onClick, sx}) {
 
                     <Stack>
                         <Center>
-                            <Title order={1} size="h1">{data.bucque} {data.fams}</Title>
+                            <Title size="h1">{data.bucque} {data.fams}</Title>
                         </Center>
                         <Center>
                             <Text size={theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
@@ -92,11 +87,6 @@ function PgCard({data, onClick, sx}) {
 
                     {/* make the solde stick to the right of the card*/}
                     <Text size={theme.headings.sizes.h2.fontSize}
-                        sx={{
-                            '@media (max-width: 300px)': {
-                                width: "100%",
-                            }
-                        }}
                         align="right">{data.solde}€</Text>
                 </Group>
             </Paper>
