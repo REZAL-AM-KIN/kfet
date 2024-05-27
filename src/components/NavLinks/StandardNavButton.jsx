@@ -1,9 +1,9 @@
-import {NavLink, useNavigate, useLocation} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {Group, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import useStyles from "./NavbarButtonStyle";
 
-export function NavbarLink({icon: Icon, label, pageName, link, shortcut, onClick, currentPage}) {
+export function NavbarLink({icon: Icon, label, link, shortcut, onClick}) {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 

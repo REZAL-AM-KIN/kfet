@@ -1,7 +1,7 @@
 import {Fragment, useState} from "react";
 import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
-import {IconBuildingStore, IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
+import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
 import NavbarLink from "./NavLinks/StandardNavButton";
 import EntiteSelector from "./NavLinks/EntiteSelectorButton";
@@ -11,8 +11,8 @@ import SearchPg from "./SearchPg";
 
 
 const mockdata = [
-    { icon: IconListDetails, label: 'Editer les produits', pageName: "Edition", link: "/edit", shortcut: "alt+E" },
-    { icon: IconToolsKitchen2, label: "Fin'ss", pageName: "Finss", link:"/finss", shortcut: "alt+F" },
+    { icon: IconListDetails, label: 'Editer les produits',link: "/edit", shortcut: "alt+E" },
+    { icon: IconToolsKitchen2, label: "Fin'ss", link:"/finss", shortcut: "alt+F" },
 
 ];
 
@@ -21,15 +21,13 @@ const mockdata = [
 Mobile Nav Bar
 
  */
-const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>{
+const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
         const theme = useMantineTheme()
 
-        linksData = linksData.filter(link => link.pageName!=="Debucquage")
         const links = linksData.map((link) => (
             <NavbarLink
                 {...link}
                 key={link.label}
-                currentPage={currentPage}
                 onClick={()=>setNavBarOpened(false)}
             />
         ));
@@ -42,7 +40,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>
                             onClick={() => setNavBarOpened((o) => !o)}
                             style={{
                                 position: "absolute",
-                                zIndex: 1000 // On s'assure que le burger soit toujours au dessus.
+                                zIndex: 1000 // On s'assure que le burger soit toujours au-dessus.
                             }}
                         >
                         </Burger>
@@ -78,13 +76,12 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData, currentPage})=>
 
 }
 
-const NormalNavBar = ({linksData, width}, currentPage)=> {
+const NormalNavBar = ({linksData, width})=> {
 
     const links = linksData.map((link) => (
         <NavbarLink
             {...link}
             key={link.label}
-            currentPage={currentPage}
         />
     ));
 
@@ -106,12 +103,10 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
                     <Stack justify="center">
                         <NavbarLink
                             icon={IconHome}
-                            pageName=""
                             link="/"
                             shortcut="alt+H"
                             key="Accueil"
                             label="Accueil"
-                            currentPage={currentPage}
                         />
                     </Stack>
                 </Navbar.Section>
@@ -132,7 +127,7 @@ const NormalNavBar = ({linksData, width}, currentPage)=> {
 
 }
 
-const NavigationBar = ({width, page}) => {
+const NavigationBar = ({width}) => {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
@@ -144,9 +139,9 @@ const NavigationBar = ({width, page}) => {
     return (
         <Fragment>
             {isSmallDevice?
-                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} linksData={mockdata} currentPage={page}/>
+                <MobileNavBar navBarOpened={opened} setNavBarOpened={setOpened} linksData={mockdata}/>
                 :
-                <NormalNavBar width={width} linksData={mockdata} currentPage={page}/>
+                <NormalNavBar width={width} linksData={mockdata}/>
             }
         </Fragment>
     );
