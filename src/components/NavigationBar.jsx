@@ -1,5 +1,5 @@
 import {Fragment, useState} from "react";
-import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
+import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, Space, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
@@ -34,7 +34,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
 
         return (
                 <Fragment>
-                    <Affix position={{top: 10, left: 10}}>
+                    <Affix position={{top: 5, left: 5}}>
                         <Burger
                             opened={navBarOpened}
                             onClick={() => setNavBarOpened((o) => !o)}
@@ -46,31 +46,92 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         </Burger>
                     </Affix>
 
-                    <Drawer
-                        opened={navBarOpened}
-                        onClose={() => {setNavBarOpened(false)}}
-                        closeButtonLabel="Close drawer"
-                        styles={{
-                            drawer: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                                    .background},
-                            closeButton: { color: "white", iconSize: 80} }}
-                        lockScroll
-                    >
-                        <Container fluid>
-                            <SearchPg setActive={setNavBarOpened}/>
-                        </Container>
-                        <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>
-                            <Stack align="center" spacing="xs">
+                    <Navbar
+                            sx={(theme) => ({
+                                backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
+                                    .background,
+                            })}
+                            hidden={!navBarOpened}
+                            top="0">
+                        <Navbar.Section mt={41}>
+                            <Stack align="center">
+                                <Container style={{margin:0, padding:0, width:"90%"}}>
+                                    <SearchPg/>
+                                </Container>
+                            </Stack>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center">
+                                <NavbarLink
+                                    icon={IconHome}
+                                    link="/"
+                                    shortcut="alt+H"
+                                    key="Accueil"
+                                    label="Accueil"
+                                    onClick={()=>setNavBarOpened(false)}
+                                />
+                            </Stack>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center" spacing={5}>
                                 <EntiteSelector/>
                                 {links}
                             </Stack>
-
-                            <Center>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center">
                                 <LogOutLink/>
-                            </Center>
-                        </Stack>
+                            </Stack>
+                        </Navbar.Section>
+                    </Navbar>
 
-                    </Drawer>
+
+                    {/*<Drawer.Root*/}
+                    {/*    opened={navBarOpened}*/}
+                    {/*    onClose={() => {setNavBarOpened(false)}}*/}
+                    {/*    closeButtonLabel="Close drawer"*/}
+                    {/*    styles={{*/}
+                    {/*        content: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })*/}
+                    {/*                .background},*/}
+                    {/*        header: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })*/}
+                    {/*                .background},*/}
+                    {/*        close: { color: "white", iconSize: "lg"} }}*/}
+                    {/*    lockScroll*/}
+                    {/*    zIndex={50}*/}
+                    {/*>*/}
+                    {/*    <Drawer.Overlay />*/}
+                    {/*    <Drawer.Content>*/}
+                    {/*        <Drawer.Header>*/}
+                    {/*            <Drawer.Title> <Space h="md" /> </Drawer.Title>*/}
+                    {/*        </Drawer.Header>*/}
+                    {/*        <Drawer.Body>*/}
+                    
+                    {/*            <Container fluid>*/}
+                    {/*                <SearchPg/>*/}
+                    {/*            </Container>*/}
+                    {/*            <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>*/}
+                    {/*                <NavbarLink*/}
+                    {/*                    icon={IconHome}*/}
+                    {/*                    link="/"*/}
+                    {/*                    shortcut="alt+H"*/}
+                    {/*                    key="Accueil"*/}
+                    {/*                    label="Accueil"*/}
+                    {/*                    onClick={()=>setNavBarOpened(false)}*/}
+                    {/*                />*/}
+                    
+                    {/*                <Stack align="center" spacing="xs">*/}
+                    {/*                    <EntiteSelector/>*/}
+                    {/*                    {links}*/}
+                    {/*                </Stack>*/}
+                    
+                    {/*                <Center>*/}
+                    {/*                    <LogOutLink/>*/}
+                    {/*                </Center>*/}
+                    {/*            </Stack>*/}
+                    
+                    {/*        </Drawer.Body>*/}
+                    {/*    </Drawer.Content>*/}
+                    {/*</Drawer.Root>*/}
                 </Fragment>
         );
 
@@ -93,7 +154,8 @@ const NormalNavBar = ({linksData, width})=> {
                         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
                             .background,
                     })}
-                    fixed={true}>
+                    fixed={true}
+                    top="0">
                 <Navbar.Section>
                     <Stack justify="center">
                         <NormalSearchPgButton/>

@@ -1,6 +1,6 @@
 import {Outlet, Route, Routes} from 'react-router-dom';
 
-import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
+import {AppShell, Container, MantineProvider, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 // authentification
@@ -40,11 +40,19 @@ function App() {
                             padding: "0",
                             // Si la navbar est affiché, on met du padding sur le Container pour éviter la superposition
                             // de la nav bar sur le container
-                            marginLeft: isSmallDevice ? 0 : navBarWidth,
-                            paddingLeft: "0"
+                            // marginLeft: isSmallDevice ? 0 : navBarWidth,
+                            // paddingLeft: "0"
                         }}>
-                    <NavigationBar width={navBarWidth}/>
-                    <Outlet />
+
+                     <AppShell
+                         navbarOffsetBreakpoint="sm"
+                         navbar={ <NavigationBar width={navBarWidth}/> }
+                     >
+                         <Outlet />
+                     </AppShell>
+
+                    {/*<NavigationBar width={navBarWidth}/>*/}
+                    {/*<Outlet />*/}
                 </Container>
             </EntiteProvider>
         )
