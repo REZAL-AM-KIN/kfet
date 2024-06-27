@@ -43,7 +43,7 @@ export function NavbarLink({icon: Icon, label, link, shortcut, onClick}) {
                 className={({ isActive }) => {
                     return isActive ? cx(classes.link, classes.active) : cx(classes.link);
                 }}
-                style={{width: "80%", justifyContent: "left"}}
+                style={{width: "90%", justifyContent: "left", paddingLeft: theme.radius.md, alignSelf: "center"}}
             >
                 <Group>
                     <Icon className={classes.icon}/>

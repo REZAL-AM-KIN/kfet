@@ -37,7 +37,7 @@ export function LogOutLink() {
             <UnstyledButton
                 onClick={handleLogout}
                 className={cx(classes.link)}
-                style={{width: "80%"}}
+                style={{width: "90%", justifyContent: "left", paddingLeft: theme.radius.md, alignSelf: "center"}}
             >
                 <Group>
                     <Icon className={classes.icon}/>

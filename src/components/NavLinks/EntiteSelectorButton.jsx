@@ -57,7 +57,7 @@ export function EntiteSelector() {
     } else {
       return (
         <Popover
-            width={300}
+            width={"90%"}
             opened={active}
             onChange={setActive}
             position="bottom"
@@ -69,7 +69,8 @@ export function EntiteSelector() {
                 <UnstyledButton
                     onClick={() => {setActive((active) => !active)}}
                     className={cx(classes.link, {[classes.active]: active})}
-                    style={{backgroundColor:entite.color, width: "80%"}}
+                    style={{width: "90%", justifyContent: "left", paddingLeft: theme.radius.md, alignSelf: "center",
+                            backgroundColor:entite.color}}
                 >
                     <Group style={{width: "100%"}}>
                         <Icon className={classes.icon}/>
