@@ -93,7 +93,8 @@ const NormalNavBar = ({linksData, width})=> {
                         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
                             .background,
                     })}
-                    fixed={true}>
+                    fixed={true}
+                    top="0">
                 <Navbar.Section>
                     <Stack justify="center">
                         <NormalSearchPgButton/>
