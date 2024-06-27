@@ -1,4 +1,4 @@
-import {Group, Paper, Stack, Text, Title, useMantineTheme} from "@mantine/core";
+import {Center, Group, Paper, Stack, Text, Title, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 
 
@@ -35,36 +35,63 @@ function PgCard({data, onClick, sx}) {
 
     const style = generateStyle(data, sx, onClick, theme);
 
-    return (
-        <Paper m={isSmallDevice ? "xs" : "lg"}
-               shadow="sm"
-               radius="lg"
-               p="sm"
-               sx={style}
-               withBorder
-               onClick={onClick}>
-            <Group position={"apart"} spacing={0}>
-                <Stack spacing={0}>
-                    <Title order={1} size={isSmallDevice ? "h2" : "h1"} >{data.bucque} {data.fams}</Title>
-                    <Group position={"apart"}>
-                        <Text size={isSmallDevice ? theme.headings.sizes.h4.fontSize : theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
-                                                    style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
-                        <Text size={isSmallDevice ? theme.headings.sizes.h4.fontSize : theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
-                              style={{lineHeight: 1}}>{data.proms}</Text>
-                    </Group>
-                    <Text size={isSmallDevice ? theme.headings.sizes.h6.fontSize : theme.headings.sizes.h5.fontSize } style={{lineHeight: 1}} italic>{data.commentaire}</Text>
-                </Stack>
-                {/* make the solde stick to the right of the card*/}
-                <Text size={isSmallDevice ? theme.headings.sizes.h3.fontSize : theme.headings.sizes.h2.fontSize}
-                      sx={{
-                          '@media (max-width: 300px)': {
-                              width: "100%",
-                          }
-                      }}
-                      align="right">{data.solde}€</Text>
-            </Group>
-        </Paper>
-    );
+    if (isSmallDevice) {
+        return (
+            <Paper m="xs"
+                shadow="sm"
+                radius="lg"
+                p="sm"
+                sx={style}
+                withBorder
+                onClick={onClick}>
+                <Title order={1} size="h2">{data.bucque} {data.fams}</Title>                
+                <Group position="apart" grow>
+                    <Stack align="flex-start" justify="flex-start" spacing={0}>
+                        <Text size={theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
+                            style={{lineHeight: 1}}>{data.proms}</Text>
+                        <Text size={theme.headings.sizes.h4.fontSize} color={theme.colors.gray[9]}
+                            style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
+                    </Stack>
+                    {/* make the solde stick to the right of the card*/}
+                    <Text size={theme.headings.sizes.h3.fontSize}
+                        align="right">{data.solde}€</Text>
+                </Group>
+                <Text size={theme.headings.sizes.h6.fontSize} style={{lineHeight: 1}} italic>{data.commentaire}</Text>
+            </Paper>
+        );
+    } else {
+        return (
+            <Paper m="lg"
+                shadow="sm"
+                radius="lg"
+                p="sm"
+                sx={style}
+                withBorder
+                onClick={onClick}>
+                <Group position="apart" grow>
+                    <Stack spacing={0}>
+                        <Text size={theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
+                            style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
+                        <Text size={theme.headings.sizes.h5.fontSize} style={{lineHeight: 1}} italic>{data.commentaire}</Text>
+                    </Stack>
+
+                    <Stack>
+                        <Center>
+                            <Title size="h1">{data.bucque} {data.fams}</Title>
+                        </Center>
+                        <Center>
+                            <Text size={theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
+                                style={{lineHeight: 1}}>{data.proms}</Text>
+                        </Center>
+                    </Stack>
+
+                    {/* make the solde stick to the right of the card*/}
+                    <Text size={theme.headings.sizes.h2.fontSize}
+                        align="right">{data.solde}€</Text>
+                </Group>
+            </Paper>
+        );
+    }    
 }
 
 function SmallPgCard({data, onClick, sx}) {
