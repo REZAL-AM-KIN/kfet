@@ -4,7 +4,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
 import NavbarLink from "./NavLinks/StandardNavButton";
-import EntiteSelector from "./NavLinks/EntiteSelectorButton";
+import EntiteSelectorButton from "./NavLinks/EntiteSelectorButton";
 import NormalSearchPgButton from "./NavLinks/SearchPgButton";
 import LogOutLink from "./NavLinks/LogOutButton";
 import SearchPg from "./SearchPg";
@@ -56,6 +56,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         <Navbar.Section mt={41}>
                             <Stack align="center">
                                 <Container style={{margin:0, padding:0, width:"90%"}}>
+                                    {/*TODO: component spécifique qui ferme la navbar quand un pg est sélectionné*/}
                                     <SearchPg/>
                                 </Container>
                             </Stack>
@@ -74,7 +75,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         </Navbar.Section>
                         <Navbar.Section mt={20}>
                             <Stack justify="center" spacing={5}>
-                                <EntiteSelector/>
+                                <EntiteSelectorButton setNavBarOpened={setNavBarOpened}/>
                                 {links}
                             </Stack>
                         </Navbar.Section>
@@ -84,54 +85,6 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                             </Stack>
                         </Navbar.Section>
                     </Navbar>
-
-
-                    {/*<Drawer.Root*/}
-                    {/*    opened={navBarOpened}*/}
-                    {/*    onClose={() => {setNavBarOpened(false)}}*/}
-                    {/*    closeButtonLabel="Close drawer"*/}
-                    {/*    styles={{*/}
-                    {/*        content: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })*/}
-                    {/*                .background},*/}
-                    {/*        header: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })*/}
-                    {/*                .background},*/}
-                    {/*        close: { color: "white", iconSize: "lg"} }}*/}
-                    {/*    lockScroll*/}
-                    {/*    zIndex={50}*/}
-                    {/*>*/}
-                    {/*    <Drawer.Overlay />*/}
-                    {/*    <Drawer.Content>*/}
-                    {/*        <Drawer.Header>*/}
-                    {/*            <Drawer.Title> <Space h="md" /> </Drawer.Title>*/}
-                    {/*        </Drawer.Header>*/}
-                    {/*        <Drawer.Body>*/}
-                    
-                    {/*            <Container fluid>*/}
-                    {/*                <SearchPg/>*/}
-                    {/*            </Container>*/}
-                    {/*            <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>*/}
-                    {/*                <NavbarLink*/}
-                    {/*                    icon={IconHome}*/}
-                    {/*                    link="/"*/}
-                    {/*                    shortcut="alt+H"*/}
-                    {/*                    key="Accueil"*/}
-                    {/*                    label="Accueil"*/}
-                    {/*                    onClick={()=>setNavBarOpened(false)}*/}
-                    {/*                />*/}
-                    
-                    {/*                <Stack align="center" spacing="xs">*/}
-                    {/*                    <EntiteSelector/>*/}
-                    {/*                    {links}*/}
-                    {/*                </Stack>*/}
-                    
-                    {/*                <Center>*/}
-                    {/*                    <LogOutLink/>*/}
-                    {/*                </Center>*/}
-                    {/*            </Stack>*/}
-                    
-                    {/*        </Drawer.Body>*/}
-                    {/*    </Drawer.Content>*/}
-                    {/*</Drawer.Root>*/}
                 </Fragment>
         );
 
@@ -174,7 +127,7 @@ const NormalNavBar = ({linksData, width})=> {
                 </Navbar.Section>
                 <Navbar.Section grow mt={20}>
                     <Stack justify="center" spacing={0}>
-                        <EntiteSelector/>
+                        <EntiteSelectorButton/>
                         {links}
                     </Stack>
                 </Navbar.Section>

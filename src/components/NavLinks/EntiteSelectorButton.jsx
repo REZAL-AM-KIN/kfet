@@ -7,7 +7,7 @@ import CategoriesSelector from "./EntiteSelector";
 import useStyles from "./NavbarButtonStyle";
 
 
-export function EntiteSelector() {
+export function EntiteSelectorButton({setNavBarOpened}) {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
@@ -50,14 +50,14 @@ export function EntiteSelector() {
                 </Popover.Target>
 
                 <Popover.Dropdown>
-                    <CategoriesSelector setActive={setActive}/>
+                    <CategoriesSelector setActive={setActive} setNavBarOpened={()=>{}}/>
                 </Popover.Dropdown>
             </Popover>
         );
     } else {
       return (
         <Popover
-            width={"90%"}
+            width="target"
             opened={active}
             onChange={setActive}
             position="bottom"
@@ -80,11 +80,11 @@ export function EntiteSelector() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <CategoriesSelector setActive={setActive}/>
+                <CategoriesSelector setActive={setActive} setNavBarOpened={setNavBarOpened}/>
             </Popover.Dropdown>
         </Popover>
       );
     }
 }
 
-export default EntiteSelector;
+export default EntiteSelectorButton;

@@ -11,7 +11,7 @@ import {useEntiteList} from "../../hooks/useEntiteList";
 The buttons are styled with the color of the entite
 and there is a shadow to make them pop out
 */
-function EntiteSelector({setActive}) {
+function EntiteSelector({setActive, setNavBarOpened}) {
     const { setEntite } = useEntiteCtxt();
     const entiteList = useEntiteList();
 
@@ -23,6 +23,7 @@ function EntiteSelector({setActive}) {
                     onClick={() => {
                         setEntite(entite.id);
                         setActive(false);
+                        setNavBarOpened(false);
                     }}
                     radius="md"
                     style={{minWidth: 'fit-content', flexGrow: 1, backgroundColor:entite.color, boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}
