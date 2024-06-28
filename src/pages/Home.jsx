@@ -42,7 +42,7 @@ const Home = () => {
 
 
     return (
-        <Grid gutter={0}>
+        <Grid gutter={0} mt={10}>
             <Grid.Col md={6}>
                 <PgCard data={pgData} onClick={() => navigate("/pg/" + pgData.id)}/>
                 <RingProgress

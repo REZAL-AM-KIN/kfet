@@ -46,7 +46,7 @@ function PG() {
     }, [pghistory, pg]);
 
     return (
-        <Grid>
+        <Grid mt={10}>
             <Grid.Col md={8}>
                 <PgCard data={pg.data}/>
                 <Group grow px="md">

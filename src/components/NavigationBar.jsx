@@ -1,5 +1,5 @@
 import {Fragment, useState} from "react";
-import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, Space, useMantineTheme} from "@mantine/core";
+import {Affix, Burger, Container, Navbar, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
@@ -34,7 +34,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
 
         return (
                 <Fragment>
-                    <Affix position={{top: 5, left: 5}}>
+                    <Affix position={{top: 8, left: 8}}>
                         <Burger
                             opened={navBarOpened}
                             onClick={() => setNavBarOpened((o) => !o)}
@@ -50,12 +50,13 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                             sx={(theme) => ({
                                 backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
                                     .background,
+                                border:0
                             })}
                             hidden={!navBarOpened}
                             top="0">
-                        <Navbar.Section mt={41}>
+                        <Navbar.Section mt={7}>
                             <Stack align="center">
-                                <Container style={{margin:0, padding:0, width:"90%"}}>
+                                <Container style={{margin:0, padding:0, width:"75%"}}>
                                     <SearchPg onSubmit={() => setNavBarOpened(false)}/>
                                 </Container>
                             </Stack>
