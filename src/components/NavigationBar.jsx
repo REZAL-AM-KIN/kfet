@@ -56,8 +56,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         <Navbar.Section mt={41}>
                             <Stack align="center">
                                 <Container style={{margin:0, padding:0, width:"90%"}}>
-                                    {/*TODO: component spécifique qui ferme la navbar quand un pg est sélectionné*/}
-                                    <SearchPg/>
+                                    <SearchPg onSubmit={() => setNavBarOpened(false)}/>
                                 </Container>
                             </Stack>
                         </Navbar.Section>

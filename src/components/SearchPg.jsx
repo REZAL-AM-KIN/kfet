@@ -1,4 +1,4 @@
-import {forwardRef} from "react";
+import {forwardRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import { useConsommateurList } from "../hooks/useConsommateurs";
@@ -29,6 +29,8 @@ const SearchPg = ({onSubmit})=>{
 
     const navigate = useNavigate();
 
+    const [value, setValue] = useState('');
+
     const {consommateurList} = useConsommateurList();
 
     //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
@@ -51,6 +53,9 @@ const SearchPg = ({onSubmit})=>{
             onItemSubmit={onItemSubmit}
             placeholder="Rechercher un PG"
             nothingFound="Aucun PG trouvé :("
+            value={value}
+            onChange={setValue}
+            onDropdownClose={()=>setValue("")}
             styles={{
                 input: {
                     width: "100%",
