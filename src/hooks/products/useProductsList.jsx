@@ -47,7 +47,7 @@ export function useProductsList(entityId){
             errorNotif("Produits", error.message)
         }
         setLoading(false)
-    },[useAxiosPrivate, entityId]);
+    },[axiosPrivate, entityId]);
 
     // get product list
     useEffect(() => {
