@@ -10,7 +10,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 function RechargeLydiaButton({pgData, onRecharge, sx}) {
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + 'px)');
+    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
 
     const axiosPrivate = useAxiosPrivate();
 
