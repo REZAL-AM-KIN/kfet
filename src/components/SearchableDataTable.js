@@ -48,11 +48,11 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     //Fonction qui sert à filter les données passés par "data" en fonction de la chaine passé dans "search"
     //La recherche s'effectue sur les champs "data_keys" qui sont ici toutes les colones déclarées comme filtrable. (filtrable : true)
     function filterData(data, search) {
-        const data_keys = columns.filter((item)=>item.sortable).map((item)=>item.accessor) // on récupère les accessors des colone filtrable.
+        const data_keys = columns.filter((item)=>item.searchable).map((item)=>item.accessor) // on récupère les accessors des colone filtrable.
 
         const query = search.toLowerCase().trim();
         return data.filter((item) =>
-            data_keys.some((key) => item[key].toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
+            data_keys.some((key) => item[key] !== null && item[key].toString().toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
         );
     }
 
@@ -73,6 +73,13 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
         return filterData(
             [...data].sort((a, b) => {
+
+                if (a[sortBy] === null) {
+                    return 1;
+                }
+                if (b[sortBy] === null) {
+                    return -1;
+                }
 
                 if (payload.reversed) {
                     return b[sortBy].localeCompare(a[sortBy]);
