@@ -34,6 +34,24 @@ export function useProductInfo(productId){
     const [isSending, setSending] = useState(false)
     const [productInfo, setProductInfo] = useState({})
 
+    const retrieveProductInfo = useCallback(async () => {
+        setLoading(true)
+        if(productId){
+            try {
+                const response = await axiosPrivate.get("produits/"+productId+"/");
+                if (response.data) {
+                    setProductInfo(response.data);
+                } else {
+                    errorNotif("Produits","Impossible de récupérer les informations du produit")
+                }
+            } catch (error) {
+                errorNotif("Produits", error.message)
+                console.log("Error getting products", error);
+            }
+        }
+        setLoading(false)
+    }, [axiosPrivate, productId]);
+
     const addProduct = useCallback( async (productInfo)=>{
         try {
             setSending(true)
@@ -62,7 +80,7 @@ export function useProductInfo(productId){
             errorNotif("Produits", error.message)
             console.log("Error sending product parameters", error);
         }
-    }, []);
+    }, [axiosPrivate, retrieveProductInfo]);
 
     const updateProduct = useCallback(async (productInfo)=>{
         try {
@@ -88,7 +106,7 @@ export function useProductInfo(productId){
             errorNotif("Produit", error.message)
             console.log("Error sending product parameters", error);
         }
-    },[]);
+    },[axiosPrivate]);
 
     const deleteProduct = useCallback(async (productInfo)=>{
         try {
@@ -119,25 +137,7 @@ export function useProductInfo(productId){
             errorNotif("Produit", error.message)
             console.log("Error deleting product", error);
         }
-    },[]);
-
-    const retrieveProductInfo = useCallback(async () => {
-        setLoading(true)
-        if(productId){
-            try {
-                const response = await axiosPrivate.get("produits/"+productId+"/");
-                if (response.data) {
-                    setProductInfo(response.data);
-                } else {
-                    errorNotif("Produits","Impossible de récupérer les informations du produit")
-                }
-            } catch (error) {
-                errorNotif("Produits", error.message)
-                console.log("Error getting products", error);
-            }
-        }
-        setLoading(false)
-    }, [productId]);
+    },[axiosPrivate, retrieveProductInfo]);
 
     // get product list
     useEffect(() => {
