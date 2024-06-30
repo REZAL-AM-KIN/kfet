@@ -10,16 +10,16 @@ import {
     Box,
     Paper,
     Center,
-    Tooltip, useMantineTheme, Switch
+    Tooltip, useMantineTheme, Switch, Modal
 } from "@mantine/core"
 import {IconCircleX, IconEdit} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 
 import SearchableDataTable from "../SearchableDataTable";
-import openFinssAddModal from "./FinssAddModal";
+import FinssGeneralParameters from "./FinssGeneralParameters";
+import {modals} from "@mantine/modals";
 
 const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
-
     const [tabData, setTabData] = useState([])
     const [displayEnded, setDisplayEnded] = useState(false)
     const theme = useMantineTheme();
@@ -43,9 +43,7 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
     }, [usefinsslist.finssList, displayEnded])
 
     const ActionRowRender = ({finss}) =>{
-
         function prebucqageButtons() {
-
             //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
             if(!finss.can_subscribe){
                 return (
@@ -56,16 +54,13 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
                     </Tooltip>) //La div est nécessaire car la node Tooltip à besoin de la prop ref que les icones ne possèdent pas.
             }
 
-            //Si l'utilisateur est déjà prébucque, alors on lui propose de modifier son inscription.
+            //Si l'utilisateur est déjà prébucqué, alors on lui propose de modifier son inscription.
             if(!finss.is_prebucque){
                 return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
             }else{
                 return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier</Button>)
             }
-
         }
-
-
 
         return (
             <Stack justify="space-between" align="center" spacing={3}>
@@ -86,19 +81,13 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
                     <IconEdit size={20} />
                 </ActionIcon>
             )
-
         }
 
         return (
-
         <Group position="apart">
-
             <Text style={{ maxWidth:200, wordWrap:"break-word", margin:1}}> {finss.titre}</Text>
-
             <EditButton/>
-
         </Group>
-
         )
     }
 
@@ -106,19 +95,15 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
     // (les datas correspondant à la ligne) est passé via l'argument record
     const rowExpansionContent = (record)=>{
-
-
-            return (
-                <Stack spacing="0" style={{marginBottom:10, marginTop:10}}>
-                    <Text>Date: {record.date_event}</Text>
-                    <Text>Description: {record.description}</Text>
-                    <Center  style={{marginTop:10}}>
-                        <ActionRowRender finss={record}/>
-                    </Center>
-                </Stack>
-            )
-
-
+        return (
+            <Stack spacing="0" style={{marginBottom:10, marginTop:10}}>
+                <Text>Date: {record.date_event}</Text>
+                <Text>Description: {record.description}</Text>
+                <Center  style={{marginTop:10}}>
+                    <ActionRowRender finss={record}/>
+                </Center>
+            </Stack>
+        )
     }
 
     const CategorieFilter = (
@@ -133,52 +118,50 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
         />
     )
 
-  return (
-      <Box style={{display: "flex", height: "100%"}}>
-      <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+    return (
+        <Box style={{display: "flex", height: "100%"}}>
+        <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+            <SearchableDataTable
+                  noRecordsText="Aucun fin'ss n'a été trouvé"
+                  searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
+                  striped
+                  highlightOnHover
+                  data={tabData}
+                  columns={[
+                      {accessor: "titre", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
+                      {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                      {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                      {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
+                  ]}
+                  defaultSortedColumn="titre"
+                  idAccessor="id"
+                  isLoading = {usefinsslist.isLoading}
 
-          <SearchableDataTable
-              noRecordsText="Aucun fin'ss n'a été trouvé"
-              searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
-              striped
-              highlightOnHover
-              data={tabData}
-              columns={[
-                  {accessor: "titre", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
-                  {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                  {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                  {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
-              ]}
-              defaultSortedColumn="titre"
-              idAccessor="id"
-              isLoading = {usefinsslist.isLoading}
+                  elementSpacing={"xs"}
 
-              elementSpacing={"xs"}
+                  styles={{
+                      input: {flex: "auto"}
+                  }}
 
-              styles={{
-                  input: {flex: "auto"}
-              }}
+                  rowExpansion={ isSmallDevice ? {
+                      content: ({record})=>(rowExpansionContent(record))
+                  }:""}
 
-              rowExpansion={ isSmallDevice ? {
-                  content: ({record})=>(rowExpansionContent(record))
-              }:""}
+                  searchBarPosition="apart"
 
-              searchBarPosition="apart"
+                  categoriesSelector={CategorieFilter}
 
-              categoriesSelector={CategorieFilter}
+                  withReloadIcon
+                  reloadCallback={()=>usefinsslist.retrieveFinssList()}
 
-              withReloadIcon
-
-              reloadCallback={()=>usefinsslist.retrieveFinssList()}
-              
-              withAddIcon
-              
-              addCallback={()=>openFinssAddModal(usefinsslist)}
-
-          />
-      </Paper>
-      </Box>
-  )
+                  withAddIcon
+                  addCallback={()=> {
+                      modals.open({title: "Ajouter une fin'ss", children: <FinssGeneralParameters useFinssList={usefinsslist}/>})}
+                  }
+            />
+        </Paper>
+        </Box>
+    )
 }
 
 export  default  FinssSelector;
