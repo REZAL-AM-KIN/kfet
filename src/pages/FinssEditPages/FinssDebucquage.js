@@ -315,9 +315,11 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                     //On regarde si le pg est débucquable et pas débucqué sur tous ses produits
                     isRecordSelectable = {(record)=> {
+                        return(
                             record.solde_pg >= record.prix_total &&
                             record.participation_event.some((participation)=>!participation.participation_debucquee
                                 && participation.quantity > 0)
+                        )
                     }}
                     
                     categoriesSelector={CategorieFilter}
