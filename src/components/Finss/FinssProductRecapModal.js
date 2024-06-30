@@ -25,12 +25,12 @@ const FinssProductRecapModal = ({opened, setOpened, usefinssproduct})=> {
                         {
                             accessor: "prix_total",
                             title: "Prix total",
-                            visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + 'px)')
+                            visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + ')')
                         },
                         {
                             accessor: "prix_min",
                             title: "Prix min",
-                            visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + 'px)')
+                            visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + ')')
                         },
                         {accessor: "quantite_bucque", title: "Qts"},
                         {accessor: "prix_unitaire", title: "€/u", width: 50}

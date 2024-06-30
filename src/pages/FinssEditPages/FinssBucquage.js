@@ -27,7 +27,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const [bucquageModalOpened, setBucquageModalOpened] = useState(false);
     const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false);
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     //Construction du déroulant au clique sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
@@ -205,7 +205,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                       searchPlaceHolder={"Rechercher un PG"}
                       columns={[
                           {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
-                          {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                          {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                       ]}
                       idAccessor="consommateur_bucque"
                       data={data}

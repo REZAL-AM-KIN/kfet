@@ -83,7 +83,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
                                 {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
-                                {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                                {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
 
                             ]}
                     idAccessor="consommateur_bucque"

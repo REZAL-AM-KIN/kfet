@@ -12,7 +12,7 @@ import {IconCheck} from "@tabler/icons-react";
 
 const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
 
     const userInfo = useUser()

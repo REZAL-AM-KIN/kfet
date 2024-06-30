@@ -23,7 +23,7 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
     const [displayEnded, setDisplayEnded] = useState(false)
     const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     // On convertie la date d'un forma iso vers un format heure:minutes jour/mois/année
     useEffect(()=>{
@@ -145,9 +145,9 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
               data={tabData}
               columns={[
                   {accessor: "titre", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
-                  {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                  {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
-                  {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)') }
+                  {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                  {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                  {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
               ]}
               defaultSortedColumn="titre"
               idAccessor="id"

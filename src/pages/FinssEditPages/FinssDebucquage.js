@@ -166,7 +166,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                             <Box style={{maxHeight:"300px"}}>
                                 <DataTable
                                     columns={[
-                                        {accessor: "consommateur_bucque", title:"Bucque", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+                                        {accessor: "consommateur_bucque", title:"Bucque", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                                         {accessor: "consommateur_prenom", title:"Prénom"},
                                         {accessor: "solde_pg", title:"Solde (€)"},
                                         {accessor: "prix_total", title:"Prix à payer (€)"}
@@ -258,7 +258,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const columnsList = () => {
         const baseColumns =[
             {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
-            {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+'px)')},
+            {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
         ]
         if(displayDebucque){
             baseColumns.push({accessor: "status", title:"Débucquée ?", width: 110,render:statusColum})

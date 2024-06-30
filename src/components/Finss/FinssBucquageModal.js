@@ -28,7 +28,7 @@ import SearchPg from "../SearchPg";
 
 const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>{
     const theme = useMantineTheme()
-    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+'px)')
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     const useParticipation = useUserParticipation()
 
