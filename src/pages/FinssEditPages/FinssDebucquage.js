@@ -21,7 +21,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     //On va remplir la liste data avec les bucquages issues de usebucquage.bucquages
     // mais en ajoutant le solde du pg et le montant total de ses participations
     useEffect(()=>{
-
         //Si la liste des conso n'est pas chargé, alors on ne va pas plus loin
         if(useconsommateurlist.isLoading){
             return
@@ -29,14 +28,13 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
         //On va ajouter le prix total (prix_total) des participations du PG et le solde du pg (solde_pg).
         const completedData = usebucquage.bucquages.map((bucquage)=>{
-
             let prix_total = 0
 
             //On récupère le consommateur
             const consommateur = useconsommateurlist.consommateurs.find((consommateur)=>consommateur.id===bucquage.consommateur_id)
             if(!consommateur){
                 errorNotif("Débucquage","Correspondance consommateur manquante\n consommateur id: "+bucquage.consommateur_id)
-                return ;
+                return;
             }
 
 
@@ -48,18 +46,14 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     return;
                 }
 
-
-                //Si la quantité vaut 0 ou que la participation n'est pas bucquée ou quelle est déjà débucquée, on affiche pas la quantité
+                //Si la quantité vaut 0, que la participation n'est pas bucquée ou qu'elle est déjà débucquée, on affiche pas la quantité
                 if (participation.quantity === 0 || !participation.participation_bucquee || participation.participation_debucquee) {
                     return
                 }
 
                 //On ajoute le prix au prix total du par le PG
                 prix_total += parseFloat(product.prix_unitaire) * participation.quantity
-
             })
-
-
 
             return {...bucquage, prix_total: prix_total, solde_pg: consommateur.solde}
         })
@@ -191,8 +185,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             usebucquage.debucquage(debucquageList)
             setSelectedRecords([])
         }
-
-
     }
 
 
@@ -209,12 +201,10 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 return;
             }
 
-
             //Si la quantité vaut 0 ou que la participation n'est pas bucquée ou quelle est déjà débucquée, on affiche pas la quantité
             if(participation.quantity ===0 || !participation.participation_bucquee ){
-                return
+                return;
             }
-
 
             // On ajoute la note qui correspond aux quantités produits
             return ( <List.Item key={participation.id}>
@@ -224,7 +214,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                                 </Text>
                         </Tooltip>
                     </List.Item>)
-
         })
 
 
@@ -248,7 +237,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                             <Text color="red"> Solde insuffisant (Solde : {record.solde_pg}€)</Text>
                         }
                     </Center>
-
                 </Stack>
             </Box>
         )
@@ -285,7 +273,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 label="Afficher les participations déjà débucquée ?"
                 checked={displayDebucque}
                 onChange={(event)=>setDisplayDebucque(event.currentTarget.checked)}
-
             />
         )
 
@@ -326,18 +313,25 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     selectedRecords = {selectedRecords}
                     onSelectedRecordsChange = {setSelectedRecords}
 
-                    //On regarde si le pg est débucquable
-                    isRecordSelectable = {(record)=> record.solde_pg>=record.prix_total}
+                    //On regarde si le pg est débucquable et pas débucqué sur tous ses produits
+                    isRecordSelectable = {(record)=> {
+                            record.solde_pg >= record.prix_total &&
+                            record.participation_event.some((participation)=>!participation.participation_debucquee
+                                && participation.quantity > 0)
+                    }}
                     
                     categoriesSelector={CategorieFilter}
 
                     secondBarNodes={<Group spacing="0" position = "apart">
                                         <Tooltip label={"Débucquer les PG sélectionnés"} position={"bottom"} withArrow>
-                                            <Button disabled={usefinssinfo.finssInfo.ended} color="red" style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}} onClick={debucquage}>Débucquer</Button>
+                                            <Button disabled={usefinssinfo.finssInfo.ended} color="red"
+                                                    style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}}
+                                                    onClick={debucquage}>Débucquer</Button>
                                         </Tooltip>
 
                                         <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
-                                            <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}} onClick={()=>setFinssProductRecapModalOpened(true)}>Recap prix</Button>
+                                            <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}}
+                                                    onClick={()=>setFinssProductRecapModalOpened(true)}>Recap prix</Button>
                                         </Tooltip>
                                     </Group>
                                     }
@@ -347,10 +341,10 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                 />
             </Paper>
-
-            <FinssProductRecapModal opened={finssProductRecapModalOpened} setOpened={setFinssProductRecapModalOpened} usefinssproduct={usefinssproduct}/>
+            <FinssProductRecapModal opened={finssProductRecapModalOpened}
+                                    setOpened={setFinssProductRecapModalOpened}
+                                    usefinssproduct={usefinssproduct}/>
         </Box>
-
     )
 }
 
