@@ -49,7 +49,7 @@ export function useBucquage(finssId) {
     const retrieveBucquages = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("bucquagevent?finss="+finssId);
+            const response = await axiosPrivate.get("bucquagevent/?finss="+finssId);
             if (response.data) {
                 setBucquages(response.data.results);
             } else {

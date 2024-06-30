@@ -45,7 +45,7 @@ export function useFinssProducts(finssId){
         setLoading(true)
         try {
 
-            const response = await axiosPrivate.get("productevent?finss="+finssId);
+            const response = await axiosPrivate.get("productevent/?finss="+finssId);
             if (response.data) {
                 setProductsList(response.data.results);
             } else {

@@ -42,7 +42,7 @@ export function useFinssInfo(finssId) {
     const retrieveFinssInfo = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("event/"+finssId);
+            const response = await axiosPrivate.get("event/"+finssId+"/");
             if (response.data) {
                 setFinssInfo(response.data);
             } else {
