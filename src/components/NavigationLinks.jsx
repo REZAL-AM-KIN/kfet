@@ -140,6 +140,8 @@ export function NormalSearchPgButton() {
 
     const [active, setActive] = useState(false)
 
+    const navigate = useNavigate();
+
     useHotkeys([[shortcut, () => setActive((o) => !o)]])
 
     return (
@@ -180,7 +182,10 @@ export function NormalSearchPgButton() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <SearchPg onSubmit={() => setActive(false)}/>
+                <SearchPg onSubmit={(pg) => {
+                    navigate("pg/" + pg.id);
+                    setActive(false)
+                }}/>
             </Popover.Dropdown>
         </Popover>
     );

@@ -1,5 +1,4 @@
 import {forwardRef} from "react";
-import {useNavigate} from "react-router-dom";
 import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import { useConsommateurList } from "../hooks/useConsommateurs";
 import {Autocomplete} from "@mantine/core";
@@ -29,11 +28,9 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({onSubmit})=>{
+const SearchPg = ({onSubmit, withBorder, ...othersProps})=>{
 
     const theme = useMantineTheme()
-
-    const navigate = useNavigate();
 
     const {consommateurList} = useConsommateurList();
 
@@ -42,26 +39,19 @@ const SearchPg = ({onSubmit})=>{
         return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
     })
 
-    const onItemSubmit = (e)=>{
-        if (onSubmit) {
-            onSubmit(e);
-        }
-        navigate("pg/"+e.id);
-    }
-
     return (
         <Autocomplete
             data={data}
             itemComponent={AutoCompleteItem}
             limit={6}
-            onItemSubmit={onItemSubmit}
+            onItemSubmit={onSubmit}
             placeholder="Rechercher un PG"
             nothingFound="Aucun PG trouvé :("
             styles={{
                 input: {
                     width: "100%",
                     borderRadius: theme.radius.md,
-                    borderStyle: "none",
+                    borderStyle: withBorder ? "solid" : "none",
                     borderWidth: 2,
                     '&:focus': {
                         borderStyle: "solid",
@@ -86,6 +76,8 @@ const SearchPg = ({onSubmit})=>{
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
             hoverOnSearchChange
+
+            {...othersProps}
         />
 
 

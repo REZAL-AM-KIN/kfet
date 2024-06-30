@@ -192,7 +192,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                        {/*On wrap le SearchPg dans une box pour pouvoir controler la width*/}
                        <Box style={{flex:"auto"}}>
 
-                                <SearchPg onSelectCallBack={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
+                                <SearchPg onSubmit={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
 
                        </Box>
                        </FocusTrap>
