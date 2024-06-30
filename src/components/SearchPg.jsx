@@ -2,7 +2,7 @@ import {forwardRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
 import { useConsommateurList } from "../hooks/useConsommateurs";
-import Autocomplete from "./Autocomplete";
+import {Autocomplete} from "@mantine/core";
 
 /*
 Composant qui propose la sélection d'un pg.
@@ -37,9 +37,9 @@ const SearchPg = ({onSubmit})=>{
 
     const {consommateurList} = useConsommateurList();
 
-    //Pour que autocompltete fonctionne, il faut obligatoirement un champ value. On transforme donc le champ bucque en value
-    const data = consommateurList.map(({bucque, ...pg}) =>{
-        return { value: bucque, ...pg}
+    //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
+    const data = consommateurList.map((pg) =>{
+        return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
     })
 
     const onItemSubmit = (e)=>{
@@ -60,14 +60,23 @@ const SearchPg = ({onSubmit})=>{
             styles={{
                 input: {
                     width: "100%",
-                    borderRadius: 9,
-                    borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}),
+                    borderRadius: theme.radius.md,
+                    borderStyle: "none",
                     borderWidth: 2,
                     '&:focus': {
                         borderStyle: "solid",
                         borderColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor}).background
                     }
-                }
+                },
+                item: {
+                    '&[data-hovered]': {
+                        backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]],
+                        color: theme.colors.gray[0],
+                        "&:hover": {
+                            backgroundColor: theme.colors[theme.primaryColor][theme.primaryShade[theme.colorScheme]-1],
+                        },
+                    },
+                },
             }}
             filter={(value, item) =>
                 item.value.toLowerCase().includes(value.toLowerCase().trim()) ||
