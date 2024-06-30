@@ -20,7 +20,7 @@ const FinssEdit = () => {
 
     return(
         <Stack style={{height: "100%"}}>
-            <Title order={1} align="center">{usefinssinfo.finssInfo.titre}</Title>
+            <Title order={1} align="center" style={{margin:"10px"}}>{usefinssinfo.finssInfo.titre}</Title>
             {usefinssinfo.finssInfo.ended ? <Center><Group spacing="0"><IconAlertTriangle size={33} color="red"/><Text size={18} color="red"> Fin'ss cloturé !</Text></Group></Center>:""}
 
             <Tabs keepMounted={false} defaultValue="prebucquage" style={{

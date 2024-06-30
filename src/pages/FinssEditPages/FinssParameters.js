@@ -14,8 +14,7 @@ const FinssParameters = ({usefinssinfo, usefinssproduct, usebucquage})=>{
             </Tabs.List>
 
             <Tabs.Panel value="general">
-
-                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"10px auto", maxWidth:"fit-content"}}>
+                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"20px auto", maxWidth:"fit-content"}}>
                     <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
                 </Paper>
             </Tabs.Panel>

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Center, Stack,Box} from "@mantine/core"
+import {Center, Stack, Box, Title} from "@mantine/core"
 
 import {useFinssList} from "../hooks/finssHooks/useFinssList";
 import FinssSelector from "../components/Finss/FinssSelector";
@@ -34,7 +34,7 @@ const Finss = () => {
     return(
         <Stack spacing="0" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
            <Center>
-               <h1 style={{margin:"10px"}}>Listes des fin'ss</h1>
+               <Title order={1} style={{margin:"10px"}}>Listes des fin'ss</Title>
            </Center>
             <Box
                 style={{

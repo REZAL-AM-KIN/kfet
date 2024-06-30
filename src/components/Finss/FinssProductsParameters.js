@@ -97,8 +97,8 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
 
     return (
         <>
-        <Center style={{paddingTop:10}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{width:600, position:'relative'}}>
+        <Center>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{width:600, margin:"20px auto", position:'relative'}}>
                 <Tabs
                     keepMounted={false}
                     orientation="vertical"

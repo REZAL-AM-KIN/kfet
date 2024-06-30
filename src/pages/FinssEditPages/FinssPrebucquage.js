@@ -1,4 +1,4 @@
-import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay} from "@mantine/core";
+import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay, Space} from "@mantine/core";
 import SearchableDataTable from "../../components/SearchableDataTable";
 import errorNotif from "../../components/ErrorNotif";
 
@@ -61,11 +61,11 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
         <Stack style={{height: "100%" }}>
 
             {/*Header avec les quantités demandées pour chaque produit*/}
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", position: 'relative'}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "20px 10px 0px 10px", position: 'relative'}}>
                 <LoadingOverlay visible={usefinssproduct.isLoading} overlayBlur={2} />
 
                 <Center><Title order={4}>Quantités pré-bucquées</Title></Center>
-
+                <Space h="sm" />
 
                 {/* On régle le nombre de colone égale aux nombres de produits
                     si il y a moins de 3 produits afin d'avoir une grille centrée.*/}
@@ -78,6 +78,9 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
 
             {/*Tableau*/}
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", flex:"1 1 auto"}}>
+
+                <Center><Title order={4}>Liste des prébucqués</Title></Center>
+                <Space h="sm" />
 
                 <SearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}

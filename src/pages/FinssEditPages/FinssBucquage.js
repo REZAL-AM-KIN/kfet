@@ -123,8 +123,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         const label = prebucqueBucquage.length === 0 ? "Aucune inscription" : bucquedBucquage.length+"/"+prebucqueBucquage.length
 
         return (
-            <Tooltip label={"Indique le nombre de personne qui se sont inscrites et qui ont été bucquées"} position={"bottom-start"} withArrow>
-                <Progress value={value} label={label} size="xl" style={{marginBottom:10}} styles={{label:{fontSize:"15px"}}}/>
+            <Tooltip label={"Indique le nombre de personne qui se sont inscrites et qui ont été bucquées"} position={"bottom"} withArrow>
+                <Progress value={value} label={label} size={theme.fontSizes.xl} radius="md" style={{marginBottom:"1rem"}}/>
             </Tooltip>
         )
     }
@@ -198,52 +198,50 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "20px 10px 0px 10px", flex: "1 1 auto"}}>
                 <BucquageProgress/>
 
-                  <SearchableDataTable
-                      searchPlaceHolder={"Rechercher un PG"}
-                      columns={[
+                <SearchableDataTable
+                    searchPlaceHolder={"Rechercher un PG"}
+                    columns={[
                           {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
                           {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                      ]}
-                      idAccessor="consommateur_bucque"
-                      data={data}
-                      isLoading = {usebucquage.isLoading}
+                    ]}
+                    idAccessor="consommateur_bucque"
+                    data={data}
+                    isLoading = {usebucquage.isLoading}
 
-                      elementSpacing={"xs"}
+                    elementSpacing={"xs"}
 
-                      styles={{
+                    styles={{
                           input: {flex: "auto"}
-                      }}
+                    }}
 
-                      searchBarPosition="apart"
+                    searchBarPosition="apart"
 
-                      extraButtons={
-                                    <>
-                                        <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
-                                            <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
-                                              <IconUserPlus size={33}/>
-                                            </ActionIcon>
-                                        </Tooltip>
-                                        <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
-                                            <ActionIcon size={33} color="blue" onClick={()=>setFinssProductRecapModalOpened(true)}>
-                                                <IconNotes size={33}/>
-                                            </ActionIcon>
-                                        </Tooltip>
-                                    </>
-                                    }
+                    extraButtons={
+                        <>
+                            <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
+                                <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
+                                  <IconUserPlus size={33}/>
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
+                                <ActionIcon size={33} color="blue" onClick={()=>setFinssProductRecapModalOpened(true)}>
+                                    <IconNotes size={33}/>
+                                </ActionIcon>
+                            </Tooltip>
+                        </>
+                    }
 
-                      withReloadIcon
+                    withReloadIcon
 
-                      reloadCallback={()=>usebucquage.retrieveBucquages()}
+                    reloadCallback={()=>usebucquage.retrieveBucquages()}
 
-                      rowExpansion={{
+                    rowExpansion={{
                           content: ({record})=>(rowExpansionContent(record))
-                      }}
-
-
-                  />
+}}
+                />
             </Paper>
 
             <FinssBucquageModal opened={bucquageModalOpened} setOpened={setBucquageModalOpened} usefinssproduct={usefinssproduct} usebucquage={usebucquage}/>

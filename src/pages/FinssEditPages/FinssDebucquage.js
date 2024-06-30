@@ -278,7 +278,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "20px 10px 0px 10px", flex: "1 1 auto"}}>
                 <SearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={columnsList()}
@@ -323,13 +323,13 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     categoriesSelector={CategorieFilter}
 
                     secondBarNodes={<Group spacing="0" position = "apart">
-                                        <Tooltip label={"Débucquer les PG sélectionnés"} position={"bottom"} withArrow>
+                                        <Tooltip label={"Débucquer les PG sélectionnés"} position={"bottom-start"} withArrow>
                                             <Button disabled={usefinssinfo.finssInfo.ended} color="red"
                                                     style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}}
                                                     onClick={debucquage}>Débucquer</Button>
                                         </Tooltip>
 
-                                        <Tooltip label={"Recap des produits et des bucquages"} position={"bottom"} withArrow>
+                                        <Tooltip label={"Recap des produits et des bucquages"} position={"bottom-end"} withArrow>
                                             <Button style={{flex:"1 1 auto", maxWidth: "170px", marginLeft:3}}
                                                     onClick={()=>setFinssProductRecapModalOpened(true)}>Recap prix</Button>
                                         </Tooltip>
