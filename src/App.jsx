@@ -3,6 +3,7 @@ import {Outlet, Route, Routes} from 'react-router-dom';
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
 import { ModalsProvider } from '@mantine/modals';
 import {useMediaQuery} from "@mantine/hooks";
+import { Notifications } from '@mantine/notifications';
 
 // authentification
 import RequireAuth from './components/RequireAuth';
@@ -54,6 +55,7 @@ function App() {
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
+            <Notifications />
             <ModalsProvider>
                 <UserProvider>
                     <Routes>
