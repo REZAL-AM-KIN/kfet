@@ -1,7 +1,9 @@
 import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
+import { ModalsProvider } from '@mantine/modals';
 import {useMediaQuery} from "@mantine/hooks";
+import { Notifications } from '@mantine/notifications';
 
 // authentification
 import RequireAuth from './components/RequireAuth';
@@ -13,6 +15,7 @@ import PG from './pages/PG';
 import Home from "./pages/Home";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
+import FinssEdit from "./pages/FinssEdit";
 
 // contexts
 import { UserProvider } from "./context/User";
@@ -52,27 +55,33 @@ function App() {
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
-            <UserProvider>
-                <Routes>
-                    <Route path="/">
-                        {/*public routes*/}
-                        <Route path="login" element={<Login/>}/>
+            <Notifications />
+            <ModalsProvider>
+                <UserProvider>
+                    <Routes>
+                        <Route path="/">
+                            {/*public routes*/}
+                            <Route path="login" element={<Login/>}/>
 
-                    {/*privates routes*/}
-                    <Route element={<RequireAuth/>}>
-                        <Route element={<LayoutRoute/>}>
-                            <Route path="/" element={<Home/>}/>
-                            <Route path="pg/:pgId" element={<PG/>}/>
-                            <Route path="edit" element={<Edit/>}/>
-                            <Route path="finss" element={<Finss/>}/>
+                            {/*privates routes*/}
+                            <Route element={<RequireAuth/>}>
+                                <Route element={<LayoutRoute/>}>
+                                    <Route path="/" element={<Home/>}/>
+                                    <Route path="pg/:pgId" element={<PG/>}/>
+                                    <Route path="edit" element={<Edit/>}/>
+                                    <Route path="finss" element={<Finss/>}/>
+                                    <Route path="finss/:applyto" element={<Finss/>}/>
+                                    <Route path="finssedit/:finssid" element={<FinssEdit/>}/>
+
+                                </Route>
+                            </Route>
+
+                        {/* TODO: 404*/}
+                        
                         </Route>
-                    </Route>
-
-                    {/* TODO: 404*/}
-                    
-                    </Route>
-                </Routes>
-            </UserProvider>
+                    </Routes>
+                </UserProvider>
+            </ModalsProvider>
         </MantineProvider>
     );
 
