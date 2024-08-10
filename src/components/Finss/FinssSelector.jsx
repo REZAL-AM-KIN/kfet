@@ -10,14 +10,15 @@ import {
     Box,
     Paper,
     Center,
-    Tooltip, useMantineTheme, Switch, Modal
+    Tooltip, useMantineTheme, Switch
 } from "@mantine/core"
 import {IconCircleX, IconEdit} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
+import {modals} from "@mantine/modals";
 
 import SearchableDataTable from "../SearchableDataTable";
 import FinssGeneralParameters from "./FinssGeneralParameters";
-import {modals} from "@mantine/modals";
+import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
@@ -30,7 +31,7 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
         let tabData = usefinsslist.finssList
 
         if(!displayEnded){
-            tabData = tabData.filter((finss)=>!finss.ended)
+            tabData = tabData.filter((finss)=>finss.etat_event < etatEventValues.TERMINE)
         }
 
         tabData = tabData.map(({date_event, ...finss})=>{
@@ -45,7 +46,7 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
     const ActionRowRender = ({finss}) =>{
         function prebucqageButtons() {
             //Si le prebucquage n'est pas ouvert, on bloque les actions de prébucquage (utile car les managers de finss verront toujours apparaitre les finss dans la liste)
-            if(!finss.can_subscribe){
+            if(finss.etat_event !== etatEventValues.PREBUCQUAGE){
                 return (
                     <Tooltip label={"Inscription terminée"}>
                         <div>

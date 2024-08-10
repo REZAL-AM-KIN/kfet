@@ -17,6 +17,7 @@ import {useState} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
 import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
+import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 
 
@@ -131,9 +132,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     //On souhaite vérifier que les inscriptions sont fermé avant de permettre le bucquage des gens.
     function openBucquage() {
-
-
-        if(usefinssinfo.finssInfo.can_subscribe){
+        if(usefinssinfo.finssInfo.etat_event !== etatEventValues.BUCQUAGE){
             openModal({
                 title: 'Bucquage impossible',
                 children: (
@@ -222,7 +221,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     extraButtons={
                         <>
                             <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
-                                <ActionIcon disabled={usefinssinfo.finssInfo.ended} size={33} color="green" onClick={()=>{openBucquage()}}>
+                                <ActionIcon disabled={usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                            size={33} color="green" onClick={()=>{openBucquage()}}>
                                   <IconUserPlus size={33}/>
                                 </ActionIcon>
                             </Tooltip>

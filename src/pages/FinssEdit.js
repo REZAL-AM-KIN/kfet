@@ -8,6 +8,7 @@ import {useFinssProducts} from "../hooks/finssHooks/useFinssProduct";
 import {useFinssInfo} from "../hooks/finssHooks/useFinssInfo";
 import FinssBucquage from "./FinssEditPages/FinssBucquage";
 import FinssDebucquage from "./FinssEditPages/FinssDebucquage";
+import {etatEventValues} from "../hooks/finssHooks/EtatEventConst";
 
 const FinssEdit = () => {
     let params = useParams()
@@ -21,7 +22,10 @@ const FinssEdit = () => {
     return(
         <Stack style={{height: "100%"}}>
             <Title order={1} align="center" style={{margin:"10px"}}>{usefinssinfo.finssInfo.titre}</Title>
-            {usefinssinfo.finssInfo.ended ? <Center><Group spacing="0"><IconAlertTriangle size={33} color="red"/><Text size={18} color="red"> Fin'ss cloturé !</Text></Group></Center>:""}
+            {usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE ?
+                <Center><Group spacing="0"><IconAlertTriangle size={33} color="red"/><Text size={18} color="red"> Fin'ss cloturé !</Text></Group></Center>
+                :""
+            }
 
             <Tabs keepMounted={false} defaultValue="prebucquage" style={{
                 display: "flex", flexDirection:"column", flex: "1 1 auto",

@@ -4,18 +4,16 @@ import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {IconCirclePlus} from "@tabler/icons-react";
 
 import FinssProductForm from "./FinssProductForm";
+import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) => {
-
     const [productModalOpen, setProductModalOpen] = useState(false);
-
-    const isDebucquageStarted = usebucquage.bucquages.some((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_debucquee))
 
     //Fonction appeler au clique sur le bouton de suppression.
     //On interdit la suppression du produit s'il y a des participations bucquée sur ce produit.
     function deleteProduct(event, product) {
-        // On récupère tous les bucquages qui comporte des participations bucquee sur le produit à supprimer
-        //On omet tout de même les participations avec une quantité de 0 car elle ne concerne pas des bucquages réel
+        // On récupère tous les bucquages qui comporte des participations bucquées sur le produit à supprimer
+        // On omet tout de même les participations avec une quantité de 0, car elles ne concernent pas des bucquages réel
         // (ce genre de cas peut arriver en cas de réctification sur un débucquage)
         const bucquagesOnThisProduct = usebucquage.bucquages.filter((bucquage)=> (
             bucquage.participation_event.some((participation)=>
@@ -24,7 +22,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
                     && participation.quantity!==0))
         ))
 
-        // Si il y a des bucquage (donc des participations) bucquee sur ce produit. Alors on interdit la suppression
+        // S'il y a des bucquages (donc des participations bucquées) sur ce produit, alors on interdit la suppression
         if(bucquagesOnThisProduct.length !==0 ){
             openModal({
                 title: 'Suppression du produit impossible :',
@@ -59,7 +57,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
     }
 
     const tabsListProducts = usefinssproduct.productsList.map((product)=>(
-        //On utilise les id comme value au cas où il y est deux produit avec le même nom
+        //On utilise les id comme value au cas où il y est deux produits avec le même nom
         <Tabs.Tab value={product.id.toString()} key={product.id}>{product.nom}</Tabs.Tab>
 
     ))
@@ -70,23 +68,24 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
         product.prix_total=parseFloat(product.prix_total)
         product.prix_min=parseFloat(product.prix_min)
 
-        //On utilise les id comme value au cas où il y est deux produit avec le même nom
+        //On utilise les id comme value au cas où il y est deux produits avec le même nom
         return (
             <Tabs.Panel value={product.id.toString()} key={product.id} style={{marginLeft: "10px"}}>
                 <Stack spacing="xs">
                     <FinssProductForm
                         initialProduct={product}
                         formSubmitCallback={(values) => usefinssproduct.updateProduct(values)}
-                        disabled={usefinssinfo.finssInfo.ended || isDebucquageStarted}
+                            disabled={usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE}
                     />
 
-                    <Tooltip  label={usefinssinfo.finssInfo.ended || isDebucquageStarted ? "Suppression impossible, debucquage commencé" : "Ajouter un produit"}>
-                            <Button
-                                    disabled = {usefinssinfo.finssInfo.ended || isDebucquageStarted}
-                                    sx={{ '&[disabled]': { pointerEvents: 'all' } }}
-                                    color="red"
-                                    onClick={(e) => deleteProduct(e, product)}
-                            >Supprimer</Button>
+                    <Tooltip  label={usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE ?
+                                     "Suppression impossible, bucquages terminés" : "Supprimer le produit"}>
+                        <Button
+                                disabled = {usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE}
+                                sx={{ '&[disabled]': { pointerEvents: 'all' } }}
+                                color="red"
+                                onClick={(e) => deleteProduct(e, product)}
+                        >Supprimer</Button>
                     </Tooltip>
 
                 </Stack>
@@ -114,9 +113,11 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
                         {tabsListProducts}
 
                         {/*Bouton d'ajout de produit*/}
-                        <Tooltip  label={usefinssinfo.finssInfo.ended || isDebucquageStarted ? "Ajout impossible, debucquage commencé" : "Ajouter un produit"}>
+                        <Tooltip  label={usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE ?
+                                         "Ajout impossible, debucquage commencé" : "Ajouter un produit"}
+                        >
                             <Button
-                                disabled = {usefinssinfo.finssInfo.ended || isDebucquageStarted}
+                                disabled = {usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE}
                                 sx={{ '&[disabled]': { pointerEvents: 'all' } }}
                                 variant="subtle"
                                 onClick = {()=>{setProductModalOpen(true)}}

@@ -7,6 +7,7 @@ import {useConsommateursList} from "../../hooks/useConsommateursList";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {DataTable} from "mantine-datatable";
 import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
+import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 
 //TODO : Permettre le débucquage en negat'ss si permission.
@@ -326,7 +327,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                     secondBarNodes={<Group spacing="0" position = "apart">
                                         <Tooltip label={"Débucquer les PG sélectionnés"} position={"bottom-start"} withArrow>
-                                            <Button disabled={usefinssinfo.finssInfo.ended} color="red"
+                                            <Button disabled={usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                                    color="red"
                                                     style={{flex:"1 1 auto", maxWidth: "130px", marginRight:3}}
                                                     onClick={debucquage}>Débucquer</Button>
                                         </Tooltip>

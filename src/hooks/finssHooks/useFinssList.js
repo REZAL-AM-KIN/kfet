@@ -20,9 +20,8 @@ FinssList:
             "id": id du fin'ss,
             "titre": "Nom du fin'ss",
             "description": "Description du fin'ss",
-            "can_subscribe": peut on encore s'inscrire ? (bool),
             "date_event": "Date du fin'ss",
-            "ended": est-il cloturer ?,
+            "etat_event": entier pour décrire l'état du fin'ss (les entiers et labels associés sont définis dans EtatEventConst.js),
             "can_manage": l'utilisateur en cours peut-il le manager ?,
             "is_prebucque":  l'utilisateur est il inscrit ?,
             "managers": [Liste des managers]

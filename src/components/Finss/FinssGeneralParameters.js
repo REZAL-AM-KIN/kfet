@@ -6,7 +6,6 @@ import {
     Center,
     LoadingOverlay,
     Stack,
-    Switch,
     Text,
     Textarea,
     TextInput,
@@ -17,6 +16,7 @@ import {DatePickerInput} from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 
 import ManagersSelector from "../ManagersSelector";
+import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 function endEvent(usefinss, usebucquage) {
     const endFinss = ()=>{
@@ -89,10 +89,10 @@ function endEvent(usefinss, usebucquage) {
 const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
     const theme = useMantineTheme()
 
-    //Si on est dans le cas d'une création, on créer un faux objet usefinssinfo vide.
+    //Si on est dans le cas d'une création, on crée un faux objet usefinssinfo vide.
     if(!usefinssinfo){
         const date = new Date()
-        usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString(), can_subscribe:true, ended:false}};
+        usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString()}};
     }
 
 
@@ -101,9 +101,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
         initialValues:{
             titre: "",
             description : "",
-            can_subscribe : false,
             date_event : "",
-            ended: false,
             managers: []
         },
         validateInputOnChange:["titre", "description", "date_event"],
@@ -165,7 +163,6 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
 
                         />
 
-
                         <DatePickerInput
                             withAsterisk
                             label = "Date de Fin'ss"
@@ -179,21 +176,15 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                             {...form.getInputProps('managers')}
                         />
 
-                        <Center>
-                            <Switch
-                                labelPosition="left"
-                                label="Ouvert à l'inscription"
-                                {...form.getInputProps('can_subscribe',{type:'checkbox'})}
-                            />
-                        </Center>
-
-
-                        <Button disabled={!form.isValid() || usefinssinfo.finssInfo.ended} style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
+                        <Button disabled={!form.isValid() || usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                style={{width:"100%", marginTop: 10}} type="submit">Enregistrer</Button>
                     </form>
 
                     {/* S'il ne s'agit pas d'une création de finss, on affiche le bouton de cloture*/}
                     {usebucquage ?
-                        <Button disabled={usefinssinfo.finssInfo.ended} style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}} onClick={()=>{endEvent(usefinssinfo, usebucquage)}}>Clôturer le Fin'ss</Button>
+                        <Button disabled={usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}}
+                                onClick={()=>{endEvent(usefinssinfo, usebucquage)}}>Clôturer le Fin'ss</Button>
                         : ""}
                     </Box>
             </Center>
