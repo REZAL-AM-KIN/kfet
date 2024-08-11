@@ -34,22 +34,18 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 //on remplie la liste des produits en renommant l'attribue id en "key"
     useEffect(()=>{
         const data = productsList.map(({id, ...product}) => {
-            let prebucque_quantity = null
+            let prebucque_quantity = (product.obligatoire ? 1: 0)
 
             //On vérifie que la participation n'est pas en loading
             if (!useParticipation.isLoading) {
-
-
                 //On selectionne l'objet pariticipation qui correspond au produit
                 const participation = useParticipation.participations.find((participation) => participation.product_participation === id)
 
                 //Si une participation est trouvée alors on récupère la quantité déjà prébucquée
                 prebucque_quantity = participation && participation.prebucque_quantity // On regarde si une participation pour le produit existe
-
             }
 
-
-            return {key:id, ...product, qts: (prebucque_quantity ? prebucque_quantity : (product.obligatoire ? 1: 0))}
+            return {key:id, ...product, qts: prebucque_quantity}
         })
         form.setValues({products:data})
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,14 +58,14 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
             {cible_participation:userInfo.id, product_participation:key, prebucque_quantity:qts}
         ))
         setSending(true)
-        useParticipation.sendParticipations(participations).then((success)=>{
+        useParticipation.sendPrebucquage(participations).then((success)=>{
             if(success){
                 showNotification( {
                     icon: <IconCheck size={18} />,
                     color: "green",
                     autoClose: true,
                     title: 'Inscription réussie',
-                    message: 'Votre participation a bien été prise en compte.'
+                    message: 'Votre inscription a bien été prise en compte.'
                 })
             }
             setSending(false)
@@ -105,18 +101,18 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
         }
 
         return (
-            <Stack style={{
+            <Stack sx={{
                 background: theme.colors.gray[1],
 
             }}>
-                <Text style={{marginLeft: 40, textAlign:"justify"}}> {product.description}</Text>
+                <Text truncate sx={{marginLeft: 40, whiteSpace: "normal", overflowWrap: "anywhere"}}> {product.description}</Text>
             </Stack>
         )
     }
 
     return (
-        <Modal opened={opened} onClose={closeModal}>
-            <Box style={{position:"relative"}}>
+        <Modal opened={opened} onClose={closeModal} size="lg">
+            <Box sx={{position:"relative"}}>
                 <LoadingOverlay visible={isSending} />
 
                 <form onSubmit={form.onSubmit((values)=>sendParticipation(values))}>
@@ -139,7 +135,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
                        </DataTable>
                    </Box>
 
-                    <Button style={{width:"100%", marginTop: 10}} type="submit">Valider</Button>
+                    <Button sx={{width:"100%", marginTop: 10}} type="submit">Valider</Button>
                 </form>
             </Box>
         </Modal>

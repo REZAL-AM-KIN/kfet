@@ -26,10 +26,10 @@ export function useUserParticipation(){
         setLoading(false)
     }, [axiosPrivate])
 
-    const sendParticipations = useCallback(async (participations) =>{
+    const sendPrebucquage = useCallback(async (participations) =>{
         try {
 
-            const response = await axiosPrivate.post("bucquagevent/",participations)
+            const response = await axiosPrivate.post("bucquagevent/prebucquage/",participations)
 
             if(response.status===200){
 
@@ -59,5 +59,5 @@ export function useUserParticipation(){
         }
     }, [retrieveParticipations]);
 
-    return {participations, isLoading, retrieveParticipations, sendParticipations}
+    return {participations, isLoading, retrieveParticipations, sendParticipations: sendPrebucquage}
 }
