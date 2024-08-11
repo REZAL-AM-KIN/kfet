@@ -1,4 +1,4 @@
-import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay, Space} from "@mantine/core";
+import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay, Space, Box} from "@mantine/core";
 import SearchableDataTable from "../../components/SearchableDataTable";
 import errorNotif from "../../components/ErrorNotif";
 
@@ -62,17 +62,18 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
 
             {/*Header avec les quantités demandées pour chaque produit*/}
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "20px 10px 0px 10px", position: 'relative'}}>
-                <LoadingOverlay visible={usefinssproduct.isLoading} overlayBlur={2} />
 
                 <Center><Title order={4}>Quantités pré-bucquées</Title></Center>
                 <Space h="sm" />
 
                 {/* S'il y a moins de 3 produits, on règle le nombre de colonnes égales
                     aux nombres de produits afin d'avoir une grille centrée.*/}
-                <SimpleGrid cols={usefinssproduct.productsList.length<3 ? usefinssproduct.productsList.length: 3}>
-                    {quantite_prebucque_info}
-                </SimpleGrid>
-
+                <Box pos="relative" mih="3rem">
+                    <LoadingOverlay visible={usefinssproduct.isLoading} overlayBlur={2} />
+                    <SimpleGrid cols={usefinssproduct.productsList.length<3 ? usefinssproduct.productsList.length: 3}>
+                        {quantite_prebucque_info}
+                    </SimpleGrid>
+                </Box>
             </Paper>
 
             {/*Tableau*/}
