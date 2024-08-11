@@ -21,7 +21,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 
     const [isSending, setSending] = useState(false)
 
-// initialisation de la user form. La liste des produits est vide
+// Initialisation du form. La liste des produits est vide.
     const form = useForm({
         initialValues:{
             products:[]
@@ -38,10 +38,10 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 
             //On vérifie que la participation n'est pas en loading
             if (!useParticipation.isLoading) {
-                //On selectionne l'objet pariticipation qui correspond au produit
+                //On sélectionne l'objet participation qui correspond au produit
                 const participation = useParticipation.participations.find((participation) => participation.product_participation === id)
 
-                //Si une participation est trouvée alors on récupère la quantité déjà prébucquée
+                //Si une participation est trouvée, alors on récupère la quantité déjà prébucquée
                 prebucque_quantity = participation && participation.prebucque_quantity // On regarde si une participation pour le produit existe
             }
 
@@ -80,9 +80,9 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     }
 
 
-    // on extrait tous les produits existant dans la form car on a besoin de l'index de la form pour bind le
+    // On extrait tous les produits existants dans la form car on a besoin de l'index de la form pour bind le
     // NumberInput de chaque produit à la form.
-    // On en profite pour attribuer "index" à "id" car le champs id sert de key pour le component Datatable.
+    // On en profite pour attribuer "index" à "id" puisque le champ id sert de key pour le component Datatable.
     const tableData = form.values.products.map((item,index)=>({...item, index, id:index}))
 
 

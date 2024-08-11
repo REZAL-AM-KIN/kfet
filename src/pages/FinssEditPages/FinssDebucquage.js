@@ -183,7 +183,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
         function debucquer() {
             closeAllModals()
-            usebucquage.debucquage(debucquageList)
+            usebucquage.sendDebucquage(debucquageList)
             setSelectedRecords([])
         }
     }

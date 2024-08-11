@@ -107,7 +107,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
             {cible_participation:selectedPG.id, product_participation:key, quantity:qts}
         ))
         setSending(true)
-        usebucquage.bucquage(participations).then((success)=>{
+        usebucquage.sendBucquage(participations).then((success)=>{
             if(success){
                 showNotification( {
                     icon: <IconCheck size={18} />,

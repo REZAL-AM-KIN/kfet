@@ -7,12 +7,12 @@ import {IconCheck} from "@tabler/icons-react";
 /*
 Permet d'obtenir la liste des fin'ss
 
-Paramètres: Pas de paramètres
+Paramètres : Pas de paramètres
 
 Retour:
     isLoading: bool qui donne l'état de chargement des informations
     finssList: Liste des fin'ss avec informations sur chaque fin'ss
-    updateFinssList: Fonction qui force l'update de finssList
+    updateFinssList: Fonction qui force l'actualisation de finssList
 
 FinssList:
     [
@@ -23,7 +23,7 @@ FinssList:
             "date_event": "Date du fin'ss",
             "etat_event": entier pour décrire l'état du fin'ss (les entiers et labels associés sont définis dans EtatEventConst.js),
             "can_manage": l'utilisateur en cours peut-il le manager ?,
-            "is_prebucque":  l'utilisateur est il inscrit ?,
+            "is_prebucque":  booléen indiquant si l'utilisateur est inscrit,
             "managers": [Liste des managers]
         },
         ...
@@ -71,7 +71,7 @@ export function useFinssList(){
                     message: 'Finss créé avec succès'
                 })
 
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveFinssList()
 
 

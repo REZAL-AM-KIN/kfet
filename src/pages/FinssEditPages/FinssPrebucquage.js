@@ -19,7 +19,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
         </Stack>
         ));
 
-    //Construction du déroulant au clique sur une ligne du tableau
+    //Construction du déroulant au clic sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
     // (les datas correspondant à la ligne) est passé via l'argument record
     const rowExpansionContent = (record)=>{
@@ -29,11 +29,11 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
             record.participation_event.map((participation) =>
                 {
 
-                    //Récupération des infos produits depuis le hook useFinssProducts
+                    //Récupération des infos des produits depuis le hook useFinssProducts
                     const product = usefinssproduct.productsList.find((product) => (product.id === participation.product_participation))
                     if(!product){
                         errorNotif("Prebucquage","Correspondance produit manquante\n participation id: "+participation.id)
-                        return;
+                        return null;
                     }
 
                     //construction des nodes
@@ -45,9 +45,9 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                     )
                 })
 
-        //On wrap les nodes de quantités dans une SimpleGrid,
-        // On régle le nombre de colone égale aux nombres de produits
-        // si il y a moins de 3 produits afin d'avoir une grille centrée.
+        // On wrap les nodes de quantités dans une SimpleGrid,
+        // S'il y a moins de 3 produits, on règle le nombre de colonnes
+        // égales aux nombres de produits afin d'avoir une grille centrée.
         return (
 
             <SimpleGrid cols={usefinssproduct.productsList.length<3 ? usefinssproduct.productsList.length: 3}>
@@ -67,10 +67,9 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                 <Center><Title order={4}>Quantités pré-bucquées</Title></Center>
                 <Space h="sm" />
 
-                {/* On régle le nombre de colone égale aux nombres de produits
-                    si il y a moins de 3 produits afin d'avoir une grille centrée.*/}
+                {/* S'il y a moins de 3 produits, on règle le nombre de colonnes égales
+                    aux nombres de produits afin d'avoir une grille centrée.*/}
                 <SimpleGrid cols={usefinssproduct.productsList.length<3 ? usefinssproduct.productsList.length: 3}>
-
                     {quantite_prebucque_info}
                 </SimpleGrid>
 
@@ -91,9 +90,9 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                             ]}
                     idAccessor="consommateur_bucque"
 
-                    //On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation a une quantité non nulle
-                    //Ainsi, on affiche pas les participations qui ont été bucqué mais pas prébucqué.
-                    //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
+                    // On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation
+                    // a une quantité non nulle. Ainsi, on n'affiche pas les participations qui ont été bucqué mais pas prébucqué.
+                    // On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
                     data={usebucquage.bucquages.filter((bucquage)=>(
                         (bucquage.participation_event.length!==0)
                         && (bucquage.participation_event.some((participation)=>participation.prebucque_quantity!==0)))

@@ -12,7 +12,8 @@ Paramètres:
 
 Retours:
     isLoading: isLoading: bool qui donne l'état de chargement des informations
-    retrieveProducts: Fonction qui force l'update de productsList
+    retrieveProducts: Fonction qui force l'actualisation de productsList
+    updateProduct/deleteProduct/addProduct : Fonction qui permet de mettre à jour/supprimer/ajouter un produit avec l'endpoint /productevent/
     productsList:
         [
             {
@@ -73,7 +74,7 @@ export function useFinssProducts(finssId){
                     message: 'Les paramètres ont bien été modifiés'
                 })
 
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveProducts()
 
             }else{
@@ -100,7 +101,7 @@ export function useFinssProducts(finssId){
                     message: 'Le produit à été supprimé.'
                 })
 
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveProducts()
 
             }else{
@@ -115,7 +116,7 @@ export function useFinssProducts(finssId){
 
     const addProduct = useCallback(async (productInfo)=>{
         try {
-            productInfo.parent_event = finssId      // on remplis l'id de l'event parent.
+            productInfo.parent_event = finssId      // on remplit l'id de l'event parent.
 
             const response = await axiosPrivate.post("productevent/", productInfo)
 
@@ -129,7 +130,7 @@ export function useFinssProducts(finssId){
                     message: 'Le produit a bien été ajouté'
                 })
 
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveProducts()
 
             }else{
@@ -144,7 +145,7 @@ export function useFinssProducts(finssId){
 
     // get product list
     useEffect(() => {
-        //Si aucun finss id n'est passé, alors on de récup pas les produits
+        //Si aucun finssId n'est passé, alors on ne récupère pas les produits
         if(!finssId){
             return
         }

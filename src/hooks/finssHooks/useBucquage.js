@@ -12,15 +12,19 @@ Paramètres:
 
 Retours:
     isLoading: isLoading: bool qui donne l'état de chargement des informations
-    retrieveBucquages: Fonction qui force l'update de bucquages
-    bucquages: contient la liste des bucquages organisé comme ci-dessous:
+    retrieveBucquages: Fonction qui force l'actualisation de bucquages
+    sendBucquage: Fonction qui permet d'envoyer les bucquages à backend. Prend en argument une liste bucquagesList au
+        format [{cible_participation :<id>, product_participation :<id>, quantity :<int>}, ... ]
+    sendDebucquage: Fonction qui permet d'envoyer les débucquages à backend. Prend en argument une liste debucquagesList
+        au format [{id_participation :<id>, (optionnel) negats :<True|False>}, ... ]
+    bucquages: contient la liste des bucquages organisé comme ci-dessous :
         [
             {
                 "consommateur_id": id du consommateur,
                 "consommateur_bucque": "Bucque du consommateur",
                 "consommateur_nom": "Nom du consommateur",
-                "consommateur_fams": "Famss du consommateur",
-                "participation_event": liste des participation organisé comme suit :
+                "consommateur_fams": "Fam'ss du consommateur",
+                "participation_event": liste des participations, organisées comme suit :
                     [
                         {
                             "id": id de la participation,
@@ -62,7 +66,7 @@ export function useBucquage(finssId) {
         setLoading(false)
     }, [axiosPrivate, finssId])
 
-    const debucquage = useCallback(async (debucquagesList)=>{
+    const sendDebucquage = useCallback(async (debucquagesList)=>{
         try {
             const response = await axiosPrivate.post("bucquagevent/debucquage/", debucquagesList)
 
@@ -76,7 +80,7 @@ export function useBucquage(finssId) {
                     message: debucquagesList.length+' débucquages envoyés avec succès'
                 })
             }else{
-                errorNotif("Débucquage", "Une erreur inconue est survenue lors de l'envoi des débucquages")
+                errorNotif("Débucquage", "Une erreur inconnue est survenue lors de l'envoi des débucquages")
                 console.log("Error sending débucquages", response);
             }
         }catch (error) {
@@ -85,7 +89,7 @@ export function useBucquage(finssId) {
         }
     },[axiosPrivate])
 
-    const bucquage = useCallback(async (bucquagesList)=>{
+    const sendBucquage = useCallback(async (bucquagesList)=>{
         try {
             const response = await axiosPrivate.post("bucquagevent/bucquage/", bucquagesList)
 
@@ -99,7 +103,7 @@ export function useBucquage(finssId) {
                     message: bucquagesList.length+' bucquages envoyés avec succès'
                 })
             }else{
-                errorNotif("Débucquage", "Une erreur inconue est survenue lors de l'envoi des bucquages")
+                errorNotif("Débucquage", "Une erreur inconnue est survenue lors de l'envoi des bucquages")
                 console.log("Error sending bucquages", response);
             }
         }catch (error) {
@@ -120,6 +124,6 @@ export function useBucquage(finssId) {
         }
     }, [retrieveBucquages, finssId]);
 
-    return {bucquages, isLoading, retrieveBucquages, debucquage, bucquage}
+    return {bucquages, isLoading, retrieveBucquages, sendDebucquage, sendBucquage}
 
 }

@@ -33,7 +33,7 @@ export function useUserParticipation(){
 
             if(response.status===200){
 
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveParticipations()
                 return true
 
@@ -59,5 +59,5 @@ export function useUserParticipation(){
         }
     }, [retrieveParticipations]);
 
-    return {participations, isLoading, retrieveParticipations, sendParticipations: sendPrebucquage}
+    return {participations, isLoading, retrieveParticipations, sendPrebucquage}
 }
