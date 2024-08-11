@@ -42,6 +42,11 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                 value.length===0 ? "La description est obligatoire !": null),
             date_event: (value) =>(!value ? "La date est obligatoire !":null)
         },
+
+        transformValues: (values) => ({
+            ...values,
+            date_event: new Date(Date.UTC(values.date_event.getFullYear(), values.date_event.getMonth(), values.date_event.getDate())).toISOString().split('T')[0],
+        }),
     })
 
 
