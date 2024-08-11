@@ -34,7 +34,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
 //on remplie la liste des produits en renommant l'attribue id en "key"
     useEffect(()=>{
         const data = productsList.map(({id, ...product}) => {
-            let prebucque_quantity = (product.obligatoire ? 1: 0)
+            let prebucque_quantity = null
 
             //On vérifie que la participation n'est pas en loading
             if (!useParticipation.isLoading) {
@@ -45,7 +45,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
                 prebucque_quantity = participation && participation.prebucque_quantity // On regarde si une participation pour le produit existe
             }
 
-            return {key:id, ...product, qts: prebucque_quantity}
+            return {key:id, ...product, qts: (prebucque_quantity ? prebucque_quantity : (product.obligatoire ? 1: 0))}
         })
         form.setValues({products:data})
     // eslint-disable-next-line react-hooks/exhaustive-deps
