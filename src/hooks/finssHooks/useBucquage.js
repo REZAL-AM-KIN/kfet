@@ -64,7 +64,6 @@ export function useBucquage(finssId) {
 
     const debucquage = useCallback(async (debucquagesList)=>{
         try {
-
             const response = await axiosPrivate.post("bucquagevent/debucquage/", debucquagesList)
 
             if(response.status===200){
@@ -76,20 +75,38 @@ export function useBucquage(finssId) {
                     title: 'Débucquages envoyés avec succès',
                     message: debucquagesList.length+' débucquages envoyés avec succès'
                 })
-
-                // On recharge les paramètres pour être certain de n'avoir aucune décorélation entre le back et le front
-                retrieveBucquages()
-
             }else{
                 errorNotif("Débucquage", "Une erreur inconue est survenue lors de l'envoi des débucquages")
                 console.log("Error sending débucquages", response);
-
             }
         }catch (error) {
             errorNotif("Débucquage", error.message)
             console.log("Error sending débucquages", error);
         }
-    },[axiosPrivate, retrieveBucquages])
+    },[axiosPrivate])
+
+    const bucquage = useCallback(async (bucquagesList)=>{
+        try {
+            const response = await axiosPrivate.post("bucquagevent/bucquage/", bucquagesList)
+
+            if(response.status===200){
+                // On indique à l'utilisateur que les paramètres ont été changés
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: 'Bucquages envoyés avec succès',
+                    message: bucquagesList.length+' bucquages envoyés avec succès'
+                })
+            }else{
+                errorNotif("Débucquage", "Une erreur inconue est survenue lors de l'envoi des bucquages")
+                console.log("Error sending bucquages", response);
+            }
+        }catch (error) {
+            errorNotif("Débucquage", error.message)
+            console.log("Error sending bucquages", error);
+        }
+    },[axiosPrivate])
 
     // get Bucquage list
     useEffect(() => {
@@ -103,6 +120,6 @@ export function useBucquage(finssId) {
         }
     }, [retrieveBucquages, finssId]);
 
-    return {bucquages, isLoading, retrieveBucquages, debucquage}
+    return {bucquages, isLoading, retrieveBucquages, debucquage, bucquage}
 
 }

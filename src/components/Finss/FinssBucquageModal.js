@@ -15,7 +15,6 @@ import {
 import {useForm} from '@mantine/form';
 import {DataTable} from "mantine-datatable";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
-import {useUserParticipation} from "../../hooks/finssHooks/useUserParticipation";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck, IconX} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
@@ -29,10 +28,6 @@ import SearchPg from "../SearchPg";
 const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>{
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
-
-    const useParticipation = useUserParticipation()
-
-
 
 
     const [isSending, setSending] = useState(false)
@@ -109,10 +104,10 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
 
         const participations = values.products.map(({key,qts})=>(
-            {cible_participation:selectedPG.id, product_participation:key, quantity:qts, participation_bucquee: true}
+            {cible_participation:selectedPG.id, product_participation:key, quantity:qts}
         ))
         setSending(true)
-        useParticipation.sendParticipations(participations).then((success)=>{
+        usebucquage.bucquage(participations).then((success)=>{
             if(success){
                 showNotification( {
                     icon: <IconCheck size={18} />,
