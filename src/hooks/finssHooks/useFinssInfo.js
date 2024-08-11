@@ -25,7 +25,7 @@ Tableau d'info du fin'ss:
         "date_event": "Date du fin'ss",
         "etat_event": entier pour décrire l'état du fin'ss (les entiers et labels associés sont définis dans EtatEventConst.js),
         "can_manage": l'utilisateur en cours peut-il le manager ?,
-        "is_prebucque":  l'utilisateur est il inscrit ?,
+        "is_prebucque":  l'utilisateur est-il inscrit ?,
         "managers": [Liste des managers]
     }
 
@@ -54,14 +54,9 @@ export function useFinssInfo(finssId) {
         setLoading(false)
     }, [axiosPrivate, finssId])
 
-    //TODO utiliser endpoint /event/{id}/fermeture_debucquage/ en Patch
     const endFinss = useCallback(async ()=>{
         try {
-            await retrieveFinssInfo()
-            finssInfo.can_subscribe=false
-            finssInfo.ended=true
-
-            const response = await axiosPrivate.put("event/"+finssId+"/", finssInfo)
+            const response = await axiosPrivate.patch("event/"+finssId+"/fermeture_debucquage/")
 
             if(response.status===200){
                 // On indique à l'utilisateur que les paramètres ont été changés
@@ -72,19 +67,61 @@ export function useFinssInfo(finssId) {
                     title: 'Modification des paramètres du Finss',
                     message: 'Le finss à bien été cloturé'
                 })
-
                 // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
                 retrieveFinssInfo()
-
             }else{
                 errorNotif("Finss", "Une erreur inconnue est survenue lors de la cloture du finss")
-                console.log("Error sending Finss parameters", response);
             }
         }catch (error) {
-            errorNotif("Finss", error.message)
-            console.log("Error sending Finss parameters", error);
+            errorNotif("Finss", error.message + " - " + error.response.data.status)
         }
-    },[axiosPrivate, retrieveFinssInfo, finssId, finssInfo])
+    },[axiosPrivate, retrieveFinssInfo, finssId])
+
+    const endBucquageFinss = useCallback(async ()=>{
+        try {
+            const response = await axiosPrivate.patch("event/"+finssId+"/fermeture_bucquage/")
+
+            if(response.status===200){
+                // On indique à l'utilisateur que les paramètres ont été changés
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: 'Modification des paramètres du Finss',
+                    message: 'Les bucquages du finss ont été fermés'
+                })
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
+                retrieveFinssInfo()
+            }else{
+                errorNotif("Finss", "Une erreur inconnue est survenue lors de la fermeture des bucquage du finss")
+            }
+        }catch (error) {
+            errorNotif("Finss", error.message + " - " + error.response.data.status)
+        }
+    },[axiosPrivate, retrieveFinssInfo, finssId])
+
+    const endPrebucquageFinss = useCallback(async ()=>{
+        try {
+            const response = await axiosPrivate.patch("event/"+finssId+"/fermeture_prebucquage/")
+
+            if(response.status===200){
+                // On indique à l'utilisateur que les paramètres ont été changés
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: 'Modification des paramètres du Finss',
+                    message: 'Les inscriptions au finss ont été fermées'
+                })
+                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
+                retrieveFinssInfo()
+            }else{
+                errorNotif("Finss", "Une erreur inconnue est survenue lors de la fermeture des inscriptions du finss")
+            }
+        }catch (error) {
+            errorNotif("Finss", error.message + " - " + error.response.data.status)
+        }
+    },[axiosPrivate, retrieveFinssInfo, finssId])
 
     const changeInfo = useCallback(async (finssInfo)=>{
         try {
@@ -126,6 +163,6 @@ export function useFinssInfo(finssId) {
         }
     }, [retrieveFinssInfo, finssId]);
 
-    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo, endFinss}
+    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo, endFinss, endBucquageFinss, endPrebucquageFinss}
 
 }
