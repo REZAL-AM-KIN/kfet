@@ -16,9 +16,10 @@ const Finss = () => {
     const usefinsslist = useFinssList()
 
     // On configure un useEffect qui s'execute à chaque changement d'état d'ouverture de la modale de sélection d'inscription
-    // Si modalOpened===false alors l'utilisateur vient de fermer la modal : on update donc les résultats
+    // Si modalOpened===false alors l'utilisateur vient de fermer la modal.
+    // Si les résultats ne sont pas déjà en cours de chargement, on les actualise.
     useEffect(()=>{
-        if(modalOpened===false){
+        if(modalOpened===false && usefinsslist.isLoading===false){
             usefinsslist.retrieveFinssList()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
