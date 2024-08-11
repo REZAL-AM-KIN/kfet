@@ -22,7 +22,7 @@ import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 
 //TODO : Modification des bucquages dans le tableau
-//TODO : Blocquer la diminution des quantités si pas la permission
+//TODO : Bloquer la diminution des quantités si pas la permission
 const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     const [bucquageModalOpened, setBucquageModalOpened] = useState(false);
@@ -30,7 +30,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
-    //Construction du déroulant au clique sur une ligne du tableau
+    //Construction du déroulant au clic sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
     // (les datas correspondant à la ligne) est passé via l'argument record
     const rowExpansionContent = (record)=>{
@@ -40,7 +40,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             record.participation_event.map((participation) =>
             {
 
-                //Récupération des infos produits depuis le hook useFinssProducts
+                //Récupération des infos des produits depuis le hook useFinssProducts
                 const product = usefinssproduct.productsList.find((product) => (product.id === participation.product_participation))
                 if(!product){
                     errorNotif("Prebucquage","Correspondance produit manquante\n participation id: "+participation.id)
@@ -55,11 +55,11 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
        let tabs_content = [[],[],[]]
 
-        //Si on est sur téléphone on affiche tous les bucquages dans un seul tableau
+        //Si on est sur téléphone, on affiche tous les bucquages dans un seul tableau
         if (isSmallDevice){
             tabs_content[0]=productQuantity
 
-        }else{ //Sinon on les répartis dans 3 tableau
+        }else{ //Sinon, on les répartit dans 3 tableaux
             productQuantity.forEach((quantity, index)=>{
                 tabs_content[index%3].push(quantity)
             })
@@ -104,7 +104,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     }
 
-    //Construction de l'élément de progession des bucquages
+    //Construction de l'élément de progression des bucquages
     const BucquageProgress = () =>{
 
         //on sélectionne tous les prébucquages
@@ -132,30 +132,27 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     //On souhaite vérifier que les inscriptions sont fermé avant de permettre le bucquage des gens.
     function openBucquage() {
-        if(usefinssinfo.finssInfo.etat_event !== etatEventValues.BUCQUAGE){
+        if(usefinssinfo.finssInfo.etat_event === etatEventValues.PREBUCQUAGE){
             openModal({
                 title: 'Bucquage impossible',
                 children: (
                     <>
                         <Text size="sm">
                             Le bucquage n'est pas disponible car les inscriptions sont toujours ouvertes. <br/>
-                            Rendez-vous dans les paramètres pour cloturer les inscriptions.
+                            Rendez-vous dans les paramètres pour clôturer les inscriptions.
                         </Text>
                         <Button fullWidth color="red" onClick={closeAllModals} mt="md">C'est compris.</Button>
                     </>
                 ),
             });
             return
-        }
-
-        //On vérifie si certaines participation on déjà été débucqué, si c'est le cas, alors on interdit les bucquages.
-        if(usebucquage.bucquages.some((bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_debucquee))){
+        }else if(usefinssinfo.finssInfo.etat_event > etatEventValues.BUCQUAGE){
             openModal({
                 title: 'Bucquage impossible',
                 children: (
                     <>
                         <Text size="sm">
-                            Le bucquage n'est plus disponible car certaine participation ont déjà été débucquées.
+                            Le bucquage pour ce fin'ss est terminé!
                         </Text>
                         <Button fullWidth color="red" onClick={closeAllModals} mt="md">C'est compris.</Button>
                     </>
@@ -163,7 +160,6 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             });
             return
         }
-
 
         //Si des produits ont un prix nul, on prévient l'utilisateur
         if(usefinssproduct.productsList.some((product)=>parseFloat(product.prix_min)===0 || parseFloat(product.prix_total)===0)){
@@ -173,7 +169,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     <Text size="sm">
                         Certains produits ont un prix nul. <br/>
                         Ils seront donc gratuits.<br/>
-                        Etes vous certain de vouloir continuer ?
+                        Êtes vous certain de vouloir continuer ?
                     </Text>
                 ),
                 labels: { confirm: 'Continuer', cancel: 'Annuler' },
@@ -189,7 +185,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     }
 
-    // On selectionne les bucquages qui ont au moins une participation qui a été bucqué
+    // On sélectionne les bucquages qui ont au moins une participation qui a été bucqué
     // On ajoute un champ "consommateur_bucque_famss" qui contient le nom du consommateur et la famss pour l'affichage
     const data = usebucquage.bucquages.filter(
         (bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_bucquee))
