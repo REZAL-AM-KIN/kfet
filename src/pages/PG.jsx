@@ -7,6 +7,7 @@ import {PgCard} from '../components/PgCard';
 import {PgHistory} from "../components/History";
 import RechargeButton from "../components/RechargeButton";
 import RechargeLydiaButton from "../components/RechargeLydiaButton";
+import CancelLastBucquageButton from "../components/CancelLastBucquageButton";
 import Produits from "../components/Produits";
 
 import {usePermissions} from "../hooks/useUser";
@@ -49,15 +50,16 @@ function PG() {
         <Grid>
             <Grid.Col md={8}>
                 <PgCard data={pg.data}/>
-                <Group grow px="md">
+                <Group grow px="md" align="start">
                     <ProduitsFwdRef
                         ref={produitRef}
                         entite={entite}
                         pgData={pg.data}
                         length={7}
                         onSubmit={handleSubmit}/>
-                    <Stack>
+                    <Stack justify="flex-start">
                         {/* <Button onClick={handleSubmit}>Refresh</Button> */}
+                        <CancelLastBucquageButton usepg={pg} onCancel={handleSubmit}/>
                         {permissions.recharge
                             ? <RechargeButton pgData={pg.data} onRecharge={handleSubmit}/>
                             : <></>}

@@ -1,6 +1,8 @@
 import {useEffect, useState, useCallback} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
+import {showNotification} from "@mantine/notifications";
+import {IconCheck} from "@tabler/icons-react";
 
 
 /*
@@ -45,7 +47,26 @@ export function usePG(pgId){
             console.log("Error getting consommateur", error);
         }
         setLoading(false);
-    }, [pgId]);
+    }, [pgId, axiosPrivate]);
+
+    const cancelLastBucquage = useCallback(async () => {
+        try {
+            const response = await axiosPrivate.patch("consommateurs/" + pgId + "/annulerDernierDebucquage/");
+            if(response.status === 200){
+                showNotification( {
+                    icon: <IconCheck size={18} />,
+                    color: "green",
+                    autoClose: true,
+                    title: "Annulation débucquage",
+                    message: response.data.detail
+                })
+            } else {
+                errorNotif("usePG", "Erreur inconnue lors de l'annulation du dernier débucquage");
+            }
+        } catch (error) {
+            errorNotif("usePG", error.message + " - " + error.response.data.detail);
+        }
+    }, [pgId, axiosPrivate]);
 
     // get general history
     useEffect(() => {
@@ -58,5 +79,5 @@ export function usePG(pgId){
         // eslint-disable-next-line
     }, [pgId]);
 
-    return {data, isLoading, retrieve}
+    return {data, isLoading, retrieve, cancelLastBucquage}
 }
