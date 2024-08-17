@@ -50,15 +50,16 @@ export const EntiteProvider = ({children}) => {
                     // TODO: modify when the back will use the id instead of the name
                     entiteList.entitiesList.find((line) => {
                         return line.nom === permissions.entities_manageable[0];
-                    })
+                    }).id
                 );
             } else if (permissions.entities?.length) {
                 // Check if the user has a entite
-                entiteList.entitiesList.forEach((line) => {
-                    if (line.nom === permissions.entities[0]) {
-                        setEntite(line.id);
-                    }
-                });
+                setEntite(
+                    // TODO: modify when the back will use the id instead of the name
+                    entiteList.entitiesList.find((line) => {
+                        return line.nom === permissions.entities[0];
+                    }).id
+                );
             }
         }
     // eslint-disable-next-line
