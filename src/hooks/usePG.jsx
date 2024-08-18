@@ -56,7 +56,7 @@ export function usePG(pgId){
                 showNotification( {
                     icon: <IconCheck size={18} />,
                     color: "green",
-                    autoClose: true,
+                    autoClose: 5000,
                     title: "Annulation débucquage",
                     message: response.data.detail
                 })

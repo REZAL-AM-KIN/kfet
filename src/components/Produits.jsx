@@ -1,7 +1,7 @@
 import {useState, forwardRef, useEffect} from "react";
 
 import {Input, Stack, Text, Tooltip, createStyles} from "@mantine/core";
-import {getHotkeyHandler} from "@mantine/hooks";
+import {getHotkeyHandler, useHotkeys} from "@mantine/hooks";
 
 import {useProduitByEntite} from "../hooks/useProduitByEntite";
 import { useBucquage } from "../hooks/useBucquage";
@@ -49,7 +49,7 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
         // console.log("Produits: Submit item");
         bucquage(pgData.id, item.id, onSubmit);
         // console.log("Produits: Submit item: bucquage done", isLoading);
-        ref.current.focus()
+        ref.current.focus();
     }
 
     // TODO: chemin de la flemme. Ecrire un onChange plutot que de faire un useEffect
@@ -71,8 +71,7 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
         ({item, raccourci, nom, prix, ...others}, itemRef) => (
             <Text ref={itemRef}
                 onClick={()=>{
-                    onItemSubmit(item);
-                    ref.current.focus();}}
+                    onItemSubmit(item);}}
                 {...others}
             >{raccourci} - {nom} - {prix}</Text>
         )
@@ -82,14 +81,17 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
         ["ArrowUp", () => setSelected((current) => (current > 0 ? current - 1 : 0))],
         ["ArrowDown", () => setSelected((current) => (current < filteredProduits.length - 1 ? current + 1 : current))],
         ["Enter", () => onItemSubmit(filteredProduits[selected])],
-        ["Escape", () => {setSelected(0); setRecherche("")}] // reset selected item and search field
+        ["Escape", () => {setSelected(0); setRecherche(""); ref.current.blur()}] // reset selected item and search field
     ]
+
+    const shortcut = "alt+R";
+    useHotkeys([[shortcut, ()=>ref.current.focus()]])
 
     return (
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
             <Tooltip label="! pour rechercher par nom" position="right" withArrow>
                 <Input
-                    placeholder="Rechercher un produit"
+                    placeholder={`Rechercher un produit (${shortcut})`}
                     value={recherche}
                     onChange={(event) => {
                         setRecherche(event.currentTarget.value);

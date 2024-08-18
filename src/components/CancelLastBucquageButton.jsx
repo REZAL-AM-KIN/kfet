@@ -5,7 +5,7 @@ function CancelLastBucquageButton({usepg, onCancel, sx}) {
     const onClick = ()=>{
         usepg.cancelLastBucquage().then(onCancel)
     }
-    const shortcut = "alt+K";
+    const shortcut = "alt+Z";
     useHotkeys([[shortcut, onClick]])
     return (
         <Button onClick={onClick} sx={sx}>Annuler le dernier débucquage ({shortcut})</Button>
