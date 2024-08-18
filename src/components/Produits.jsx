@@ -1,7 +1,7 @@
 import {useState, forwardRef, useEffect} from "react";
 
-import {Input, Stack, Text, Tooltip, createStyles} from "@mantine/core";
-import {getHotkeyHandler, useHotkeys} from "@mantine/hooks";
+import {Input, Stack, Text, Tooltip, createStyles, useMantineTheme} from "@mantine/core";
+import {getHotkeyHandler, useHotkeys, useMediaQuery} from "@mantine/hooks";
 
 import {useProduitByEntite} from "../hooks/useProduitByEntite";
 import { useBucquage } from "../hooks/useBucquage";
@@ -32,6 +32,8 @@ const useStyles = createStyles((theme) => ({
 
 
 function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
+    const theme = useMantineTheme()
+    const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     const {classes} = useStyles();
 
@@ -91,7 +93,7 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
             <Tooltip label="! pour rechercher par nom" position="right" withArrow>
                 <Input
-                    placeholder={`Rechercher un produit (${shortcut})`}
+                    placeholder={`Rechercher un produit ${isSmallDevice? "" : "("+shortcut+")"}`}
                     value={recherche}
                     onChange={(event) => {
                         setRecherche(event.currentTarget.value);
