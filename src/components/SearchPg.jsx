@@ -36,7 +36,7 @@ const SearchPg = ({onSubmit, withBorder, ...othersProps})=>{
 
     //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
     const data = consommateurList.map((pg) =>{
-        return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms}
+        return {id: pg.id, value: pg.bucque, fams: pg.fams, nom: pg.nom, prenom: pg.prenom, proms: pg.proms, solde: pg.solde}
     })
 
     return (

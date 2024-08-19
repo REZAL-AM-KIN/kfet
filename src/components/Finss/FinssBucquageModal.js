@@ -25,6 +25,24 @@ import SearchPg from "../SearchPg";
 // Il permet également de faire un bucquage partiel (sélectionner un produit et une quantité)
 // Il permet également de débucquer (sélectionner un produit et une quantité)
 
+
+// On le définit ici sinon on ne peut pas écrire directement dans le NumberInput (je crois qu'il recrée le composant
+// plutôt que de le re-render)
+const QtsInput = ({item, qts, ...othersProps})=> {
+    return (
+        <NumberInput
+            min={item.obligatoire ? 1 : 0}
+            styles={{control:{backgroundColor: "white"},
+                input:{
+                    backgroundColor: qts>item.prebucque_quantity ? "orange" :""
+                }
+            }}
+            {...othersProps}
+        />
+    );
+}
+
+
 const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>{
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
@@ -95,6 +113,8 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
             const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.prix_min,0)
             //console.log(prix_min_total+"/"+selectedPG.solde)
             //console.log(selectedPG)
+            // On calcule le montant dû par le PG avec les soldes min fixé pour chaques produit
+            const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.solde_requis,0)
             if(selectedPG.solde<prix_min_total){
                 setError("Solde insuffisant.") //TODO: Faire en sorte que ça calcule à chaque changement de valeur
                 return
@@ -158,25 +178,6 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     const tableData = form.values.products.map((item,index)=>({...item, index, id:index}))
 
 
-    const QtsInput = ({item})=> {
-
-        const prebucque_qts = form.values.products[item.index].prebucque_quantity
-        const qts = form.values.products[item.index].qts
-
-        return (
-                <NumberInput
-                    min={item.obligatoire ? 1 : 0}
-                    styles={{control:{backgroundColor: "white"},
-                            input:{
-                                    backgroundColor: qts>prebucque_qts ? "orange" :""
-                                }
-                           }}
-                    {...form.getInputProps('products.' + item.index + '.qts', {type: 'numberinput'})}
-                />
-                );
-    }
-
-
     return (
         <Modal opened={opened} onClose={closeModal} >
             <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})} >
@@ -207,18 +208,23 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                            columns={[
                                {accessor: "nom", title:"Nom"},
                                {accessor: "prebucque_quantity", title:"Pré-bucquage"},
-                               {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%", render: (product) => (<QtsInput item={product}/>) }
+                               {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%",
+                                   render: (product) => (
+                                       <QtsInput item={product} qts={form.values.products[product.index].qts}
+                                           {...form.getInputProps(`products.${product.index}.qts`, {type: 'number'})}/>
+                                   )
+                               }
                            ]}
                            noRecordsText="Aucun produit n'existe pour ce fin'ss"
-                           onKeyDown={()=>alert("keydown")}
                        />
                    </Box>
-
-
                </Box>
+
                 <Group spacing="0">
-                    <Button style={{flex:"auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6], order:2}} type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
-                    <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}  type="submit" disabled={!selectedPG}>Valider</Button>
+                    <Button style={{flex: "auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6], order:2}}
+                            type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                    <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}
+                            type="submit" disabled={!selectedPG}>Valider</Button>
                 </Group>
             </form>
         </Modal>
