@@ -19,9 +19,9 @@ import {showNotification} from "@mantine/notifications";
 import {IconCheck, IconX} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
 
-// Ce composant permet de faire le bucquage d'un fin'ss
-// Il s'agit d'un modal qui s'ouvre depuis FinssGeneralParameters
-// Il est composé d'un tableau de produit avec les quantités à bucqué, d'un selecteur de PG et d'un bouton de validation
+// Ce composant permet de faire le bucquage d'un fin'ss.
+// Il s'agit d'un modal qui s'ouvre depuis FinssGeneralParameters.
+// Il est composé d'un tableau de produit avec les quantités à bucqué, d'un sélecteur de PG et d'un bouton de validation.
 // Il permet également de faire un bucquage partiel (sélectionner un produit et une quantité)
 // Il permet également de débucquer (sélectionner un produit et une quantité)
 
@@ -54,7 +54,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     const [focusOnPGSelector, setFocusOnPGSelector] = useState(true)
     const [error, setError] = useState("")
 
-// initialisation de la user form. La liste des produits est vide
+// Initialisation de la user form. La liste des produits est vide.
     const form = useForm({
         initialValues:{
             products:[],
@@ -68,30 +68,30 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     ]);
 
     //on remplie la liste des produits en renommant l'attribue id en "key"
-    //On rajoute les quantités pré-bucquées pour pouvoir les affichés facilement dans le tableau
+    //On rajoute les quantités pré-bucquées pour pouvoir les afficher facilement dans le tableau
     useEffect(()=>{
         const data = usefinssproduct.productsList.map(({id, ...product}) => {
             let prebucque_quantity = null
             let already_bucqued_quantity = null
 
-            //Si il n'y a pas de PG selectionné, alors on ne récupère les quantités prébucquées
+            // S'il n'y a pas de PG sélectionné, alors on ne récupère les quantités prébucquées
             if(selectedPG){
-                //On selectionne l'objet bucquage (cf useBucquage) de l'utilisateur sélectionné
+                //On sélectionne l'objet bucquage (cf. useBucquage) de l'utilisateur sélectionné
                 const bucquage = usebucquage.bucquages.find(bucquage => bucquage.consommateur_id === selectedPG.id)
 
-                //Si un bucquage est trouvé alors on récupère les participations
+                //Si un bucquage est trouvé, alors on récupère les participations
                 if(bucquage){
-                    //On selectionne la participation du bucquage qui correspond à l'id du produit.
+                    //On sélectionne la participation du bucquage qui correspond à l'id du produit.
                     const participation = bucquage.participation_event.find(participation => participation.product_participation === id)
-                    prebucque_quantity = participation ? participation.prebucque_quantity : 0 // On regarde si une participation pour le produit existe, sinon on attribue la quantité de 0
+                    prebucque_quantity = participation ? participation.prebucque_quantity : 0 // On regarde si une participation pour le produit existe, sinon on attribue la quantité de 0.
 
 
-                    //Si la participation est déjà bucqué alors on récupère les quantités déjà bucquées
+                    //Si la participation est déjà bucqué, alors on récupère les quantités déjà bucquées
                     already_bucqued_quantity = (participation && participation.participation_bucquee) ? participation.quantity : undefined
 
 
                 }else{
-                    //Si pas de bucquage on attribut la quantité de 0
+                    //Si pas de bucquage, on attribue la quantité de 0.
                     prebucque_quantity=0
                 }
 
@@ -108,12 +108,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         // On regarde si les valeurs de quantité ont augmenté entre le prébucquage et le bucquage
         // Si c'est le cas, on vérifie que le PG a le montant suffisant pour être débucqué
         if(values.products.some((product)=>product.qts>product.already_bucqued_quantity)){
-            //console.log("qts changed")
-            // On calcule le montant du par le PG avec les prix min fixé pour chaques produit
-            const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.prix_min,0)
-            //console.log(prix_min_total+"/"+selectedPG.solde)
-            //console.log(selectedPG)
-            // On calcule le montant dû par le PG avec les soldes min fixé pour chaques produit
+            // On calcule le montant dû par le PG avec les soldes min fixé pour chaque produit
             const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.solde_requis,0)
             if(selectedPG.solde<prix_min_total){
                 setError("Solde insuffisant.") //TODO: Faire en sorte que ça calcule à chaque changement de valeur
@@ -169,12 +164,9 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         setFocusOnPGSelector(true) // On remet le focus sur le SearchPg
     }
 
-
-
-
-    // on extrait tous les produits existant dans la form car on a besoin de l'index de la form pour bind le
+    // On extrait tous les produits existants dans la form car on a besoin de l'index de la form pour bind le
     // NumberInput de chaque produit à la form.
-    // On en profite pour attribuer "index" à "id" car le champs id sert de key pour le component Datatable.
+    // On en profite pour attribuer "index" à "id" puisque le champ id sert de key pour le component Datatable.
     const tableData = form.values.products.map((item,index)=>({...item, index, id:index}))
 
 
@@ -185,7 +177,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                    {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                    <Group  spacing="0">
                        <FocusTrap active={focusOnPGSelector}>
-                       {/*On wrap le SearchPg dans une box pour pouvoir controler la width*/}
+                       {/*On wrap le SearchPg dans une box pour pouvoir contrôler la width*/}
                        <Box style={{flex:"auto"}}>
 
                                 <SearchPg onSubmit={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
