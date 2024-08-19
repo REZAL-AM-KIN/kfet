@@ -47,16 +47,16 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     return;
                 }
 
-                //Si la quantité vaut 0, que la participation n'est pas bucquée ou qu'elle est déjà débucquée, on affiche pas la quantité
+                //Si la quantité vaut 0, que la participation n'est pas bucquée ou qu'elle est déjà débucquée, on n'affiche pas la quantité
                 if (participation.quantity === 0 || !participation.participation_bucquee || participation.participation_debucquee) {
                     return
                 }
 
-                //On ajoute le prix au prix total du par le PG
-                prix_total += parseFloat(product.prix_unitaire) * participation.quantity
+                //On ajoute le prix au prix total dû par le PG
+                prix_total += (parseFloat(product.prix_unitaire) * participation.quantity)
             })
 
-            return {...bucquage, prix_total: prix_total, solde_pg: consommateur.solde}
+            return {...bucquage, prix_total: parseFloat(prix_total.toFixed(2)), solde_pg: consommateur.solde}
         })
         setData(completedData)
 
@@ -120,7 +120,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                                                                     !participation.participation_debucquee &&
                                                                     participation.quantity !== 0)
             bucquedParticipation.forEach((participation)=>{
-                debucquageList.push({participation_id: participation.id, negatss: negatss})
+                debucquageList.push({id: participation.id, negatss: negatss})
             })
 
 
@@ -202,7 +202,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 return;
             }
 
-            //Si la quantité vaut 0 ou que la participation n'est pas bucquée ou quelle est déjà débucquée, on affiche pas la quantité
+            //Si la quantité vaut 0 ou que la participation n'est pas bucquée, on affiche pas la quantité
             if(participation.quantity ===0 || !participation.participation_bucquee ){
                 return;
             }
