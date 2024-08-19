@@ -98,7 +98,10 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
             }
 
 
-            return ({key:id, ...product, prebucque_quantity: prebucque_quantity, already_bucqued_quantity: already_bucqued_quantity, qts: (already_bucqued_quantity ? already_bucqued_quantity : (product.obligatoire ? 1: 0))})
+            return ({key:id, ...product,
+                    prebucque_quantity: prebucque_quantity,
+                    already_bucqued_quantity: already_bucqued_quantity,
+                    qts: (already_bucqued_quantity ? already_bucqued_quantity : (prebucque_quantity>0 ? prebucque_quantity : (product.obligatoire ? 1: 0)))})
         })
         form.setValues({products:data})
     },[usefinssproduct.productsList, usebucquage.bucquages, selectedPG])
