@@ -22,22 +22,25 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
             "nom": "",
             "description": "",
             "prix_total": 0,
-            "prix_min": 0,
+            "solde_requis": 0,
             "obligatoire": false,
         },
-        validateInputOnChange:["nom", "description", "prix_total", "prix_min"],
+        validateInputOnChange:["nom", "description", "prix_total", "solde_requis"],
 
         validate:{
             nom: (value) => (value.length>30 ? "Le nom doit faire moins de 30 caractères" :
                 value.length===0 ? "Le titre est obligatoire !": null),
             description: (value) => (value.length>100 ? "La description doit faire moins de 100 caractères" : null),
-            prix_total: (value) => (value<0 ? "Le prix total doit être positif" : null),
-            prix_min: (value) => (value<0 ? "Le prix minimum doit être positif" : null),
+            prix_total: (value) => (value<0 ? "Le prix total doit être positif" :
+                value.length===0 ? "Le prix total est obligatoire !": null),
+            solde_requis: (value) => (value<0 ? "Le solde minimum sur le compte du pg doit être positif" :
+                value.length===0 ? "Le solde minimum requis est obligatoire !": null),
 
         },
     })
 
     useEffect(()=>{
+        console.log(initialProduct)
         form.setValues(initialProduct)
     }, [initialProduct])
 
@@ -70,13 +73,13 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
             />
 
             <NumberInput
-                placeholder="Prix minimum"
-                label="Prix minimum"
+                placeholder="Solde minimum requis sur le compte du PG"
+                label="Solde minimum"
                 withAsterisk
                 precision={2}
                 decimalSeparator=","
                 hideControls
-                {...form.getInputProps('prix_min')}
+                {...form.getInputProps('solde_requis')}
             />
 
 

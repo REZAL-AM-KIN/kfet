@@ -66,7 +66,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
     const tabsPanelList = usefinssproduct.productsList.map((product) => {
         //On transforme les prix (prix_total et prix_min) qui sont en string dans le json
         product.prix_total=parseFloat(product.prix_total)
-        product.prix_min=parseFloat(product.prix_min)
+        product.solde_requis=parseFloat(product.solde_requis)
 
         //On utilise les id comme value au cas où il y est deux produits avec le même nom
         return (
