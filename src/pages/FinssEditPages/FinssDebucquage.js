@@ -231,7 +231,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 <Stack spacing="0" style = {{flexBasis: "fit-content", marginLeft: "auto", marginRight:"auto"}}>
                     <Group style={{marginBottom: 8}}>
                         <Text>Récapitulatif : </Text>
-                        <List>
+                        <List size="sm">
                             {productQuantityNodes}
                         </List>
                     </Group>
