@@ -28,8 +28,8 @@ const FinssProductRecapModal = ({opened, setOpened, usefinssproduct})=> {
                             visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + ')')
                         },
                         {
-                            accessor: "prix_min",
-                            title: "Prix min",
+                            accessor: "solde_requis",
+                            title: "Solde requis",
                             visibleMediaQuery: (theme) => ('(min-width: ' + theme.breakpoints.sm + ')')
                         },
                         {accessor: "quantite_bucque", title: "Qts"},
