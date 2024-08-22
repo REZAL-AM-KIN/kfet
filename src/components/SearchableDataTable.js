@@ -30,10 +30,16 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
     //Vérification de la présence des callbacks si reload ou add
     if(withAddIcon && !addCallback){
-        throw "withAddIcon option require addCallback. \n addCallback should be a function that handle add logic"
+        throw Object.assign(
+            new Error("withAddIcon option require addCallback. \n addCallback should be a function that handle add logic"),
+            { code: 501 }
+        );
     }
     if(withReloadIcon && !reloadCallback){
-        throw "withReloadIcon option require reloadCallBack. \n reloadCallBack should be a function that handle reload logic"
+        throw Object.assign(
+            new Error("withReloadIcon option require reloadCallBack. \n reloadCallBack should be a function that handle reload logic"),
+            { code: 501 }
+        );
     }
 
 
@@ -42,11 +48,11 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     //Fonction qui sert à filter les données passés par "data" en fonction de la chaine passé dans "search"
     //La recherche s'effectue sur les champs "data_keys" qui sont ici toutes les colones déclarées comme filtrable. (filtrable : true)
     function filterData(data, search) {
-        const data_keys = columns.filter((item)=>item.sortable).map((item)=>item.accessor) // on récupère les accessors des colone filtrable.
+        const data_keys = columns.filter((item)=>item.searchable).map((item)=>item.accessor) // on récupère les accessors des colone filtrable.
 
         const query = search.toLowerCase().trim();
         return data.filter((item) =>
-            data_keys.some((key) => item[key].toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
+            data_keys.some((key) => item[key] !== null && item[key].toString().toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
         );
     }
 
@@ -68,6 +74,13 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
         return filterData(
             [...data].sort((a, b) => {
 
+                if (a[sortBy] === null) {
+                    return 1;
+                }
+                if (b[sortBy] === null) {
+                    return -1;
+                }
+
                 if (payload.reversed) {
                     return b[sortBy].localeCompare(a[sortBy]);
                 }
@@ -82,7 +95,7 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     useEffect(() => {
         const sorted_data = sortData(data, {sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search:search});
         setSortedData(sorted_data);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, sortStatus]);
 
     const handleSearchChange = (event) => {
@@ -94,14 +107,14 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     return (
         <Stack spacing={elementSpacing} style={{height: "100%"}}>
             <Group spacing="xs" position={searchBarPosition} style={styles.searchBar}>
-                    <TextInput
-                        placeholder={searchPlaceHolder}
+                <TextInput
+                    placeholder={searchPlaceHolder}
 
-                        icon={<IconSearch size={14} stroke={1.5} />}
-                        style = {styles.input}
-                        value={search}
-                        onChange={handleSearchChange}
-                    />
+                    icon={<IconSearch size={14} stroke={1.5} />}
+                    style = {styles.input}
+                    value={search}
+                    onChange={handleSearchChange}
+                />
 
                 {/* Ajout des boutons d'ajout et de refresh si demandé par l'utilisateur*/}
                 {(withAddIcon || withReloadIcon || extraButtons) && (

@@ -1,9 +1,7 @@
 import {Outlet, Route, Routes} from 'react-router-dom';
 
 import {Container, MantineProvider, useMantineTheme} from "@mantine/core";
-import { ModalsProvider } from '@mantine/modals';
 import {useMediaQuery} from "@mantine/hooks";
-import { Notifications } from '@mantine/notifications';
 
 // authentification
 import RequireAuth from './components/RequireAuth';
@@ -16,6 +14,9 @@ import Home from "./pages/Home";
 import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import FinssEdit from "./pages/FinssEdit";
+
+import {Notifications} from '@mantine/notifications';
+import {ModalsProvider} from '@mantine/modals';
 
 // contexts
 import { UserProvider } from "./context/User";
@@ -51,7 +52,7 @@ function App() {
                 </Container>
             </EntiteProvider>
         )
-    };
+    }
 
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
@@ -75,9 +76,18 @@ function App() {
 
                                 </Route>
                             </Route>
+                        {/*privates routes*/}
+                        <Route element={<RequireAuth/>}>
+                            <Route element={<LayoutRoute/>}>
+                                <Route path="/" element={<Home/>}/>
+                                <Route path="pg/:pgId" element={<PG/>}/>
+                                <Route path="edit" element={<Edit/>}/>
+                                <Route path="finss" element={<Finss/>}/>
+                            </Route>
+                        </Route>
 
                         {/* TODO: 404*/}
-                        
+
                         </Route>
                     </Routes>
                 </UserProvider>
