@@ -1,7 +1,7 @@
 import {NavLink, useNavigate} from "react-router-dom";
 import {Group, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
-import useStyles from "./NavbarButtonStyle";
+import useNavabarButtonStyle from "./NavbarButtonStyle";
 
 export function NavbarLink({icon: Icon, label, link, shortcut, onClick}) {
     const theme = useMantineTheme()
@@ -14,7 +14,7 @@ export function NavbarLink({icon: Icon, label, link, shortcut, onClick}) {
     }];
     useHotkeys([shortcutAssoc]);
 
-    const {classes, cx} = useStyles();
+    const {classes, cx} = useNavabarButtonStyle();
     if (!isSmallDevice) {
         return (
             <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}
