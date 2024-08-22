@@ -111,8 +111,8 @@ const NormalNavBar = ({linksData, width})=> {
                         />
                     </Stack>
                 </Navbar.Section>
-                <Navbar.Section grow mt={20}>
-                    <Stack justify="center" spacing={0}>
+                <Navbar.Section grow mt={30}>
+                    <Stack justify="center" spacing={10}>
                         <EntiteSelector/>
                         {links}
                     </Stack>
