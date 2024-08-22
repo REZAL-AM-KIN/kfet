@@ -33,8 +33,8 @@ const FinssEdit = () => {
             >
                 <Tabs.List grow position="apart">
                     <Tabs.Tab value="prebucquage">Prebucquage</Tabs.Tab>
-                    <Tabs.Tab value="bucquage">Bucquage</Tabs.Tab>
-                    <Tabs.Tab value="debucquage">Debucquage</Tabs.Tab>
+                    <Tabs.Tab value="bucquage" disabled={usefinssinfo.finssInfo.etat_event < etatEventValues.BUCQUAGE}>Bucquage</Tabs.Tab>
+                    <Tabs.Tab value="debucquage" disabled={usefinssinfo.finssInfo.etat_event < etatEventValues.DEBUCQUAGE}>Debucquage</Tabs.Tab>
                     <Tabs.Tab value="parameters">Paramètres</Tabs.Tab>
                 </Tabs.List>
 
