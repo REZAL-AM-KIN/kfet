@@ -14,7 +14,6 @@ function endEvent(usefinss, usebucquage) {
 
         // S'il reste des bucquages avec des participations non débucquées, alors on interdit la cloture
         if(bucquedButNotDebucquedBucquage.length!==0){
-            console.log(bucquedButNotDebucquedBucquage.length)
             openModal({
                 title: 'Clôture du Fin\'ss impossible :',
                 centered: true,

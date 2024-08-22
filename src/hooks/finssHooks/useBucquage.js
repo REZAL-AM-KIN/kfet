@@ -79,13 +79,16 @@ export function useBucquage(finssId) {
                     title: 'Débucquages envoyés avec succès',
                     message: debucquagesList.length+' débucquages envoyés avec succès'
                 })
+                return true
             }else{
                 errorNotif("Débucquage", "Une erreur inconnue est survenue lors de l'envoi des débucquages")
                 console.log("Error sending débucquages", response);
+                return false
             }
         }catch (error) {
             errorNotif("Débucquage", error.message)
             console.log("Error sending débucquages", error);
+            return false
         }
     },[axiosPrivate])
 
@@ -102,13 +105,16 @@ export function useBucquage(finssId) {
                     title: 'Bucquages envoyés avec succès',
                     message: bucquagesList.length+' bucquages envoyés avec succès'
                 })
+                return true
             }else{
                 errorNotif("Débucquage", "Une erreur inconnue est survenue lors de l'envoi des bucquages")
                 console.log("Error sending bucquages", response);
+                return false
             }
         }catch (error) {
             errorNotif("Débucquage", error.message)
             console.log("Error sending bucquages", error);
+            return false
         }
     },[axiosPrivate])
 

@@ -40,8 +40,8 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
     })
 
     useEffect(()=>{
-        console.log(initialProduct)
         form.setValues(initialProduct)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialProduct])
 
     return (
