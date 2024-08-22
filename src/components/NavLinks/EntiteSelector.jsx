@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Group} from "@mantine/core";
-import {useEntiteCtxt} from "../hooks/useEntiteCtxt";
-import {useEntiteList} from "../hooks/useEntiteList";
+import {useEntiteCtxt} from "../../hooks/useEntiteCtxt";
+import {useEntiteList} from "../../hooks/useEntiteList";
 
 /*
 * This component is used to display the entites in the popover
