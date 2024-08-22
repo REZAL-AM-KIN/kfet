@@ -53,12 +53,15 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     const [pgselectorValue, setPgselectorValue] = useState()
     const [focusOnPGSelector, setFocusOnPGSelector] = useState(true)
     const [error, setError] = useState("")
+    const [soldeRequisTotal, SetSoldeRequisTotal] = useState(0)
 
 // Initialisation de la user form. La liste des produits est vide.
     const form = useForm({
         initialValues:{
             products:[],
         },
+        validate: validateForm,
+        validateInputOnChange: true,
 
     })
 
@@ -103,24 +106,23 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                     already_bucqued_quantity: already_bucqued_quantity,
                     qts: (already_bucqued_quantity ? already_bucqued_quantity : (prebucque_quantity>0 ? prebucque_quantity : (product.obligatoire ? 1: 0)))})
         })
-        form.setValues({products:data})
+        form.setValues({products:data, selectedPG:selectedPG})
+        validateForm({products:data, selectedPG:selectedPG})
     },[usefinssproduct.productsList, usebucquage.bucquages, selectedPG])
+
+    function validateForm(values){
+        const solde_requis_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.solde_requis,0)
+        SetSoldeRequisTotal(solde_requis_total)
+        if (values.selectedPG && values.selectedPG.solde<solde_requis_total) {
+            setError("Solde insuffisant")
+            return {products: values.products.map(() => "solde insuffisant")}
+        }
+        setError("")
+        return {};
+    }
 
     //Fonction de submit de la form
     function sendParticipation(values, _event){
-        // On regarde si les valeurs de quantité ont augmenté entre le prébucquage et le bucquage
-        // Si c'est le cas, on vérifie que le PG a le montant suffisant pour être débucqué
-        if(values.products.some((product)=>product.qts>product.already_bucqued_quantity)){
-            // On calcule le montant dû par le PG avec les soldes min fixé pour chaque produit
-            const prix_min_total = values.products.reduce((accumulator, product)=>accumulator+product.qts*product.solde_requis,0)
-            if(selectedPG.solde<prix_min_total){
-                setError("Solde insuffisant.") //TODO: Faire en sorte que ça calcule à chaque changement de valeur
-                return
-            }
-
-        }
-
-
         const participations = values.products.map(({key,qts})=>(
             {cible_participation:selectedPG.id, product_participation:key, quantity:qts}
         ))
@@ -174,10 +176,9 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
 
     return (
-        <Modal opened={opened} onClose={closeModal} >
+        <Modal opened={opened} onClose={closeModal} size={isSmallDevice ? "100%":"lg"}>
             <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})} >
                <Box sx={{height: isSmallDevice ? 300:400}}>
-                   {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                    <Group  spacing="0">
                        <FocusTrap active={focusOnPGSelector}>
                        {/*On wrap le SearchPg dans une box pour pouvoir contrôler la width*/}
@@ -196,6 +197,13 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
                    <Box style={{position: 'relative'}}>
                        {!selectedPG && <Overlay opacity={0.4} color="#c5c5c5" blur={2} zIndex={5} />}
+                       {selectedPG &&
+                           <Box style={{color: (error !== "" ? "red":""),}} >
+                               <Center><Text>Solde: {selectedPG.solde}€</Text></Center>
+                               <Center><Text>Solde requis: {soldeRequisTotal}€</Text></Center>
+                           </Box>
+                       }
+                       {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                        <DataTable
                            minHeight={150} //Pour l'affichage du logo "pas de produits trouvés"
                            fetching={usefinssproduct.isLoading}
@@ -203,6 +211,8 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                            columns={[
                                {accessor: "nom", title:"Nom"},
                                {accessor: "prebucque_quantity", title:"Pré-bucquage"},
+                               {accessor: "solde_requis", title:"Solde requis (€)",
+                                   render: (product) => (form.values.products[product.index].qts*product.solde_requis).toFixed(2)},
                                {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%",
                                    render: (product) => (
                                        <QtsInput item={product} qts={form.values.products[product.index].qts}
@@ -216,10 +226,10 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                </Box>
 
                 <Group spacing="0">
-                    <Button style={{flex: "auto", marginTop: 10, marginLeft: "3px", backgroundColor: theme.colors.green[6], order:2}}
-                            type="submit" name="Continue" disabled={!selectedPG}>Bucquage suivant</Button>
+                    <Button style={{flex: "auto", marginTop: 10, marginLeft: "3px", order:2}}
+                            type="submit" name="Continue" disabled={!selectedPG || error !== ""} color="green">Bucquage suivant</Button>
                     <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}
-                            type="submit" disabled={!selectedPG}>Valider</Button>
+                            type="submit" disabled={!selectedPG || error !== ""}>Valider</Button>
                 </Group>
             </form>
         </Modal>
