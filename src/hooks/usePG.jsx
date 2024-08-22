@@ -60,11 +60,14 @@ export function usePG(pgId){
                     title: "Annulation débucquage",
                     message: response.data.detail
                 })
+                return true
             } else {
                 errorNotif("usePG", "Erreur inconnue lors de l'annulation du dernier débucquage");
+                return false
             }
         } catch (error) {
             errorNotif("usePG", error.message + " - " + error.response.data.detail);
+            return false
         }
     }, [pgId, axiosPrivate]);
 

@@ -6,7 +6,11 @@ function CancelLastBucquageButton({usepg, onCancel}) {
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
     const onClick = ()=>{
-        usepg.cancelLastBucquage().then(onCancel)
+        usepg.cancelLastBucquage().then((succes)=>{
+            if (succes) {
+                onCancel();
+            }
+        })
     }
 
     const shortcut = "alt+Z";
