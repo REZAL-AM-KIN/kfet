@@ -254,8 +254,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     //Fonction qui permet d'ajouter la colonne débucquée ? si l'affichage de tous les bucquages (y compris ceux déjà débucqué) est activé
     const columnsList = () => {
         const baseColumns =[
-            {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
-            {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+            {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
+            {accessor: "consommateur_nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
         ]
         if(displayDebucque){
             baseColumns.push({accessor: "status", title:"Débucquée ?", width: 110,render:statusColum})

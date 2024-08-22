@@ -5,7 +5,8 @@ import {useEffect, useState} from "react";
 
 /*
 Ce composant donne une datable triable avec un champ de recherche et la logique de tri intégré.
-Les columns triable et recherchable sont les colones avec l'atribut (sortable: true).
+Les columns triable sont les colones avec l'atribut (sortable: true).
+Les columns chercheable sont les colones avec l'atribut (searchable: true).
 
 defaultSortedColumn : Permet de specifié l'accessor de la colone à trié par défaut (par défaut il s'agit de la première colone)
 
@@ -46,9 +47,9 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
 
     //Fonction qui sert à filter les données passés par "data" en fonction de la chaine passé dans "search"
-    //La recherche s'effectue sur les champs "data_keys" qui sont ici toutes les colones déclarées comme filtrable. (filtrable : true)
+    //La recherche s'effectue sur les champs "data_keys" qui sont ici toutes les colones déclarées comme recherchable. (searchable : true)
     function filterData(data, search) {
-        const data_keys = columns.filter((item)=>item.searchable).map((item)=>item.accessor) // on récupère les accessors des colone filtrable.
+        const data_keys = columns.filter((item)=>item.searchable).map((item)=>item.accessor) // on récupère les accessors des colonnes recherchables.
 
         const query = search.toLowerCase().trim();
         return data.filter((item) =>

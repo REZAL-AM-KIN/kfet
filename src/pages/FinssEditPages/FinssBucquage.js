@@ -199,8 +199,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 <SearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
-                          {accessor: "consommateur_bucque_famss", title:"Bucque", sortable: true},
-                          {accessor: "consommateur_nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                          {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
+                          {accessor: "consommateur_nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                     ]}
                     idAccessor="consommateur_bucque"
                     data={data}

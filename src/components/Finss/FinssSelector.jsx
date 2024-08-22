@@ -121,46 +121,46 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-        <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
-            <SearchableDataTable
-                  noRecordsText="Aucun fin'ss n'a été trouvé"
-                  searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
-                  striped
-                  highlightOnHover
-                  data={tabData}
-                  columns={[
-                      {accessor: "titre", title:"Nom", sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
-                      {accessor: "description", title:"Description", sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                      {accessor: "date_event", title:"Date", textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                      {accessor: "actions", title:"Inscription", textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
-                  ]}
-                  defaultSortedColumn="titre"
-                  idAccessor="id"
-                  isLoading = {usefinsslist.isLoading}
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+                <SearchableDataTable
+                    noRecordsText="Aucun fin'ss n'a été trouvé"
+                    searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
+                    striped
+                    highlightOnHover
+                    data={tabData}
+                    columns={[
+                        {accessor: "titre", title:"Nom", searchable: true, sortable: true, render: (finss)=>(<NameRowRender finss={finss}/>), titleStyle: {minWidth:"280px"}, width: "20%"},
+                        {accessor: "description", title:"Description", searchable: true, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "date_event", title:"Date", searchable: true, textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "actions", title:"Inscription", searchable: false, textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
+                    ]}
+                    defaultSortedColumn="titre"
+                    idAccessor="id"
+                    isLoading = {usefinsslist.isLoading}
 
-                  elementSpacing={"xs"}
+                    elementSpacing={"xs"}
 
-                  styles={{
-                      input: {flex: "auto"}
-                  }}
+                    styles={{
+                        input: {flex: "auto"}
+                    }}
 
-                  rowExpansion={ isSmallDevice ? {
-                      content: ({record})=>(rowExpansionContent(record))
-                  }:""}
+                    rowExpansion={ isSmallDevice ? {
+                        content: ({record})=>(rowExpansionContent(record))
+                    }:""}
 
-                  searchBarPosition="apart"
+                    searchBarPosition="apart"
 
-                  categoriesSelector={CategorieFilter}
+                    categoriesSelector={CategorieFilter}
 
-                  withReloadIcon
-                  reloadCallback={()=>usefinsslist.retrieveFinssList()}
+                    withReloadIcon
+                    reloadCallback={()=>usefinsslist.retrieveFinssList()}
 
-                  withAddIcon
-                  addCallback={()=> {
-                      modals.open({title: "Ajouter un fin'ss", children: <FinssGeneralParameters useFinssList={usefinsslist}/>})}
-                  }
-            />
-        </Paper>
+                    withAddIcon
+                    addCallback={()=> {
+                        modals.open({title: "Ajouter un fin'ss", children: <FinssGeneralParameters useFinssList={usefinsslist}/>})}
+                    }
+                />
+            </Paper>
         </Box>
     )
 }
