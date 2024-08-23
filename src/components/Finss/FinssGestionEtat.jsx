@@ -70,10 +70,11 @@ function endBucquageFinss(usefinss) {
         children : (
             <Text size="sm">
                 Une fois les bucquages du fin'ss fermé, il ne sera plus possible de bucquer d'autres
-                personnes, <i><u>ni de modifier les produits</u></i>.
+                personnes, <span style={{ fontSize: '1.2em' }}><i><u><b>ni de
+                modifier les produits et leur prix</b></u></i></span>.
             </Text>
         ),
-        labels : {confirm: "Fermer les bucquages", cancel:"Annuler"},
+        labels: {confirm: "Fermer les bucquages", cancel:"Annuler"},
         confirmProps:{color:"red"},
         onConfirm: () => usefinss.endBucquageFinss(),
     });
