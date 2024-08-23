@@ -65,11 +65,6 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
     })
 
-
-    useHotkeys([
-        ['Enter', () => alert('Enter')],
-    ]);
-
     //on remplie la liste des produits en renommant l'attribue id en "key"
     //On rajoute les quantités pré-bucquées pour pouvoir les afficher facilement dans le tableau
     useEffect(()=>{
@@ -227,9 +222,9 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
                 <Group spacing="0">
                     <Button style={{flex: "auto", marginTop: 10, marginLeft: "3px", order:2}}
-                            type="submit" name="Continue" disabled={!selectedPG || error !== ""} color="green">Bucquage suivant</Button>
+                            type="submit" name="Continue" disabled={!selectedPG || error !== "" || isSending} color="green">Bucquage suivant</Button>
                     <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}
-                            type="submit" disabled={!selectedPG || error !== ""}>Valider</Button>
+                            type="submit" disabled={!selectedPG || error !== "" || isSending}>Valider</Button>
                 </Group>
             </form>
         </Modal>
