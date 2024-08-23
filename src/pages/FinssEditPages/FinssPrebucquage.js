@@ -45,7 +45,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                     )
                 })
 
-        // On wrap les nodes de quantités dans une SimpleGrid,
+        // On englobe les nodes de quantités dans une SimpleGrid,
         // S'il y a moins de 3 produits, on règle le nombre de colonnes
         // égales aux nombres de produits afin d'avoir une grille centrée.
         return (

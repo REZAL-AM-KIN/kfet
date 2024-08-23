@@ -26,7 +26,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
-    // On convertie la date d'un forma iso vers un format heure:minutes jour/mois/année
+    // On convertit la date d'un forma iso vers un format heure:minutes jour/mois/année
     useEffect(()=>{
         let tabData = usefinsslist.finssList
 
@@ -36,7 +36,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
 
         tabData = tabData.map(({date_event, ...finss})=>{
             const date = new Date(date_event)
-            const date_string = date.toLocaleDateString() // si on voulait l'heure il faudrait ajouter : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })+" "+
+            const date_string = date.toLocaleDateString() // si on voulait l'heure, il faudrait ajouter : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })+" "+
 
             return {date_event:date_string, ...finss}
         })
@@ -52,7 +52,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
                         <div>
                             <IconCircleX size={30} color="red"/>
                         </div>
-                    </Tooltip>) //La div est nécessaire car la node Tooltip à besoin de la prop ref que les icones ne possèdent pas.
+                    </Tooltip>) //La div est nécessaire car la node Tooltip a besoin de la prop ref que les icones ne possèdent pas.
             }
 
             //Si l'utilisateur est déjà prébucqué, alors on lui propose de modifier son inscription.
@@ -92,7 +92,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
         )
     }
 
-    //Construction du déroulant au clique sur une ligne du tableau
+    //Construction du déroulant au clic sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
     // (les datas correspondant à la ligne) est passé via l'argument record
     const rowExpansionContent = (record)=>{

@@ -28,7 +28,7 @@ function endEvent(usefinss, usebucquage) {
                 ),
             });
 
-            // Sinon, on demande une dernière fois si l'utilisateur est sur de lui
+            // Sinon, on demande une dernière fois si l'utilisateur est sûr de lui
         }else{
             openConfirmModal({
                 title: "Clôture du fin'ss "+usefinss.finssInfo.titre,
@@ -47,7 +47,7 @@ function endEvent(usefinss, usebucquage) {
 
     }
 
-    // Première modal de confirmation : Vérifie que l'utilisateur souhaite bien cloturer le Fin'ss
+    // Première modal de confirmation : Vérifie que l'utilisateur souhaite bien clôturer le Fin'ss
     openConfirmModal({
         title: "Clôture du fin'ss "+usefinss.finssInfo.titre,
         centered: true,

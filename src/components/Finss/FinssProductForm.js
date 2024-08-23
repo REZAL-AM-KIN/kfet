@@ -4,9 +4,9 @@ import {useEffect} from "react";
 
 /*
 Permet d'obtenir une form d'édition ou de création de produit.
-Si initialProduct est spécifié alors les valeurs de la form seront celles du produit passé
+Si initialProduct est spécifié alors les valeurs de la form seront celles du produit passé.
 Il faut implementer "formSubmitCallback" pour la gestion du submit de la form
-Exemple:
+Exemple :
 
 func formSubmitCallback(values){
     console.log(values)

@@ -11,7 +11,6 @@ import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 import {usePermissions} from "../../hooks/useUser";
 
 
-//TODO : Permettre le débucquage en negat'ss si permission.
 const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const useconsommateurlist = useConsommateursList();
     const permissions = usePermissions();
@@ -42,7 +41,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
 
             bucquage.participation_event.forEach((participation) => {
-                //Récupération des infos produits depuis le hook useFinssProducts
+                //Récupération des infos des produits depuis le hook useFinssProducts
                 const product = usefinssproduct.productsList.find((product) => (product.id === participation.product_participation))
                 if (!product) {
                     errorNotif("Débucquage", "Correspondance produit manquante\n participation id: " + participation.id)
@@ -67,13 +66,13 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     
 
 
-    //Est appelé au clique sur le bouton débucquer
+    //Est appelé au clic sur le bouton débucquer
     function debucquage() {
 
-        // On vérifie qu'au moins un PG est séléctionné.
+        // On vérifie qu'au moins un PG est sélectionné.
         if(selectedRecords.length === 0){
             openModal({
-                title: 'Aucun PG séléctionné',
+                title: 'Aucun PG sélectionné',
                 children: (
                     <>
                         <Text size="sm">
@@ -94,7 +93,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 <Text size="sm">
                     Vous êtes sur le point de débucquer {selectedRecords.length} PG dont <span color="red">{negatssList.length}</span> en négat'ss.<br/>
                     Le débucquage sera <u><i><b>définitif</b></i></u>. Vous ne pourrez plus enregistrer de nouveau bucquages.<br/>
-                    Etes vous certains de vouloir continuer ?
+                    Êtes vous certains de vouloir continuer ?
                 </Text>
 
             ),
@@ -107,10 +106,10 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         let debucquageList = []
         let negatssList = []
 
-        //On extrait les id des participations et les negatss pour constituer la liste des débucquages.
+        //On extrait les id des participations et les négat'ss pour constituer la liste des débucquages.
         selectedRecords.forEach((bucquage) => {
-            //On regarde si le pg va être débucquée en négatss
-            // Si oui on l'ajoute à une liste qui permettra de faire un recap des PG débucquée en negatss
+            //On regarde si le pg va être débucquée en négat'ss
+            // Si oui, on l'ajoute à une liste qui permettra de faire un recap des PG débucquée en négat'ss
             const negatss = bucquage.solde_pg<bucquage.prix_total
             if(negatss){
                 negatssList.push({...bucquage, id:bucquage.consommateur_id})
@@ -137,7 +136,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     <Text size="sm">
                         Certains produits ont un prix nul. <br/>
                         Il seront donc gratuit.<br/>
-                        Etes vous certain de vouloir continuer ?
+                        Êtes vous certain de vouloir continuer ?
                     </Text>
                 ),
                 labels: { confirm: 'Continuer', cancel: 'Annuler' },
@@ -149,10 +148,10 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         }
 
         function checkNegatss() {
-            // S'il y a des pg à débucquer en négatss, on affiche une modale de confirmation avec la list des pg concernés
+            // S'il y a des pg à débucquer en négat'ss, on affiche une modale de confirmation avec la list des pg concernés
             if(negatssList.length !==0){
                 openConfirmModal({
-                    title: <Text color="red">Débucquage en négatss !</Text>,
+                    title: <Text color="red">Débucquage en négat'ss !</Text>,
                     closeOnConfirm: false,
                     children: (
                         <Stack>
@@ -197,25 +196,25 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     }
 
 
-    //Construction du déroulant au clique sur une ligne du tableau
+    //Construction du déroulant au clic sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
     // (les datas correspondant à la ligne) est passé via l'argument record
     const rowExpansionContent = (record)=>{
 
         const productQuantityNodes = record.participation_event.map((participation) => {
-            //Récupération des infos produits depuis le hook useFinssProducts
+            //Récupération des infos des produits depuis le hook useFinssProducts
             const product = usefinssproduct.productsList.find((product) => (product.id === participation.product_participation))
             if(!product){
                 errorNotif("Débucquage","Correspondance produit manquante\n participation id: "+participation.id)
                 return;
             }
 
-            //Si la quantité vaut 0 ou que la participation n'est pas bucquée, on affiche pas la quantité
+            //Si la quantité vaut 0 ou que la participation n'est pas bucquée, on n'affiche pas la quantité
             if(participation.quantity ===0 || !participation.participation_bucquee ){
                 return;
             }
 
-            // On ajoute la note qui correspond aux quantités produits
+            // On ajoute la note qui correspond aux quantités des produits
             return ( <List.Item key={participation.id}>
                         <Tooltip label={participation.participation_debucquee ? "Participation déjà débucquée" :""} disabled={!participation.participation_debucquee}>
                                 <Text strikethrough = {participation.participation_debucquee}>
@@ -265,7 +264,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     // Déclaration de la render node pour la colonne "débucquée ?"
     const statusColum = (record) =>{
-        // Si dans le bucquage courant il y a des participations non débucquées dont la quantité est non nulle alors on affiche une croix
+        // Si dans le bucquage courant il y a des participations non débucquées dont la quantité est non nulle, alors on affiche une croix
         if(record.participation_event.some((participation)=>(!participation.participation_debucquee && participation.quantity !==0))){
             return (<Center><IconCircleX color={"red"}/></Center>)
         }
@@ -295,7 +294,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
 
                     //On récupère les bucquages dont au moins une participation est bucquee
-                    // et si on n'affiche pas les débucquée on sélectionne seulement les bucquages
+                    // et si on n'affiche pas les débucquée, on sélectionne seulement les bucquages
                     // qui ont au moins une participation non débucquee dont la quantité n'est pas nulle.
                     //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
                     data={data.filter((bucquage)=>bucquage.participation_event.some(

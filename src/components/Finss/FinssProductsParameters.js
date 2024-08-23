@@ -9,7 +9,7 @@ import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) => {
     const [productModalOpen, setProductModalOpen] = useState(false);
 
-    //Fonction appeler au clique sur le bouton de suppression.
+    //Fonction appeler au clic sur le bouton de suppression.
     //On interdit la suppression du produit s'il y a des participations bucquée sur ce produit.
     function deleteProduct(event, product) {
         // On récupère tous les bucquages qui comporte des participations bucquées sur le produit à supprimer

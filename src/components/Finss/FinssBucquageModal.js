@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {DataTable} from "mantine-datatable";
-import {useHotkeys, useMediaQuery} from "@mantine/hooks";
+import {useMediaQuery} from "@mantine/hooks";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck, IconX} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
@@ -50,12 +50,12 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
     const [isSending, setSending] = useState(false)
     const [selectedPG, setSelectedPG] = useState()
-    const [pgselectorValue, setPgselectorValue] = useState()
+    const [pgselectorValue, setPgselectorValue] = useState("")
     const [focusOnPGSelector, setFocusOnPGSelector] = useState(true)
     const [error, setError] = useState("")
     const [soldeRequisTotal, SetSoldeRequisTotal] = useState(0)
 
-// Initialisation de la user form. La liste des produits est vide.
+// Initialisation du useForm. La liste des produits est vide.
     const form = useForm({
         initialValues:{
             products:[],
@@ -103,6 +103,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         })
         form.setValues({products:data, selectedPG:selectedPG})
         validateForm({products:data, selectedPG:selectedPG})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[usefinssproduct.productsList, usebucquage.bucquages, selectedPG])
 
     function validateForm(values){

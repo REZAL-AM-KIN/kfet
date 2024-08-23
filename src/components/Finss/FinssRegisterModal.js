@@ -1,4 +1,4 @@
-import {Box, Button, Center, LoadingOverlay, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Box, Button, LoadingOverlay, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
 import {useEffect, useState} from "react";
@@ -125,7 +125,7 @@ const FinssRegisterModal = ({opened, setOpened, finss})=>{
                                {accessor: "nom", title:"Nom"},
                                {accessor: "actions", title:"Quantités", textAlignment:"center", width:"20%",
                                    render: (product) => (
-                                       <QtsInput item={product} {...form.getInputProps('products.' + product.index + '.qts', {type: 'numberinput'})}/>
+                                       <QtsInput item={product} {...form.getInputProps('products.' + product.index + '.qts', {type: 'number'})}/>
                                    )
                                }
                            ]}
