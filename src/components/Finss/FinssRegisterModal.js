@@ -1,4 +1,4 @@
-import {Box, Button, LoadingOverlay, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Box, Button, Center, LoadingOverlay, Modal, NumberInput, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {useFinssProducts} from "../../hooks/finssHooks/useFinssProduct";
 import {useEffect, useState} from "react";
@@ -10,14 +10,23 @@ import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons-react";
 
 
-const FinssRegisterModal = ({opened, setOpened, finssId})=>{
+const QtsInput = ({item, ...othersProps})=> {
+    return (
+        <NumberInput
+            min={item.obligatoire ? 1 : 0}
+            {...othersProps}
+        />
+    );
+}
+
+const FinssRegisterModal = ({opened, setOpened, finss})=>{
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
 
     const userInfo = useUser()
     const useParticipation = useUserParticipation()
-    const {isLoading, productsList} = useFinssProducts(finssId)
+    const {isLoading, productsList} = useFinssProducts((finss? finss.id:null))
 
     const [isSending, setSending] = useState(false)
 
@@ -86,15 +95,6 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     const tableData = form.values.products.map((item,index)=>({...item, index, id:index}))
 
 
-    const QtsInput = ({item})=> {
-        return (
-                <NumberInput
-                    min={item.obligatoire ? 1 : 0}
-                    {...form.getInputProps('products.' + item.index + '.qts', {type: 'numberinput'})}
-                />
-                );
-    }
-
     const RowDescription = ({product}) => {
         if (product.description===""){
             return
@@ -111,7 +111,7 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
     }
 
     return (
-        <Modal opened={opened} onClose={closeModal} size="lg">
+        <Modal opened={opened} onClose={closeModal} size="lg" title={finss && finss.titre+" - inscription"}>
             <Box sx={{position:"relative"}}>
                 <LoadingOverlay visible={isSending} />
 
@@ -123,7 +123,11 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
                            records={tableData}
                            columns={[
                                {accessor: "nom", title:"Nom"},
-                               {accessor: "actions", title:"Quantités", textAlignment:"center", width:"20%", render: (product) => (<QtsInput item={product}/>) }
+                               {accessor: "actions", title:"Quantités", textAlignment:"center", width:"20%",
+                                   render: (product) => (
+                                       <QtsInput item={product} {...form.getInputProps('products.' + product.index + '.qts', {type: 'numberinput'})}/>
+                                   )
+                               }
                            ]}
                            noRecordsText="Aucun produit n'existe pour ce fin'ss"
                            rowExpansion={{
@@ -131,7 +135,6 @@ const FinssRegisterModal = ({opened, setOpened, finssId})=>{
                                content: ({record})=>(<RowDescription product={record}/>),
                            }}
                        >
-
                        </DataTable>
                    </Box>
 

@@ -20,7 +20,7 @@ import SearchableDataTable from "../SearchableDataTable";
 import FinssGeneralParameters from "./FinssGeneralParameters";
 import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
-const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
+const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
     const [displayEnded, setDisplayEnded] = useState(false)
     const theme = useMantineTheme();
@@ -57,9 +57,9 @@ const FinssSelector = ({usefinsslist, setFinssId, setModalOpened}) => {
 
             //Si l'utilisateur est déjà prébucqué, alors on lui propose de modifier son inscription.
             if(!finss.is_prebucque){
-                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
+                return (<Button onClick={()=>{setFinss(finss); setModalOpened(true);}} style={{borderRadius: "1.5em"}}>S'inscrire</Button>)
             }else{
-                return (<Button onClick={()=>{setFinssId(finss.id); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier</Button>)
+                return (<Button onClick={()=>{setFinss(finss); setModalOpened(true);}} style={{borderRadius: "1.5em"}} color="green">Modifier</Button>)
             }
         }
 

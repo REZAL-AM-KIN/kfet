@@ -45,7 +45,7 @@ const Finss = () => {
             >
                 <FinssSelector
                     usefinsslist={usefinsslist}
-                    setFinssId={setFinssBucquage}
+                    setFinss={setFinssBucquage}
                     setModalOpened={setModalOpened}
                 />
             </Box>
@@ -53,7 +53,7 @@ const Finss = () => {
             <FinssRegisterModal
                 opened={modalOpened}
                 setOpened={setModalOpened}
-                finssId={finssBucquage}
+                finss={finssBucquage}
             />
         </Stack>
     );
