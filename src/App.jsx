@@ -76,15 +76,6 @@ function App() {
 
                                 </Route>
                             </Route>
-                        {/*privates routes*/}
-                        <Route element={<RequireAuth/>}>
-                            <Route element={<LayoutRoute/>}>
-                                <Route path="/" element={<Home/>}/>
-                                <Route path="pg/:pgId" element={<PG/>}/>
-                                <Route path="edit" element={<Edit/>}/>
-                                <Route path="finss" element={<Finss/>}/>
-                            </Route>
-                        </Route>
 
                         {/* TODO: 404*/}
 
