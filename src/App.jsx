@@ -15,6 +15,9 @@ import Edit from "./pages/Edit";
 import Finss from "./pages/Finss";
 import FinssEdit from "./pages/FinssEdit";
 
+// Provides des bibliothèques
+import 'dayjs/locale/fr';
+import {DatesProvider} from '@mantine/dates';
 import {Notifications} from '@mantine/notifications';
 import {ModalsProvider} from '@mantine/modals';
 
@@ -65,32 +68,34 @@ function App() {
     return (
         <MantineProvider theme={kfetTheme} withGlobalStyles withNormalizeCSS>
             <Notifications />
-            <ModalsProvider>
-                <UserProvider>
-                    <Routes>
-                        <Route path="/">
-                            {/*public routes*/}
-                            <Route path="login" element={<Login/>}/>
+            <DatesProvider settings={{locale: 'fr'}}>
+                <ModalsProvider>
+                    <UserProvider>
+                        <Routes>
+                            <Route path="/">
+                                {/*public routes*/}
+                                <Route path="login" element={<Login/>}/>
 
-                            {/*privates routes*/}
-                            <Route element={<RequireAuth/>}>
-                                <Route element={<LayoutRoute/>}>
-                                    <Route path="/" element={<Home/>}/>
-                                    <Route path="pg/:pgId" element={<PG/>}/>
-                                    <Route path="edit" element={<Edit/>}/>
-                                    <Route path="finss" element={<Finss/>}/>
-                                    <Route path="finss/:applyto" element={<Finss/>}/>
-                                    <Route path="finssedit/:finssid" element={<FinssEdit/>}/>
+                                {/*privates routes*/}
+                                <Route element={<RequireAuth/>}>
+                                    <Route element={<LayoutRoute/>}>
+                                        <Route path="/" element={<Home/>}/>
+                                        <Route path="pg/:pgId" element={<PG/>}/>
+                                        <Route path="edit" element={<Edit/>}/>
+                                        <Route path="finss" element={<Finss/>}/>
+                                        <Route path="finss/:applyto" element={<Finss/>}/>
+                                        <Route path="finssedit/:finssid" element={<FinssEdit/>}/>
 
+                                    </Route>
                                 </Route>
+
+                            {/* TODO: 404*/}
+
                             </Route>
-
-                        {/* TODO: 404*/}
-
-                        </Route>
-                    </Routes>
-                </UserProvider>
-            </ModalsProvider>
+                        </Routes>
+                    </UserProvider>
+                </ModalsProvider>
+            </DatesProvider>
         </MantineProvider>
     );
 
