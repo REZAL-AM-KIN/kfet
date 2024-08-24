@@ -1,12 +1,19 @@
-A finir le 15 janvier
+À finir le 15 janvier
 
 Auto identification des pian'ss avec clé ssh like?
 
-Voir dev niki admin -> permissions acces consommateur  / utilisateur
+Hooks requetes -> OPENAPI generated code
 
-hooks requetes -> OPENAPI generated code
+Nombre d'objets maximum par requête
 
-nombre d'ojects maximum par requête
+Regarder tous les TODO!
 
-regarder tous les TODO!
 
+
+Fin'ss :
+Besoin d'un premier clic sur le bouton recap prix avant de débucquer
+
+Mettre un bouton de cloture plus accessible quand tt le monde est débucqué
+
+Possibilité de modifier les paramètres généraux après début du fin'ss
+Pb api endpoint api/bucquagevent/ qui a besoin d'une liste > pas possible d'utiliser l'interface web de l'api

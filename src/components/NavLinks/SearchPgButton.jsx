@@ -3,12 +3,12 @@ import {Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@m
 import {useHotkeys} from "@mantine/hooks";
 import {IconUserSearch} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
-import useStyles from "./NavbarButtonStyle";
+import useNavabarButtonStyle from "./NavbarButtonStyle";
 
 
 export function NormalSearchPgButton() {
     const theme = useMantineTheme()
-    const {classes, cx} = useStyles();
+    const {classes, cx} = useNavabarButtonStyle();
 
     const Icon = IconUserSearch
     const label = "Rechercher un pg"

@@ -4,14 +4,14 @@ import {useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple} from "@tabler/icons-react";
 import {useEntiteCtxt} from "../../hooks/useEntiteCtxt";
 import CategoriesSelector from "./EntiteSelector";
-import useStyles from "./NavbarButtonStyle";
+import useNavabarButtonStyle from "./NavbarButtonStyle";
 
 
 export function EntiteSelectorButton({setNavBarOpened}) {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
-    const {classes, cx} = useStyles();
+    const {classes, cx} = useNavabarButtonStyle();
 
     const Icon = IconBoxMultiple;
     const { entite } = useEntiteCtxt();

@@ -4,7 +4,7 @@ import {useMediaQuery} from "@mantine/hooks";
 import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
 import NavbarLink from "./NavLinks/StandardNavButton";
-import EntiteSelectorButton from "./NavLinks/EntiteSelectorButton";
+import EntiteSelector from "./NavLinks/EntiteSelectorButton";
 import NormalSearchPgButton from "./NavLinks/SearchPgButton";
 import LogOutLink from "./NavLinks/LogOutButton";
 import SearchPg from "./SearchPg";
@@ -75,7 +75,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         </Navbar.Section>
                         <Navbar.Section mt={20}>
                             <Stack justify="center" spacing={5}>
-                                <EntiteSelectorButton setNavBarOpened={setNavBarOpened}/>
+                                <EntiteSelector setNavBarOpened={setNavBarOpened}/>
                                 {links}
                             </Stack>
                         </Navbar.Section>
@@ -125,9 +125,9 @@ const NormalNavBar = ({linksData, width})=> {
                         />
                     </Stack>
                 </Navbar.Section>
-                <Navbar.Section grow mt={20}>
-                    <Stack justify="center" spacing={0}>
-                        <EntiteSelectorButton/>
+                <Navbar.Section grow mt={30}>
+                    <Stack justify="center" spacing={10}>
+                        <EntiteSelector/>
                         {links}
                     </Stack>
                 </Navbar.Section>
