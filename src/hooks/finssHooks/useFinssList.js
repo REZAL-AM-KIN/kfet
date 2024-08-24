@@ -39,6 +39,7 @@ export function useFinssList(){
     const [finssList, setFinssList] = useState([])
 
     const retrieveFinssList = useCallback(async () => {
+        setLoading(true)
         try {
             const response = await axiosPrivate.get("event/");
             if (response.data) {
