@@ -157,7 +157,10 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
 
                     withAddIcon
                     addCallback={()=> {
-                        modals.open({title: "Ajouter un fin'ss", children: <FinssGeneralParameters useFinssList={usefinsslist}/>})}
+                        modals.open({title: "Ajouter un fin'ss", children: <FinssGeneralParameters usefinssinfo={{
+                                isLoading: false,
+                                finssInfo: {date_event: new Date().toISOString()}
+                            }} useFinssList={usefinsslist}/>})}
                     }
                 />
             </Paper>
