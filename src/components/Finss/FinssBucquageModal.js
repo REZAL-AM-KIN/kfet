@@ -174,7 +174,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     return (
         <Modal opened={opened} onClose={closeModal} size={isSmallDevice ? "100%":"lg"}>
             <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})} >
-               <Box sx={{height: isSmallDevice ? 300:400}}>
+               <Box sx={{minHeight: isSmallDevice ? 300:400}}>
                    <Group  spacing="0">
                        <FocusTrap active={focusOnPGSelector}>
                        {/*On wrap le SearchPg dans une box pour pouvoir contrôler la width*/}
@@ -191,24 +191,26 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                    </Group>
 
 
-                   <Box style={{position: 'relative'}}>
+                   <Box style={{position: 'relative'}} mt={10}>
                        {!selectedPG && <Overlay opacity={0.4} color="#c5c5c5" blur={2} zIndex={5} />}
                        {selectedPG &&
                            <Box style={{color: (error !== "" ? "red":""),}} >
                                <Center><Text>Solde: {selectedPG.solde}€</Text></Center>
-                               <Center><Text>Solde requis: {soldeRequisTotal}€</Text></Center>
+                               <Center><Text>Solde requis total: {soldeRequisTotal.toFixed(2)}€</Text></Center>
                            </Box>
                        }
                        {error !== "" ? <Center><Text color="red">{error}</Text></Center> : ""}
                        <DataTable
+                           mt={5}
+                           horizontalSpacing={2}
                            minHeight={150} //Pour l'affichage du logo "pas de produits trouvés"
                            fetching={usefinssproduct.isLoading}
                            records={tableData}
                            columns={[
                                {accessor: "nom", title:"Nom"},
-                               {accessor: "prebucque_quantity", title:"Pré-bucquage"},
-                               {accessor: "solde_requis", title:"Solde requis (€)",
-                                   render: (product) => (form.values.products[product.index].qts*product.solde_requis).toFixed(2)},
+                               {accessor: "prebucque_quantity", title:"Inscription"},
+                               {accessor: "solde_requis", title:"Solde requis",
+                                   render: (product) => (form.values.products[product.index].qts*product.solde_requis).toFixed(2)+" €"},
                                {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%",
                                    render: (product) => (
                                        <QtsInput item={product} qts={form.values.products[product.index].qts}
