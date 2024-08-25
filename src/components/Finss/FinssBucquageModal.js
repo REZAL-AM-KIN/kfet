@@ -124,19 +124,12 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         ))
         setSending(true)
         usebucquage.sendBucquage(participations).then((success)=>{
-            if(success){
-                showNotification( {
-                    icon: <IconCheck size={18} />,
-                    color: "green",
-                    autoClose: true,
-                    title: 'Inscription réussie',
-                    message: 'Votre participation a bien été prise en compte.'
-                })
-            }
-            //On force la récupération des bucquages
-            //TODO : C'est pas très opti, il faudrait permettre de refresh seulement les participations de l'utilisateur concerné
-            usebucquage.retrieveBucquages()
             setSending(false)
+            if(success){
+                //On force la récupération des bucquages
+                //TODO : C'est pas très opti, il faudrait permettre de refresh seulement les participations de l'utilisateur concerné
+                usebucquage.retrieveBucquages()
+            }
             if(_event.nativeEvent.submitter.name==="Continue"){
                 clearPgSelector()
             }else{
