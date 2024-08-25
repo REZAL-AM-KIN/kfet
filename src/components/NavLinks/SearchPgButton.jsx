@@ -64,7 +64,6 @@ export function NormalSearchPgButton() {
                     navigate("pg/" + pg.id);
                     setActive(false)
                 }}/>
-                <SearchPg onSubmit={() => setActive(false)}/>
             </Popover.Dropdown>
         </Popover>
     );
