@@ -217,7 +217,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     extraButtons={
                         <>
                             <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
-                                <ActionIcon disabled={usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                <ActionIcon disabled={usefinssinfo.finssInfo.etat_event !== etatEventValues.BUCQUAGE}
                                             size={33} color="green" onClick={()=>{openBucquage()}}>
                                   <IconUserPlus size={33}/>
                                 </ActionIcon>
