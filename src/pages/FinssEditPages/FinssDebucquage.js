@@ -92,7 +92,6 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                 <Text size="sm">
                     Vous êtes sur le point de débucquer {selectedRecords.length} PG dont <span color="red">{negatssList.length}</span> en négat'ss.<br/>
-                    Le débucquage sera <u><i><b>définitif</b></i></u>. Vous ne pourrez plus enregistrer de nouveau bucquages.<br/>
                     Êtes vous certains de vouloir continuer ?
                 </Text>
 
