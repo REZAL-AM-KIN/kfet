@@ -103,11 +103,11 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "8px 8px 0px 8px", flex: "1 1 auto"}}>
 
                 <SearchableDataTable
                     noRecordsText="Aucun produit n'a été trouvé"
-                    searchPlaceHolder="Rechercher suivant le nom/raccourcit/prix"
+                    searchPlaceHolder="Rechercher sur le nom/raccourcit/prix"
                     striped
                     highlightOnHover
                     data={tabData}

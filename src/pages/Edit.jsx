@@ -1,4 +1,4 @@
-import {Center, Stack, Box, Modal} from "@mantine/core"
+import {Center, Stack, Box, Title, Modal} from "@mantine/core"
 import {useEffect, useState} from "react";
 import ProductsSelector from "../components/editProduct/ProductsSelector";
 import {useProductsList} from "../hooks/products/useProductsList";
@@ -25,7 +25,7 @@ const Edit = () => {
     return(
         <Stack spacing="0">
             <Center>
-                <h1 style={{margin:"10px"}}>Listes des produits de {entite.nom}</h1>
+                <Title order={1}  style={{margin:"0.5rem"}}>Listes des produits de {entite.nom}</Title>
             </Center>
             <Box
                 style={{

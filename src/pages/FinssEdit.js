@@ -20,8 +20,8 @@ const FinssEdit = () => {
 
 
     return(
-        <Stack style={{height: "100%"}}>
-            <Title order={1} align="center" style={{margin:"10px"}}>{usefinssinfo.finssInfo.titre}</Title>
+        <Stack style={{height: "100%"}} spacing={0}>
+            <Title order={1} align="center" style={{margin:"0.5rem"}}>{usefinssinfo.finssInfo.titre}</Title>
             {usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE ?
                 <Center><Group spacing="0"><IconAlertTriangle size={33} color="red"/><Text size={18} color="red"> Fin'ss cloturé !</Text></Group></Center>
                 :""

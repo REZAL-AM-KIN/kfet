@@ -1,19 +1,16 @@
+tester si le "maximum-scale=1" dans le <meta/> ligne 6 de public/intex.html ne pose pas de soucis avec le zoom sur android (je peux que tester sur iphone)
+
+
 À finir le 15 janvier
 
 Auto identification des pian'ss avec clé ssh like?
 
-Hooks requetes -> OPENAPI generated code
+Hooks requetes -> OPENAPI generated code ????????????? rien compris
 
 Nombre d'objets maximum par requête
 
 Regarder tous les TODO!
 
 
-
 Fin'ss :
-Besoin d'un premier clic sur le bouton recap prix avant de débucquer
-
-Mettre un bouton de cloture plus accessible quand tt le monde est débucqué
-
-Possibilité de modifier les paramètres généraux après début du fin'ss
-Pb api endpoint api/bucquagevent/ qui a besoin d'une liste > pas possible d'utiliser l'interface web de l'api
+Mettre un bouton de cloture plus accessible quand tt le monde est débucqué (un peu osef hein)

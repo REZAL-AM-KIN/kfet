@@ -121,7 +121,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "10px 10px 0px 10px", paddingTop:6, flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "8px 8px 0px 8px", flex: "1 1 auto"}}>
                 <SearchableDataTable
                     noRecordsText="Aucun fin'ss n'a été trouvé"
                     searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
