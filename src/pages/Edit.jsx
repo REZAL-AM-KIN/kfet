@@ -23,7 +23,7 @@ const Edit = () => {
     }, [modalOpened])
 
     return(
-        <Stack>
+        <Stack spacing="0">
             <Center>
                 <h1 style={{margin:"10px"}}>Listes des produits de {entite.nom}</h1>
             </Center>
@@ -40,7 +40,7 @@ const Edit = () => {
                     setModalOpened={setModalOpened}
                 />
 
-                <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
+                <Modal centered opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
                     <ProductParameters
                         productId={productId}
                         entity={entite.nom}
