@@ -20,14 +20,15 @@ export const EntiteProvider = ({children}) => {
     // for later sessions
     const setEntite = useCallback((id) => {
         // get the other props based on the Id:
-        const linefound = entiteList.entitiesList.find((line) => {
+        const lineFound = entiteList.entitiesList.find((line) => {
             return line.id === id;
         });
-        if (linefound) {
-            localStorage.setItem("entite", JSON.stringify(linefound));
-            setEntiteState(linefound);
+        if (lineFound) {
+            localStorage.setItem("entite", JSON.stringify(lineFound));
+            setEntiteState(lineFound);
+            return true;
         }
-        // eslint-disable-next-line
+        return false;
     },[entiteList]);
     // this dependency is needed to avoid stale closure.
     // if there was no dependency, the function would always use the initial value of entiteList,
@@ -37,15 +38,22 @@ export const EntiteProvider = ({children}) => {
 
     // update the entites
     useEffect(() => {
-        if (Object.keys(permissions).length) {
+        if (Object.keys(permissions).length && entiteList.entitiesList.length) {
             // Set the entite only if the user has permissions
             // console.log("permission trouvé! affectation de la catégorie")
             if (localStorage.getItem("entite")) {
-                // Check if the entite is already in the localStorage
-                setEntiteState(JSON.parse(localStorage.getItem("entite")));
-            } else if (permissions.entities_manageable?.length) {
+                // Si une entite est enregistré dans le localStorage, on regarde si elle existe encore du côté du backend
+                if (setEntite(JSON.parse(localStorage.getItem("entite")).id)) {
+                    return;
+                } else {
+                    // Si elle n'existe plus, on la supprime du localStorage
+                    localStorage.removeItem("entite");
+                }
+            }
+            // On arrive dans cette partie si il n'y a pas d'entité dans le localStorage, ou que c'était une entité qui n'existe plus
+            if (permissions.entities_manageable?.length) {
                 // Check if the user has a entite manageable
-                // get the entite from the list
+                // get the 1st entite from the list
                 setEntite(
                     // TODO: modify when the back will use the id instead of the name
                     entiteList.entitiesList.find((line) => {
