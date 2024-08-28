@@ -28,7 +28,7 @@ const AutoCompleteItem = forwardRef(({ value, fams, prenom, nom, proms, ...other
     )
 );
 
-const SearchPg = ({onSubmit, withBorder, ...othersProps})=>{
+const SearchPg = ({onSubmit, withBorder, value, onChange, ...othersProps})=>{
 
     const theme = useMantineTheme()
 
@@ -76,6 +76,9 @@ const SearchPg = ({onSubmit, withBorder, ...othersProps})=>{
                 item.proms.toLowerCase().includes(value.toLowerCase().trim())
             }
             hoverOnSearchChange
+
+            value={value}
+            onChange={onChange}
 
             {...othersProps}
         />

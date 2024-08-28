@@ -8,6 +8,7 @@ import EntiteSelector from "./NavLinks/EntiteSelectorButton";
 import NormalSearchPgButton from "./NavLinks/SearchPgButton";
 import LogOutLink from "./NavLinks/LogOutButton";
 import SearchPg from "./SearchPg";
+import {useNavigate} from "react-router-dom";
 
 
 const mockdata = [
@@ -22,7 +23,9 @@ Mobile Nav Bar
 
  */
 const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
-        const theme = useMantineTheme()
+        const navigate = useNavigate()
+
+        const [searchPgValue, setSearchPgValue] = useState("")
 
         const links = linksData.map((link) => (
             <NavbarLink
@@ -57,7 +60,11 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         <Navbar.Section mt={7}>
                             <Stack align="center">
                                 <Container style={{margin:0, padding:0, width:"75%"}}>
-                                    <SearchPg onSubmit={() => setNavBarOpened(false)}/>
+                                    <SearchPg onSubmit={(pg) => {
+                                        navigate("pg/" + pg.id);
+                                        setNavBarOpened(false);
+                                        setSearchPgValue("");
+                                    }} value={searchPgValue} onChange={setSearchPgValue}/>
                                 </Container>
                             </Stack>
                         </Navbar.Section>
