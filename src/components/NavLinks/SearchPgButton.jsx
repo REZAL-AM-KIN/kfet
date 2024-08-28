@@ -17,6 +17,7 @@ export function NormalSearchPgButton() {
     const shortcut = "alt+P"
 
     const [active, setActive] = useState(false)
+    const [searchPgValue, setSearchPgValue] = useState("")
 
     const navigate = useNavigate()
 
@@ -63,7 +64,7 @@ export function NormalSearchPgButton() {
                 <SearchPg onSubmit={(pg) => {
                     navigate("pg/" + pg.id);
                     setActive(false)
-                }}/>
+                }} value={searchPgValue} onChange={setSearchPgValue}/>
             </Popover.Dropdown>
         </Popover>
     );

@@ -1,7 +1,7 @@
-import {forwardRef} from "react";
-import {Group, Stack, Text, useMantineTheme} from "@mantine/core";
+import {forwardRef, useEffect} from "react";
+import {Group, Stack, Text, Autocomplete, useMantineTheme} from "@mantine/core";
+import { useDebouncedState } from '@mantine/hooks';
 import { useConsommateurList } from "../hooks/useConsommateurs";
-import {Autocomplete} from "@mantine/core";
 
 /*
 Composant qui propose la sélection d'un pg.
@@ -32,7 +32,12 @@ const SearchPg = ({onSubmit, withBorder, value, onChange, ...othersProps})=>{
 
     const theme = useMantineTheme()
 
-    const {consommateurList} = useConsommateurList();
+    const {consommateurList, retrieveConsommateurs} = useConsommateurList();
+    const [debounced, setDebounced] = useDebouncedState('', 300);
+
+    useEffect(()=>{
+        retrieveConsommateurs(debounced)
+    },[debounced])
 
     //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
     const data = consommateurList.map((pg) =>{
@@ -69,16 +74,14 @@ const SearchPg = ({onSubmit, withBorder, value, onChange, ...othersProps})=>{
                 },
             }}
             filter={(value, item) =>
-                item.value.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.nom.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.prenom.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.proms.toLowerCase().includes(value.toLowerCase().trim())
-            }
+                true}
             hoverOnSearchChange
 
             value={value}
-            onChange={onChange}
+            onChange={(v)=> {
+                onChange(v);
+                setDebounced(v);
+            }}
 
             {...othersProps}
         />

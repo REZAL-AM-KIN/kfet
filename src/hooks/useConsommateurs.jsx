@@ -32,11 +32,10 @@ export function useConsommateurList(){
     const [isLoading, setLoading] = useState(true);
     const [consommateurList, setConsommateurList] = useState([]);
 
-    const retrieveConsommateurs = useCallback(async () => {
-        console.log("useConsommateurList: Update consommateur list");
+    const retrieveConsommateurs = useCallback(async (searchTerm) => {
         setLoading(true);
         try {
-            const response = await axiosPrivate.get("consommateurs/");
+            const response = await axiosPrivate.get("consommateurs/", {params: {search:searchTerm}});
             if (response.data) {
                 setConsommateurList(response.data.results);
             } else {
@@ -47,7 +46,7 @@ export function useConsommateurList(){
             console.log("Error getting entities", error);
         }
         setLoading(false);
-    }, []);
+    }, [axiosPrivate]);
 
     // get Consommateurs list
     useEffect(() => {
