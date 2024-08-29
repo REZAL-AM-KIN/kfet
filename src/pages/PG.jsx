@@ -1,7 +1,7 @@
 import {forwardRef, useCallback, useRef, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
-import {Grid, Stack, Group} from "@mantine/core";
+import {Grid, Stack, Group, Box} from "@mantine/core";
 
 import {PgCard} from '../components/PgCard';
 import {PgHistory} from "../components/History";
@@ -67,7 +67,9 @@ function PG() {
                 </Group>
             </Grid.Col>
             <Grid.Col md={4}>
-                <PgHistory history={pghistory.data}/>
+                <Box h="calc(100vh - 2rem)">
+                    <PgHistory history={pghistory.data}/>
+                </Box>
             </Grid.Col>
         </Grid>
     );

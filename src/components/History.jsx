@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {Table} from "@mantine/core";
+import {ScrollArea, Table} from "@mantine/core";
 import {SmallPgCard} from "./PgCard";
 
 
@@ -32,19 +32,21 @@ function GeneralHistory({history, style}) {
     // TODO: Carousel to display days?
 
     return (
-        <Table striped highlightOnHover sx={{borderRadius:"1em", ...style}}>
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>PG</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-            {lines}
-            </tbody>
-        </Table>
+        <ScrollArea.Autosize mah="100%">
+            <Table striped highlightOnHover sx={{borderRadius:"1em", ...style}}>
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>PG</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {lines}
+                </tbody>
+            </Table>
+        </ScrollArea.Autosize>
     )
 }
 
@@ -71,19 +73,21 @@ function PgHistory({history, style}) {
     // TODO: Carousel to display days?
 
     return (
-        <Table striped highlightOnHover sx={{borderRadius:"1em", ...style}}>
-            <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Prix</th>
-                <th>Entité</th>
-                <th>Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            {lines}
-            </tbody>
-        </Table>
+        <ScrollArea.Autosize mah="100%">
+            <Table striped highlightOnHover stickyHeader sx={{borderRadius:"1em", ...style}}>
+                <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Entité</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {lines}
+                </tbody>
+            </Table>
+        </ScrollArea.Autosize>
     )
 }
 

@@ -54,7 +54,7 @@ const Home = () => {
                         {value: 8.2, color: "orange", tooltip: "a toi!"}
                     ]}/>
             </Grid.Col>
-            <Grid.Col md={6} p={{base: "0rem", xs: "xl"}}>
+            <Grid.Col md={6} p={{base: "0rem", xs: "md"}}>
                 <Tabs value={activeTab} onTabChange={(e) => {
                     embla.scrollTo(Number(e))
                 }}> {/* à supprimer sur mobile*/}
@@ -63,7 +63,7 @@ const Home = () => {
                         <Tabs.Tab value="1">Historique Perso</Tabs.Tab>
                     </Tabs.List>
                 </Tabs>
-                <Carousel getEmblaApi={setEmbla} withControls={false}>
+                <Carousel getEmblaApi={setEmbla} withControls={false} height='calc(100vh - 36px - 4rem)'>
                     <Carousel.Slide>
                         <GeneralHistory history={history.data}/>
                     </Carousel.Slide>
