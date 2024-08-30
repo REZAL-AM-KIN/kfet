@@ -1,9 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-import {Grid, RingProgress, Tabs, Text, useMantineTheme} from "@mantine/core"
+import {Grid, RingProgress, Tabs, Text} from "@mantine/core"
 import {Carousel} from "@mantine/carousel";
-import {useMediaQuery} from "@mantine/hooks";
 
 import {PgCard} from "../components/PgCard";
 import {GeneralHistory, PgHistory} from "../components/History";
@@ -13,9 +12,6 @@ import { useHistory, usePGHistory } from "../hooks/useHistory";
 
 const Home = () => {
     const navigate = useNavigate();
-
-    const theme = useMantineTheme();
-    const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.xs + ')');
 
     const [activeTab, setActiveTab] = useState("1");
     const [embla, setEmbla] = useState(null);
@@ -58,7 +54,7 @@ const Home = () => {
                         {value: 8.2, color: "orange", tooltip: "a toi!"}
                     ]}/>
             </Grid.Col>
-            <Grid.Col md={6} p={isSmallDevice ? "0" : "xl"}>
+            <Grid.Col md={6} p={{base: "0rem", xs: "xl"}}>
                 <Tabs value={activeTab} onTabChange={(e) => {
                     embla.scrollTo(Number(e))
                 }}> {/* à supprimer sur mobile*/}

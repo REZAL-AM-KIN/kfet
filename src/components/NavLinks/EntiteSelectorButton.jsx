@@ -4,14 +4,14 @@ import {useMediaQuery} from "@mantine/hooks";
 import {IconBoxMultiple} from "@tabler/icons-react";
 import {useEntiteCtxt} from "../../hooks/useEntiteCtxt";
 import CategoriesSelector from "./EntiteSelector";
-import useNavabarButtonStyle from "./NavbarButtonStyle";
+import useNavbarButtonStyle from "./NavbarButtonStyle";
 
 
-export function EntiteSelector() {
+export function EntiteSelectorButton({setNavBarOpened}) {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
-    const {classes, cx} = useNavabarButtonStyle();
+    const {classes, cx} = useNavbarButtonStyle();
 
     const Icon = IconBoxMultiple;
     const { entite } = useEntiteCtxt();
@@ -50,14 +50,14 @@ export function EntiteSelector() {
                 </Popover.Target>
 
                 <Popover.Dropdown>
-                    <CategoriesSelector setActive={setActive}/>
+                    <CategoriesSelector setActive={setActive} setNavBarOpened={()=>{}}/>
                 </Popover.Dropdown>
             </Popover>
         );
     } else {
       return (
         <Popover
-            width={300}
+            width="target"
             opened={active}
             onChange={setActive}
             position="bottom"
@@ -69,7 +69,8 @@ export function EntiteSelector() {
                 <UnstyledButton
                     onClick={() => {setActive((active) => !active)}}
                     className={cx(classes.link, {[classes.active]: active})}
-                    style={{backgroundColor:entite.color, width: "80%"}}
+                    style={{width: "90%", justifyContent: "left", paddingLeft: theme.radius.md, alignSelf: "center",
+                            backgroundColor:entite.color}}
                 >
                     <Group style={{width: "100%"}}>
                         <Icon className={classes.icon}/>
@@ -79,11 +80,11 @@ export function EntiteSelector() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <CategoriesSelector setActive={setActive}/>
+                <CategoriesSelector setActive={setActive} setNavBarOpened={setNavBarOpened}/>
             </Popover.Dropdown>
         </Popover>
       );
     }
 }
 
-export default EntiteSelector;
+export default EntiteSelectorButton;

@@ -2,14 +2,14 @@ import {Group, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@man
 import {useHotkeys, useMediaQuery} from "@mantine/hooks";
 import {IconLogout} from "@tabler/icons-react";
 import {handleLogout} from "../../auth/logout";
-import useNavabarButtonStyle from "./NavbarButtonStyle";
+import useNavbarButtonStyle from "./NavbarButtonStyle";
 
 
 export function LogOutLink() {
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
 
-    const {classes, cx} = useNavabarButtonStyle();
+    const {classes, cx} = useNavbarButtonStyle();
 
     const label = "Déconnexion"
     const Icon = IconLogout
@@ -37,7 +37,7 @@ export function LogOutLink() {
             <UnstyledButton
                 onClick={handleLogout}
                 className={cx(classes.link)}
-                style={{width: "80%"}}
+                style={{width: "90%", justifyContent: "left", paddingLeft: theme.radius.md, alignSelf: "center"}}
             >
                 <Group>
                     <Icon className={classes.icon}/>

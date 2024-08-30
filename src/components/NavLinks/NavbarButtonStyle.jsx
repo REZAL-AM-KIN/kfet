@@ -1,6 +1,6 @@
 import {createStyles} from "@mantine/core";
 
-export const useNavabarButtonStyle = createStyles((theme) => ({
+export const useNavbarButtonStyle = createStyles((theme) => ({
     icon: {
         width : "2rem",
         height: "2rem",
@@ -29,4 +29,4 @@ export const useNavabarButtonStyle = createStyles((theme) => ({
     },
 }));
 
-export default useNavabarButtonStyle;
+export default useNavbarButtonStyle;

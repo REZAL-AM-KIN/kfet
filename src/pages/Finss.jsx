@@ -35,7 +35,7 @@ const Finss = () => {
     return(
         <Stack spacing="0" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
            <Center>
-               <Title order={1} style={{margin:"10px"}}>Listes des fin'ss</Title>
+               <Title order={1} style={{margin:"0.5rem"}}>Listes des fin'ss</Title>
            </Center>
             <Box
                 style={{

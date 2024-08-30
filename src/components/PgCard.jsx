@@ -56,7 +56,11 @@ function PgCard({data, onClick, sx}) {
                     <Text size={theme.headings.sizes.h3.fontSize}
                         align="right">{data.solde}€</Text>
                 </Group>
-                <Text size={theme.headings.sizes.h6.fontSize} style={{lineHeight: 1}} italic>{data.commentaire}</Text>
+
+                <Text truncate lineClamp={2} size={theme.headings.sizes.h6.fontSize}
+                      style={{lineHeight: 1, whiteSpace: "pre-wrap", wordWrap:"break-word"}} italic>
+                    {data.commentaire}
+                </Text>
             </Paper>
         );
     } else {
@@ -71,8 +75,13 @@ function PgCard({data, onClick, sx}) {
                 <Group position="apart" grow>
                     <Stack spacing={0}>
                         <Text size={theme.headings.sizes.h3.fontSize} color={theme.colors.gray[9]}
-                            style={{lineHeight: 1}}>{data.nom} {data.prenom}</Text>
-                        <Text size={theme.headings.sizes.h5.fontSize} style={{lineHeight: 1}} italic>{data.commentaire}</Text>
+                              style={{lineHeight: 1}}>
+                                {data.nom} {data.prenom}
+                        </Text>
+                        <Text truncate lineClamp={2} size={theme.headings.sizes.h5.fontSize}
+                              style={{lineHeight: 1, whiteSpace: "pre-wrap", wordWrap:"break-word"}} italic>
+                                {data.commentaire}
+                        </Text>
                     </Stack>
 
                     <Stack>

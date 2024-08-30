@@ -2,19 +2,23 @@ import {useState} from "react";
 import {Popover, Stack, Text, Tooltip, UnstyledButton, useMantineTheme} from "@mantine/core";
 import {useHotkeys} from "@mantine/hooks";
 import {IconUserSearch} from "@tabler/icons-react";
+import {useNavigate} from "react-router-dom";
+
 import SearchPg from "../SearchPg";
-import useNavabarButtonStyle from "./NavbarButtonStyle";
+import useNavbarButtonStyle from "./NavbarButtonStyle";
 
 
 export function NormalSearchPgButton() {
     const theme = useMantineTheme()
-    const {classes, cx} = useNavabarButtonStyle();
+    const {classes, cx} = useNavbarButtonStyle();
 
     const Icon = IconUserSearch
     const label = "Rechercher un pg"
     const shortcut = "alt+P"
 
     const [active, setActive] = useState(false)
+
+    const navigate = useNavigate()
 
     useHotkeys([[shortcut, () => setActive((o) => !o)]])
 
@@ -56,7 +60,10 @@ export function NormalSearchPgButton() {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <SearchPg onSubmit={() => setActive(false)}/>
+                <SearchPg onSubmit={(pg) => {
+                    navigate("pg/" + pg.id);
+                    setActive(false)
+                }}/>
             </Popover.Dropdown>
         </Popover>
     );

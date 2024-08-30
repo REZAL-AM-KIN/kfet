@@ -30,7 +30,7 @@ const FinssProductForm = ({initialProduct, formSubmitCallback, disabled}) => {
         validate:{
             nom: (value) => (value.length>30 ? "Le nom doit faire moins de 30 caractères" :
                 value.length===0 ? "Le titre est obligatoire !": null),
-            description: (value) => (value.length>100 ? "La description doit faire moins de 100 caractères" : null),
+            description: (value) => (value.length>200 ? "La description doit faire moins de 200 caractères" : null),
             prix_total: (value) => (value<0 ? "Le prix total doit être positif" :
                 value.length===0 ? "Le prix total est obligatoire !": null),
             solde_requis: (value) => (value<0 ? "Le solde minimum sur le compte du pg doit être positif" :

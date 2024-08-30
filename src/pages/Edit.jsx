@@ -1,4 +1,4 @@
-import {Center, Stack, Box, Modal} from "@mantine/core"
+import {Center, Stack, Box, Title, Modal} from "@mantine/core"
 import {useEffect, useState} from "react";
 import ProductsSelector from "../components/editProduct/ProductsSelector";
 import {useProductsList} from "../hooks/products/useProductsList";
@@ -23,9 +23,9 @@ const Edit = () => {
     }, [modalOpened])
 
     return(
-        <Stack>
+        <Stack spacing="0">
             <Center>
-                <h1 style={{margin:"10px"}}>Listes des produits de {entite.nom}</h1>
+                <Title order={1}  style={{margin:"0.5rem"}}>Listes des produits de {entite.nom}</Title>
             </Center>
             <Box
                 style={{
@@ -40,7 +40,7 @@ const Edit = () => {
                     setModalOpened={setModalOpened}
                 />
 
-                <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
+                <Modal centered opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
                     <ProductParameters
                         productId={productId}
                         entity={entite.nom}

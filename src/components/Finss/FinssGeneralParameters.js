@@ -18,13 +18,6 @@ import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 
 const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
-    //Si on est dans le cas d'une création, on crée un faux objet usefinssinfo vide.
-    if(!usefinssinfo){
-        const date = new Date()
-        usefinssinfo = {isLoading: false, finssInfo:{date_event:date.toISOString()}};
-    }
-
-
     // Initialisation de la Form des paramètres du fin'ss
     const form = useForm({
         initialValues:{
@@ -101,6 +94,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                             label = "Date de Fin'ss"
                             valueFormat="DD MMMM YYYY"
                             icon={<IconCalendar size={16} />}
+                            popoverProps={{ withinPortal: true }}
                             {...form.getInputProps('date_event')}
 
                         />

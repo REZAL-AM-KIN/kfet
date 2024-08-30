@@ -1,5 +1,5 @@
 import {Fragment, useState} from "react";
-import {Affix, Burger, Center, Container, Drawer, Navbar, Stack, useMantineTheme} from "@mantine/core";
+import {Affix, Burger, Container, Navbar, Stack, useMantineTheme} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {IconListDetails, IconToolsKitchen2, IconHome} from "@tabler/icons-react";
 
@@ -8,6 +8,7 @@ import EntiteSelector from "./NavLinks/EntiteSelectorButton";
 import NormalSearchPgButton from "./NavLinks/SearchPgButton";
 import LogOutLink from "./NavLinks/LogOutButton";
 import SearchPg from "./SearchPg";
+import {useNavigate} from "react-router-dom";
 
 
 const mockdata = [
@@ -22,7 +23,9 @@ Mobile Nav Bar
 
  */
 const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
-        const theme = useMantineTheme()
+        const navigate = useNavigate()
+
+        const [searchPgValue, setSearchPgValue] = useState("")
 
         const links = linksData.map((link) => (
             <NavbarLink
@@ -34,7 +37,7 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
 
         return (
                 <Fragment>
-                    <Affix position={{top: 10, left: 10}}>
+                    <Affix position={{top: 8, left: 8}}>
                         <Burger
                             opened={navBarOpened}
                             onClick={() => setNavBarOpened((o) => !o)}
@@ -46,31 +49,49 @@ const MobileNavBar = ({navBarOpened, setNavBarOpened, linksData})=>{
                         </Burger>
                     </Affix>
 
-                    <Drawer
-                        opened={navBarOpened}
-                        onClose={() => {setNavBarOpened(false)}}
-                        closeButtonLabel="Close drawer"
-                        styles={{
-                            drawer: {backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                                    .background},
-                            closeButton: { color: "white", iconSize: 80} }}
-                        lockScroll
-                    >
-                        <Container fluid>
-                            <SearchPg setActive={setNavBarOpened}/>
-                        </Container>
-                        <Stack justify="space-between"  style={{width: "100%", height: "100%", paddingTop: "4vh", paddingBottom: "5.5em"}}>
-                            <Stack align="center" spacing="xs">
-                                <EntiteSelector/>
+                    <Navbar
+                            sx={(theme) => ({
+                                backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
+                                    .background,
+                                border:0
+                            })}
+                            hidden={!navBarOpened}
+                            top="0">
+                        <Navbar.Section mt={7}>
+                            <Stack align="center">
+                                <Container style={{margin:0, padding:0, width:"75%"}}>
+                                    <SearchPg onSubmit={(pg) => {
+                                        navigate("pg/" + pg.id);
+                                        setNavBarOpened(false);
+                                        setSearchPgValue("");
+                                    }} value={searchPgValue} onChange={setSearchPgValue}/>
+                                </Container>
+                            </Stack>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center">
+                                <NavbarLink
+                                    icon={IconHome}
+                                    link="/"
+                                    shortcut="alt+H"
+                                    key="Accueil"
+                                    label="Accueil"
+                                    onClick={()=>setNavBarOpened(false)}
+                                />
+                            </Stack>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center" spacing={5}>
+                                <EntiteSelector setNavBarOpened={setNavBarOpened}/>
                                 {links}
                             </Stack>
-
-                            <Center>
+                        </Navbar.Section>
+                        <Navbar.Section mt={20}>
+                            <Stack justify="center">
                                 <LogOutLink/>
-                            </Center>
-                        </Stack>
-
-                    </Drawer>
+                            </Stack>
+                        </Navbar.Section>
+                    </Navbar>
                 </Fragment>
         );
 

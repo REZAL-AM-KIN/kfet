@@ -17,13 +17,13 @@ const FinssParameters = ({usefinssinfo, usefinssproduct, usebucquage})=>{
 
             <Tabs.Panel value="general">
                 {usefinssinfo.finssInfo.etat_event < etatEventValues.TERMINE ?
-                    <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"20px auto", maxWidth:"fit-content"}}>
+                    <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
                         <GestionEtatEvent usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
                     </Paper>
                     : null
                 }
 
-                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"20px auto", maxWidth:"fit-content"}}>
+                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
                     <Text ta="center">Paramètres généraux</Text>
                     <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
                 </Paper>

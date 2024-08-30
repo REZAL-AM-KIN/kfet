@@ -118,20 +118,20 @@ const GestionEtatEvent = ({usefinssinfo, usebucquage}) => {
             onClick = ()=>{};
     }
     return (
-        <Box style={{width:400, position:'relative'}}>
-            <Center>
-                <Text>
+        <Center>
+            <Box style={{width:400, position:'relative'}}>
+                <Text ta="center">
                     Etat du fin'ss: {etatEventLabels[usefinssinfo.finssInfo.etat_event]}
                 </Text>
-            </Center>
 
-            {usefinssinfo.finssInfo.etat_event < etatEventValues.TERMINE ?
-            <Button
-                    style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}}
-                    onClick={onClick}>{button_text}
-            </Button>
-                : null}
-        </Box>
+                {usefinssinfo.finssInfo.etat_event < etatEventValues.TERMINE ?
+                <Button
+                        style={{width:"100%", marginTop: 10, backgroundColor:theme.colors.red[9]}}
+                        onClick={onClick}>{button_text}
+                </Button>
+                    : null}
+            </Box>
+        </Center>
     )
 }
 

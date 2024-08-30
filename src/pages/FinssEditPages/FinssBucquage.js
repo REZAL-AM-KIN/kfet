@@ -193,7 +193,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
-            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "20px 10px 0px 10px", flex: "1 1 auto"}}>
+            <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "16px 8px 0px 8px", flex: "1 1 auto"}}>
                 <BucquageProgress/>
 
                 <SearchableDataTable
@@ -217,7 +217,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     extraButtons={
                         <>
                             <Tooltip label={"Ajouter un bucquage"} position={"bottom"} withArrow>
-                                <ActionIcon disabled={usefinssinfo.finssInfo.etat_event === etatEventValues.TERMINE}
+                                <ActionIcon disabled={usefinssinfo.finssInfo.etat_event !== etatEventValues.BUCQUAGE}
                                             size={33} color="green" onClick={()=>{openBucquage()}}>
                                   <IconUserPlus size={33}/>
                                 </ActionIcon>
