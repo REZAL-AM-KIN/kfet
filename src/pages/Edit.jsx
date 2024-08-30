@@ -35,7 +35,7 @@ const Edit = () => {
             >
                 <ProductsSelector
                     useproductslist={useproductslist}
-                    category={entite.nom}
+                    category={entite.id}
                     setProductId={setProductId}
                     setModalOpened={setModalOpened}
                 />
