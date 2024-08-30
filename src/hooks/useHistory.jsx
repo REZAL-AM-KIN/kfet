@@ -79,7 +79,7 @@ export function usePGHistory(pgId){
 
     const retrieve = useCallback(async (limit, offset) => {
         if (!!!limit) {
-            limit = 10
+            limit = 25
         }
         if (!!!offset) {
             offset = 0
@@ -87,8 +87,8 @@ export function usePGHistory(pgId){
         setLoading(true);
         try {
             // limit is the number of data loaded at once, offset is "load data until <loaded> number of lines"
-            const response = await axiosPrivate.get("history/" + pgId + "/", {params: {limit:limit, offset:offset}});
-            setPgHistory(response.data);
+            const response = await axiosPrivate.get("history/", {params: {limit:limit, offset:offset, cible_evenement:pgId}});
+            setPgHistory(response.data?.results);
         } catch (error) {
             errorNotif("History", error.message);
             console.log("Error getting general history", error);

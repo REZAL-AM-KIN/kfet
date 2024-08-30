@@ -60,6 +60,7 @@ function PgHistory({history, style}) {
                 <td>{line.prix_evenement}€</td>
                 <td>{line.entite_evenement} ({line.initiateur_evenement})</td>
                 <td>{date.toLocaleString("fr-fr", {
+                    year: "numeric",
                     month: "short",
                     day: "numeric",
                     hour: "numeric",
