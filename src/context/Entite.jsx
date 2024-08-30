@@ -1,6 +1,6 @@
 import {createContext, useCallback, useEffect, useState} from 'react';
 import {usePermissions} from "../hooks/useUser";
-import {useEntiteList} from "../hooks/useEntiteList";
+import {useEntity} from "../hooks/useEntity";
 
 const EntiteContext = createContext({});
 
@@ -14,22 +14,22 @@ export const EntiteProvider = ({children}) => {
     });
 
     const permissions = usePermissions();
-    const entiteList = useEntiteList();
+    const entity = useEntity();
 
     // Override setEntite and setCatColor to save the data in the localStorage
     // for later sessions
     const setEntite = useCallback((id) => {
         // get the other props based on the Id:
-        const lineFound = entiteList.entitiesList.find((line) => {
-            return line.id === id;
+        return entity.getEntityWithId(id).then((dataFound) => {
+            if (dataFound) {
+                localStorage.setItem("entite", JSON.stringify(dataFound));
+                setEntiteState(dataFound);
+                return true;
+            }
+            return false;
         });
-        if (lineFound) {
-            localStorage.setItem("entite", JSON.stringify(lineFound));
-            setEntiteState(lineFound);
-            return true;
-        }
-        return false;
-    },[entiteList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[entity.getEntityWithId]);
     // this dependency is needed to avoid stale closure.
     // if there was no dependency, the function would always use the initial value of entiteList,
     // which is an empty array, because it hasn't been fetched yet.
@@ -38,7 +38,7 @@ export const EntiteProvider = ({children}) => {
 
     // update the entites
     useEffect(() => {
-        if (Object.keys(permissions).length && entiteList.entitiesList.length) {
+        if (Object.keys(permissions).length) {
             // Set the entite only if the user has permissions
             // console.log("permission trouvé! affectation de la catégorie")
             if (localStorage.getItem("entite")) {
@@ -54,24 +54,14 @@ export const EntiteProvider = ({children}) => {
             if (permissions.entities_manageable?.length) {
                 // Check if the user has a entite manageable
                 // get the 1st entite from the list
-                setEntite(
-                    // TODO: modify when the back will use the id instead of the name
-                    entiteList.entitiesList.find((line) => {
-                        return line.nom === permissions.entities_manageable[0];
-                    }).id
-                );
+                setEntite(permissions.entities_manageable[0]);
             } else if (permissions.entities?.length) {
                 // Check if the user has a entite
-                setEntite(
-                    // TODO: modify when the back will use the id instead of the name
-                    entiteList.entitiesList.find((line) => {
-                        return line.nom === permissions.entities[0];
-                    }).id
-                );
+                setEntite(permissions.entities[0]);
             }
         }
     // eslint-disable-next-line
-    }, [permissions,entiteList.entitiesList])
+    }, [permissions])
 
     return (
         <EntiteContext.Provider value={{entite, setEntite}}>

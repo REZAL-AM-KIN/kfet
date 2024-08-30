@@ -38,7 +38,6 @@ export function useHistory(){
         if (!!!offset) {
             offset = 0;
         }
-        console.log("useHistory: Update pg history | limit:", limit, "offset:", offset);
         setLoading(true);
         try {
             const response = await axiosPrivate.get("history/", {params: {limit:limit, offset:offset}});
@@ -48,7 +47,7 @@ export function useHistory(){
             console.log("Error getting general history", error);
         }
         setLoading(false);
-    }, []);
+    }, [axiosPrivate]);
 
     const loadMore = useCallback(() => {
         setLimit(limit => limit + 15);
@@ -94,7 +93,7 @@ export function usePGHistory(pgId){
             console.log("Error getting general history", error);
         }
         setLoading(false);
-    }, [pgId]);
+    }, [axiosPrivate, pgId]);
 
     const loadMore = useCallback(() => {
         // load more of the history

@@ -37,7 +37,6 @@ export const UserProvider = ({children}) => {
     }, [isLogged])
 
     const getUser = async () => {
-        console.log("UPDATE CONTEXT: USER");
         try {
             const response = await axiosPrivate.get("utilisateur/");
             if (response.data) {
@@ -51,7 +50,6 @@ export const UserProvider = ({children}) => {
     }
 
     const getPermissions = async () => {
-        console.log("UPDATE CONTEXT: PERMISSIONS");
         try {
             const response = await axiosPrivate.get("permissions/");
             setPermissions(response.data);

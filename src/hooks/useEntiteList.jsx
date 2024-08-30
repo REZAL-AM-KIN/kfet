@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import errorNotif from "../components/ErrorNotif";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -20,41 +20,36 @@ Retours :
         ]
  */
 
-export function useEntiteList(){
-
+export function useEntiteList(limit){
     const axiosPrivate = useAxiosPrivate()
 
     const [isLoading, setLoading] = useState(true)
     const [entitiesList, setEntitiesList] = useState([])
+    const [page, setPage] = useState(1);
+    const [pageCount, setPageCount] = useState(1)
 
-    const retrieveEntities = async () => {
-        setLoading(true)
-        try {
-            const response = await axiosPrivate.get("entites/");
-            if (response.data) {
-                setEntitiesList(response.data.results);
-            } else {
-                errorNotif("Entités","Impossible de récupérer la liste des entités");
+    const retrieveEntities = useCallback( async () => {
+            setLoading(true)
+            try {
+                const response = await axiosPrivate.get("entites/", {params: {limit:limit, offset:(page-1)*limit}});
+                if (response.data) {
+                    setEntitiesList(response.data.results);
+                    setPageCount(Math.ceil(response.data.count / limit));
+                } else {
+                    errorNotif("Entités","Impossible de récupérer la liste des entités");
+                }
+            } catch (error) {
+                errorNotif("Catégories", error.message)
+                console.log("Error getting entities", error);
             }
-        } catch (error) {
-            errorNotif("Catégories", error.message)
-            console.log("Error getting entities", error);
-        }
-        setLoading(false)
-    }
+            setLoading(false)
+        }, [axiosPrivate, limit, page]
+    )
 
-    // get product list
     useEffect(() => {
-            const controller = new AbortController();
+        retrieveEntities();
+    }, [retrieveEntities]);
 
-            retrieveEntities();
-
-            return () => {
-                controller.abort();
-            }
-        // eslint-disable-next-line
-    }, []);
-
-    return {entitiesList, isLoading, retrieveEntities}
+    return {entitiesList, isLoading, retrieveEntities, pageCount, page, setPage}
 
 }

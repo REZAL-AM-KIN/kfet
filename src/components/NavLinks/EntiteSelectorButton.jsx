@@ -21,7 +21,7 @@ export function EntiteSelectorButton({setNavBarOpened}) {
     if (!isSmallDevice) {
         return (
             <Popover
-                width={300}
+                width={350}
                 opened={active}
                 onChange={setActive}
                 position="right"
@@ -50,7 +50,7 @@ export function EntiteSelectorButton({setNavBarOpened}) {
                 </Popover.Target>
 
                 <Popover.Dropdown>
-                    <CategoriesSelector setActive={setActive} setNavBarOpened={()=>{}}/>
+                    <CategoriesSelector setActive={setActive} setNavBarOpened={()=>{}} isSmallDevice={isSmallDevice}/>
                 </Popover.Dropdown>
             </Popover>
         );
@@ -80,7 +80,7 @@ export function EntiteSelectorButton({setNavBarOpened}) {
             </Popover.Target>
 
             <Popover.Dropdown>
-                <CategoriesSelector setActive={setActive} setNavBarOpened={setNavBarOpened}/>
+                <CategoriesSelector setActive={setActive} setNavBarOpened={setNavBarOpened} isSmallDevice={isSmallDevice}/>
             </Popover.Dropdown>
         </Popover>
       );

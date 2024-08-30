@@ -75,7 +75,7 @@ function PgHistory({history, style}) {
 
     return (
         <ScrollArea.Autosize mah="100%">
-            <Table striped highlightOnHover stickyHeader sx={{borderRadius:"1em", ...style}}>
+            <Table striped highlightOnHover sx={{borderRadius:"1em", ...style}}>
                 <thead>
                 <tr>
                     <th>Produit</th>
