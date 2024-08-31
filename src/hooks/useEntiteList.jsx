@@ -31,7 +31,7 @@ export function useEntiteList(limit){
     const retrieveEntities = useCallback( async () => {
             setLoading(true)
             try {
-                const response = await axiosPrivate.get("entites/", {params: {limit:limit, offset:(page-1)*limit}});
+                const response = await axiosPrivate.get("mesentites/", {params: {limit:limit, offset:(page-1)*limit}});
                 if (response.data) {
                     setEntitiesList(response.data.results);
                     setPageCount(Math.ceil(response.data.count / limit));
