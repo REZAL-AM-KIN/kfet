@@ -1,9 +1,14 @@
-import { Select, useMantineTheme } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import {Select, useMantineTheme} from '@mantine/core';
+import {useDebouncedState, useMediaQuery} from '@mantine/hooks';
+import {useEffect} from "react";
 
-const EntitySelector = ({entitiesManageable, entite, ...props})=>{
+const EntitySelector = ({entitiesManageable, entite, setSearch, ...props})=>{
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
+    const [debounced, setDebounced] = useDebouncedState(props["value"], 300);
+    useEffect(() => {
+        setSearch(debounced)
+    }, [setSearch, debounced]);
     return (
         <Select
             data={entitiesManageable}
@@ -13,6 +18,8 @@ const EntitySelector = ({entitiesManageable, entite, ...props})=>{
             maxDropdownHeight={isSmallDevice? 120:280}
             withinPortal
             {...props}
+            onSearchChange={setDebounced}
+            defaultValue={props["value"]}
         />
     );
 }

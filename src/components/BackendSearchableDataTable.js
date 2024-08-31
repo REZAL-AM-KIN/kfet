@@ -2,6 +2,7 @@ import {Box, Stack, TextInput, Group, ActionIcon} from "@mantine/core";
 import {IconCirclePlus, IconRefresh, IconSearch} from "@tabler/icons-react";
 import {DataTable} from "mantine-datatable";
 import {useEffect, useState} from "react";
+import {useDebouncedState} from "@mantine/hooks";
 
 /*
 Ce composant donne une datable triable avec un champ de recherche et la logique de tri intégré.
@@ -22,13 +23,16 @@ categoriesSelector : Doit contenir un noeud react qui sera affiché contre la ba
 secondBarNodes: Liste de Nodes qui seront ajouter sous la barre principale (champ de recherche, boutons, ect).
 
  */
-const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defaultSortedColumn, styles, elementSpacing="xs", searchBarPosition = "apart", withAddIcon, withReloadIcon, addCallback, reloadCallback, extraButtons, categoriesSelector, secondBarNodes, ...othersProps})=>{
+const BackendSearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defaultSortedColumn, styles,
+                                    elementSpacing="xs", searchBarPosition = "apart",
+                                    withAddIcon, withReloadIcon, addCallback, reloadCallback,
+                                    extraButtons, setSearch, setSort,
+                                    page, onPageChange, totalRecords, recordsPerPage, setPageSize, pageSizeOptions,
+                                    secondBarNodes, ...othersProps})=>{
     const [sortStatus, setSortStatus] = useState({ columnAccessor: (defaultSortedColumn ? defaultSortedColumn : columns[0].accessor), direction: 'asc' });
-    const [search, setSearch] = useState('');
-    const [sortedData, setSortedData] = useState(data);
+    const [debounced, setDebounced] = useDebouncedState('', 300);
 
-    //On vérifie que les paramètes passés sont consistant:
-
+    //On vérifie que les paramètres passés sont consistants.
     //Vérification de la présence des callbacks si reload ou add
     if(withAddIcon && !addCallback){
         throw Object.assign(
@@ -43,67 +47,17 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
         );
     }
 
-
-
-
-    //Fonction qui sert à filter les données passés par "data" en fonction de la chaine passé dans "search"
-    //La recherche s'effectue sur les champs "data_keys" qui sont ici toutes les colones déclarées comme recherchable. (searchable : true)
-    function filterData(data, search) {
-        const data_keys = columns.filter((item)=>item.searchable).map((item)=>item.accessor) // on récupère les accessors des colonnes recherchables.
-
-        const query = search.toLowerCase().trim();
-        return data.filter((item) =>
-            data_keys.some((key) => item[key] !== null && item[key].toString().toLowerCase().includes(query)) // On filtre sur toutes les clés dispo dans data_keys
-        );
-    }
-
-
-    //Cette fonction permet de triée les données passées en "data" suivant les caractéristiques définis par "payload"
-    //payload: { sortBy: keyof data | null; reversed: boolean; search: string }
-    function sortData(data, payload) {
-
-        if(data.length===0){
-            return data
-        }
-
-        const { sortBy } = payload;
-
-        if (!sortBy) {
-            return filterData(data, payload.search);
-        }
-
-        return filterData(
-            [...data].sort((a, b) => {
-
-                if (a[sortBy] === null) {
-                    return 1;
-                }
-                if (b[sortBy] === null) {
-                    return -1;
-                }
-
-                if (payload.reversed) {
-                    return b[sortBy].localeCompare(a[sortBy]);
-                }
-
-                return a[sortBy].localeCompare(b[sortBy]);
-            }),
-            payload.search
-        );
-    }
-
+    useEffect(()=>{
+        setSearch(debounced);
+    }, [setSearch, debounced]);
 
     useEffect(() => {
-        const sorted_data = sortData(data, {sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search:search});
-        setSortedData(sorted_data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data, sortStatus]);
-
-    const handleSearchChange = (event) => {
-        const { value } = event.currentTarget;
-        setSearch(value);
-        setSortedData(sortData(data, { sortBy:sortStatus.columnAccessor, reversed: (sortStatus.direction==="desc"), search: value }));
-    };
+        if (sortStatus.direction === 'asc') {
+            setSort(sortStatus.columnAccessor);
+        } else {
+            setSort("-"+sortStatus.columnAccessor);
+        }
+    }, [setSort, sortStatus]);
 
     return (
         <Stack spacing={elementSpacing} style={{height: "100%"}}>
@@ -113,16 +67,12 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
 
                     icon={<IconSearch size={14} stroke={1.5} />}
                     style = {styles.input}
-                    value={search}
-                    onChange={handleSearchChange}
+                    onChange={(event) => setDebounced(event.currentTarget.value)}
                 />
 
                 {/* Ajout des boutons d'ajout et de refresh si demandé par l'utilisateur*/}
                 {(withAddIcon || withReloadIcon || extraButtons) && (
                     <Group style={{alignItems: "center", ...styles.buttons}}>
-                        {/* Ajout du selector si demandé par l'utilisateur*/}
-                        {categoriesSelector}
-
                         {extraButtons}
 
                         {withAddIcon && (
@@ -152,11 +102,18 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
                     minHeight={150}
                     striped
                     highlightOnHover
-                    records={sortedData}
+                    records={data}
                     columns={columns}
                     fetching={isLoading}
                     sortStatus={sortStatus}
                     onSortStatusChange={setSortStatus}
+                    page={page}
+                    onPageChange={onPageChange}
+                    totalRecords={totalRecords}
+                    recordsPerPage={recordsPerPage}
+                    recordsPerPageOptions={pageSizeOptions}
+                    onRecordsPerPageChange={setPageSize}
+                    recordsPerPageLabel="Produits par page"
 
                     style = {styles.datatable}
 
@@ -169,4 +126,4 @@ const SearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defau
     );
 }
 
-export default SearchableDataTable;
+export default BackendSearchableDataTable;

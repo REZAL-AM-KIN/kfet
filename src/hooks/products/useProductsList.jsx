@@ -27,19 +27,26 @@ Retours :
 
  */
 
-export function useProductsList(entityId){
+export function useProductsList(entityId, initial_limit=25){
 
     const axiosPrivate = useAxiosPrivate()
 
     const [isLoading, setLoading] = useState(true)
     const [productsList, setProductsList] = useState([])
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(initial_limit);
+    const [numberRecords, setNumberRecords] = useState(1)
+    const [ordering, setOrdering] = useState("nom")
+    const [search, setSearch] = useState("")
 
     const retrieveProducts = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("produitsDansEntite/"+entityId+"/");
+            const response = await axiosPrivate.get("produitsDansEntite/", {params:
+                    {cible_entity:entityId, limit:limit, offset:(page-1)*limit, ordering:ordering, search:search}});
             if (response.data) {
-                setProductsList(response.data);
+                setProductsList(response.data.results);
+                setNumberRecords(response.data.count);
             } else {
                 errorNotif("Produits","Impossible de récupérer les produits de l'entité");
             }
@@ -47,7 +54,7 @@ export function useProductsList(entityId){
             errorNotif("Produits", error.message)
         }
         setLoading(false)
-    },[axiosPrivate, entityId]);
+    },[axiosPrivate, entityId, limit, page, ordering, search]);
 
     // get product list
     useEffect(() => {
@@ -57,15 +64,14 @@ export function useProductsList(entityId){
         }
         const controller = new AbortController();
 
-        setLoading(true)
         retrieveProducts();
 
         return () => {
             controller.abort();
         }
-        // eslint-disable-next-line
-    }, [entityId]);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [retrieveProducts]);
 
-    return {productsList, isLoading, retrieveProducts}
+    return {productsList, isLoading, retrieveProducts, page, setPage, limit, setLimit, numberRecords, ordering, setOrdering, search, setSearch}
 
 }

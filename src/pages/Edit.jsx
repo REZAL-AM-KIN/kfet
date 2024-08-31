@@ -14,25 +14,13 @@ const Edit = () => {
     const [modalOpened, setModalOpened] = useState(false)
     const [productId, setProductId] = useState()
 
-    //si une modale est refermé, on considère que l'utilisateur a fini de modifier le produit et on recharge la liste
-    useEffect(()=>{
-        if(modalOpened===false){
-            useproductslist.retrieveProducts()
-        }
-    // eslint-disable-next-line
-    }, [modalOpened])
 
     return(
         <Stack spacing="0">
             <Center>
                 <Title order={1}  style={{margin:"0.5rem"}}>Listes des produits de {entite.nom}</Title>
             </Center>
-            <Box
-                style={{
-                    flex: "1 1 auto",
-                    overflow: "hidden"
-                }}
-            >
+            <Box style={{flex: "1 1 auto", overflow: "hidden"}}>
                 <ProductsSelector
                     useproductslist={useproductslist}
                     category={entite.id}
@@ -40,7 +28,12 @@ const Edit = () => {
                     setModalOpened={setModalOpened}
                 />
 
-                <Modal centered opened={modalOpened} onClose={() => setModalOpened(false)} title={productId ? "Modifier le produit" : "Ajouter un produit" }>
+                <Modal centered opened={modalOpened} onClose={() => {
+                        setModalOpened(false);
+                        useproductslist.retrieveProducts();
+                    }}
+                   title={productId ? "Modifier le produit" : "Ajouter un produit" }
+                >
                     <ProductParameters
                         productId={productId}
                         entity={entite.nom}

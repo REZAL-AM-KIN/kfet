@@ -10,13 +10,12 @@ import {
 import {IconCircleX, IconEdit} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {useEffect, useState} from "react";
-import SearchableDataTable from "../SearchableDataTable";
+import BackendSearchableDataTable from "../BackendSearchableDataTable";
 import {openConfirmModal} from '@mantine/modals';
 import {usePermissions} from "../../hooks/useUser";
 import {useProductInfo} from "../../hooks/products/useProductInfo";
 
 const ProductsSelector = ({useproductslist, category, setProductId, setModalOpened}) => {
-    const [tabData, setTabData] = useState([])
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
@@ -30,10 +29,6 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
             setCanManageEntity(permissions.entities_manageable.some(item => category === item))
         }
     }, [permissions.entities_manageable,category])
-
-    useEffect(()=>{
-        setTabData(useproductslist.productsList)
-    }, [useproductslist.productsList])
 
 
     //Construction du déroulant au clic sur une ligne du tableau
@@ -105,48 +100,51 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
         <Box style={{display: "flex", height: "100%"}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "8px 8px 0px 8px", flex: "1 1 auto"}}>
 
-                <SearchableDataTable
+                <BackendSearchableDataTable
                     noRecordsText="Aucun produit n'a été trouvé"
-                    searchPlaceHolder="Rechercher sur le nom/raccourcit/prix"
+                    searchPlaceHolder="Rechercher sur le nom/raccourcit"
                     striped
                     highlightOnHover
-                    data={tabData}
+                    data={useproductslist.productsList}
                     columns={[
                         {accessor: "nom",
                             title:"Nom",
                             titleStyle: {minWidth:"160px"},
                             sortable: true,
-                            searchable: true,
                             render: (product) => (<NameRowRender product={product}/>)},
                         {accessor: "raccourci",
                             title:"Raccourci",
                             textAlignment:"center",
                             width: theme.breakpoints.sm/2,
                             sortable: true,
-                            searchable: true,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                         {accessor: "prix",
                             title:"Prix (€)",
                             textAlignment:"center",
                             width: theme.breakpoints.sm/2,
                             sortable: true,
-                            searchable: false,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') },
                         {accessor: "stock",
                             title:"Stock",
                             textAlignment:"center",
                             width: theme.breakpoints.sm/2,
                             sortable: true,
-                            searchable: false,
                             visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')'),
                             render: (product) => product.suivi_stock ? product.stock : '-'},
                     ]}
                     defaultSortedColumn="nom"
                     idAccessor="id"
                     isLoading = {useproductslist.isLoading}
+                    setSearch={useproductslist.setSearch}
+                    setSort={useproductslist.setOrdering}
+                    page={useproductslist.page}
+                    onPageChange={useproductslist.setPage}
+                    totalRecords={useproductslist.numberRecords}
+                    recordsPerPage={useproductslist.limit}
+                    setPageSize={useproductslist.setLimit}
+                    recordsPerPageOptions={[10, 25, 50]}
 
                     elementSpacing={"xs"}
-
                     styles={{
                         input: {flex: "auto"}
                     }}

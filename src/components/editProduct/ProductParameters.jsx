@@ -12,15 +12,14 @@ import {useForm} from "@mantine/form";
 import {useEffect} from "react";
 import EntitySelector from "./EntitySelector";
 import {useProductInfo} from "../../hooks/products/useProductInfo";
-import {usePermissions} from "../../hooks/useUser";
+import {useEntiteManageablesList} from "../../hooks/useEntiteManageablesList";
 
 
 
 const ProductParameters = ({productId,setModalOpened, entity})=>{
     const theme = useMantineTheme();
     const useproductinfo = useProductInfo(productId);
-    const permissions = usePermissions();
-    const entitiesManageable = permissions.entities_manageable;
+    const entiteManageablesList = useEntiteManageablesList(5);
     // Initialisation de la Form des paramètres du produit
     const form = useForm({
         initialValues:{
@@ -57,6 +56,9 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
         }
     // eslint-disable-next-line
     }, [useproductinfo.productInfo])
+    useEffect(() => {
+        entiteManageablesList.setSearch(entity)
+    }, []);
 
     function formSubmit(values) {
         if(productId){
@@ -94,7 +96,8 @@ const ProductParameters = ({productId,setModalOpened, entity})=>{
                             {...form.getInputProps('prix')}
                         />
 
-                        <EntitySelector entitiesManageable={entitiesManageable}
+                        <EntitySelector entitiesManageable={entiteManageablesList.entitiesList.map((item) => (item.nom))}
+                            setSearch={entiteManageablesList.setSearch}
                             required
                             {...form.getInputProps('entite')}
                         />
