@@ -10,19 +10,19 @@ import {
     Box,
     Paper,
     Center,
-    Tooltip, useMantineTheme, Switch
+    Tooltip,
+    useMantineTheme
 } from "@mantine/core"
 import {IconCircleX, IconEdit} from "@tabler/icons-react";
 import {useMediaQuery} from "@mantine/hooks";
 import {modals} from "@mantine/modals";
 
-import SearchableDataTable from "../SearchableDataTable";
+import BackendSearchableDataTable from "../BackendSearchableDataTable";
 import FinssGeneralParameters from "./FinssGeneralParameters";
 import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 
 const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
     const [tabData, setTabData] = useState([])
-    const [displayEnded, setDisplayEnded] = useState(false)
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
 
@@ -30,18 +30,13 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
     useEffect(()=>{
         let tabData = usefinsslist.finssList
 
-        if(!displayEnded){
-            tabData = tabData.filter((finss)=>finss.etat_event < etatEventValues.TERMINE)
-        }
-
         tabData = tabData.map(({date_event, ...finss})=>{
             const date = new Date(date_event)
-            const date_string = date.toLocaleDateString() // si on voulait l'heure, il faudrait ajouter : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })+" "+
-
+            const date_string = date.toLocaleDateString()
             return {date_event:date_string, ...finss}
         })
        setTabData(tabData)
-    }, [usefinsslist.finssList, displayEnded])
+    }, [usefinsslist.finssList])
 
     const ActionRowRender = ({finss}) =>{
         function prebucqageButtons() {
@@ -107,22 +102,23 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
         )
     }
 
-    const CategorieFilter = (
-        <Switch
-            style={{flex:"1"}}
-            styles={{body:{alignItems:"center"}}}
-            labelPosition="left"
-            label="Afficher les fin'ss cloturés ?"
-            checked={displayEnded}
-            onChange={(event)=>setDisplayEnded(event.currentTarget.checked)}
+    // const CategorieFilter = (
+    //     <Switch
+    //         style={{flex:"1"}}
+    //         styles={{body:{alignItems:"center"}}}
+    //         labelPosition="left"
+    //         label="Afficher les fin'ss cloturés ?"
+    //         checked={displayEnded}
+    //         onChange={(event)=>setDisplayEnded(event.currentTarget.checked)}
+    //
+    //     />
+    // )
 
-        />
-    )
-
+    // TODO: ajouter un DatePickerInput avec range pour filter les finss par date?
     return (
         <Box style={{display: "flex", height: "100%"}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "8px 8px 0px 8px", flex: "1 1 auto"}}>
-                <SearchableDataTable
+                <BackendSearchableDataTable
                     noRecordsText="Aucun fin'ss n'a été trouvé"
                     searchPlaceHolder="Rechercher un fin'ss sur n'importe quel critère"
                     striped
@@ -134,23 +130,32 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
                         {accessor: "date_event", title:"Date", searchable: true, textAlignment:"center", width:160, sortable: true,  visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                         {accessor: "actions", title:"Inscription", searchable: false, textAlignment:"center", width:140, render: (finss) => (<ActionRowRender finss={finss}/>), visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')') }
                     ]}
-                    defaultSortedColumn="titre"
+                    defaultSortedColumn="date_event"
+                    defaultSortedDir="desc"
                     idAccessor="id"
                     isLoading = {usefinsslist.isLoading}
+                    setSearch={usefinsslist.setSearch}
+                    setSort={usefinsslist.setOrdering}
+                    page={usefinsslist.page}
+                    onPageChange={usefinsslist.setPage}
+                    totalRecords={usefinsslist.numberRecords}
+                    recordsPerPage={usefinsslist.limit}
+                    setPageSize={usefinsslist.setLimit}
+                    recordsPerPageOptions={[10, 25, 50]}
+
 
                     elementSpacing={"xs"}
-
                     styles={{
                         input: {flex: "auto"}
                     }}
+                    searchBarPosition="apart"
 
                     rowExpansion={ isSmallDevice ? {
                         content: ({record})=>(rowExpansionContent(record))
                     }:""}
 
-                    searchBarPosition="apart"
 
-                    categoriesSelector={CategorieFilter}
+                    //categoriesSelector={CategorieFilter}
 
                     withReloadIcon
                     reloadCallback={()=>usefinsslist.retrieveFinssList()}

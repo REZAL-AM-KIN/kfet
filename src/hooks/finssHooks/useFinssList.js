@@ -32,18 +32,25 @@ FinssList:
 
  */
 
-export function useFinssList(){
-    const axiosPrivate = useAxiosPrivate()
-    const [isLoading, setLoading] = useState(true)
-    const [isSending, setSending] = useState(false)
-    const [finssList, setFinssList] = useState([])
+export function useFinssList(initial_limit=25, initial_ordering="titre"){
+    const axiosPrivate = useAxiosPrivate();
+    const [isLoading, setLoading] = useState(true);
+    const [isSending, setSending] = useState(false);
+    const [finssList, setFinssList] = useState([]);
+    const [page, setPage] = useState(1);
+    const [numberRecords, setNumberRecords] = useState(1);
+    const [limit, setLimit] = useState(initial_limit);
+    const [ordering, setOrdering] = useState(initial_ordering);
+    const [search, setSearch] = useState("");
 
     const retrieveFinssList = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("event/");
+            const response = await axiosPrivate.get("event/", {params:
+                {limit:limit, offset:(page-1)*limit, ordering:ordering, search:search}});
             if (response.data) {
                 setFinssList(response.data.results);
+                setNumberRecords(response.data.count);
             } else {
                 errorNotif("Finss","Impossible de récupérer la liste des finss");
             }
@@ -52,7 +59,7 @@ export function useFinssList(){
             console.log("Error getting Finss", error);
         }
         setLoading(false)
-    }, [axiosPrivate, setFinssList])
+    }, [axiosPrivate, setFinssList, limit, page, ordering, search]);
 
     const createFinss = useCallback(async (finssInfo)=>{
         try {
@@ -90,12 +97,12 @@ export function useFinssList(){
     useEffect(() => {
         const controller = new AbortController();
 
-        setLoading(true)
         retrieveFinssList();
         return () => {
             controller.abort();
         }
     }, [retrieveFinssList]);
 
-    return {isLoading, finssList, isSending, retrieveFinssList, createFinss}
+    return {isLoading, finssList, isSending, retrieveFinssList, createFinss,
+        setOrdering, setLimit, setPage, setSearch, ordering, limit, page, search, numberRecords}
 }

@@ -1,6 +1,7 @@
 import {Group, MultiSelect, Stack, Text} from "@mantine/core";
-import {useConsommateursList} from "../hooks/useConsommateursList";
+import {useConsommateurList} from "../hooks/useConsommateurs";
 import {forwardRef, useEffect, useState} from "react";
+import {useDebouncedState} from "@mantine/hooks";
 
 const SelectItem = forwardRef(
     ({ bucque, fams, prenom, nom, proms, ...others }, ref) => (
@@ -24,18 +25,23 @@ const SelectItem = forwardRef(
 
 
 const ManagersSelector = ({...props})=>{
-    const {consommateurs, isLoading} = useConsommateursList()
+    const {consommateurList, retrieveConsommateurs} = useConsommateurList()
+    const [debounced, setDebounced] = useDebouncedState('', 300);
     const [selectorData, setSelectorData] = useState([])
 
     useEffect(()=>{
-        const data = consommateurs.map(({...consommateur})=>({
+        retrieveConsommateurs(debounced)
+    },[debounced])
+
+    useEffect(()=>{
+        const data = consommateurList.map(({...consommateur})=>({
             key:consommateur.id,
             label:consommateur.bucque+" "+consommateur.fams,
             value: consommateur.id,
             ...consommateur,
         }))
         setSelectorData(data)
-    }, [consommateurs])
+    }, [consommateurList])
 
     return (
       <MultiSelect
@@ -43,18 +49,12 @@ const ManagersSelector = ({...props})=>{
           label="Managers"
           itemComponent={SelectItem}
           searchable
-          filter={(value, selected,item) =>
-              !selected && (
-              item.bucque.toLowerCase().includes(value.toLowerCase().trim()) ||
-              item.nom.toLowerCase().includes(value.toLowerCase().trim()) ||
-              item.prenom.toLowerCase().includes(value.toLowerCase().trim()) ||
-              item.fams.toLowerCase().includes(value.toLowerCase().trim()) ||
-              item.proms.toLowerCase().includes(value.toLowerCase().trim())
-                        )
-          }
+          filter={(value, item) =>
+              true}
           nothingFound="Aucun PG trouvé..."
           clearable
           limit={5}
+          onSearchChange={setDebounced}
           {...props}
       />
     );

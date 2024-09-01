@@ -23,13 +23,13 @@ categoriesSelector : Doit contenir un noeud react qui sera affiché contre la ba
 secondBarNodes: Liste de Nodes qui seront ajouter sous la barre principale (champ de recherche, boutons, ect).
 
  */
-const BackendSearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defaultSortedColumn, styles,
-                                    elementSpacing="xs", searchBarPosition = "apart",
+const BackendSearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defaultSortedColumn, defaultSortedDir="asc",
+                                    styles, elementSpacing="xs", searchBarPosition = "apart",
                                     withAddIcon, withReloadIcon, addCallback, reloadCallback,
                                     extraButtons, setSearch, setSort,
                                     page, onPageChange, totalRecords, recordsPerPage, setPageSize, pageSizeOptions,
                                     secondBarNodes, ...othersProps})=>{
-    const [sortStatus, setSortStatus] = useState({ columnAccessor: (defaultSortedColumn ? defaultSortedColumn : columns[0].accessor), direction: 'asc' });
+    const [sortStatus, setSortStatus] = useState({ columnAccessor: (defaultSortedColumn ? defaultSortedColumn : columns[0].accessor), direction: defaultSortedDir });
     const [debounced, setDebounced] = useDebouncedState('', 300);
 
     //On vérifie que les paramètres passés sont consistants.
