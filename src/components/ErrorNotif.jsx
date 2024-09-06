@@ -5,7 +5,7 @@ export default function errorNotif (localisation, message) {
     showNotification({
         icon: <IconX size="1rem" />,
         color: "red",
-        autoClose: false,
+        autoClose: 30000,
         title: 'Oh Oh.... Erreur de '+localisation,
         message: 'Une erreur est survenue: '+message,
     });
