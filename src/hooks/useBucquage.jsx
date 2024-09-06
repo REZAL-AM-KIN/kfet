@@ -13,7 +13,7 @@ export function useBucquage(){
 
     const axiosPrivate = useAxiosPrivate()
 
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
 
     const bucquage = useCallback(async (pgId, produitId, callback) => {
         console.log("useBucquage: Create bucquage");

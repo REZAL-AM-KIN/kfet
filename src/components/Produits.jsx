@@ -1,10 +1,10 @@
 import {useState, forwardRef, useEffect} from "react";
 
-import {Input, Stack, Text, Tooltip, createStyles} from "@mantine/core";
-import {getHotkeyHandler} from "@mantine/hooks";
+import {Input, Stack, Text, createStyles, LoadingOverlay, Box} from "@mantine/core";
+import {getHotkeyHandler, useDebouncedValue} from "@mantine/hooks";
 
-import {useProduitByEntite} from "../hooks/useProduitByEntite";
 import { useBucquage } from "../hooks/useBucquage";
+import { useProductsList } from "../hooks/products/useProductsList";
 
 
 const useStyles = createStyles((theme) => ({
@@ -32,40 +32,33 @@ const useStyles = createStyles((theme) => ({
 
 
 function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
-
     const {classes} = useStyles();
 
-    const produits = useProduitByEntite(entite.id);
-    const {bucquage} = useBucquage();
+    const useproductslist = useProductsList(entite.id, length);
+    const usebucquage = useBucquage();
 
-    const [filteredProduits, setFilteredProduits] = useState(produits.data);
     const [recherche, setRecherche] = useState("");
     const [selected, setSelected] = useState(0);
+    const [debounced] = useDebouncedValue(recherche, 300);
 
     var itemId = 0;
 
     const onItemSubmit = (item) => {
         if (!item) return;
-        // console.log("Produits: Submit item");
-        bucquage(pgData.id, item.id, onSubmit);
-        // console.log("Produits: Submit item: bucquage done", isLoading);
-        ref.current.focus()
+        if (usebucquage.isLoading) return;
+        usebucquage.bucquage(pgData.id, item.id, onSubmit);
     }
 
-    // TODO: chemin de la flemme. Ecrire un onChange plutot que de faire un useEffect
+    useEffect(()=>{
+        useproductslist.setSearch(debounced);
+        setSelected(0);
+    }, [debounced]);
+
     useEffect(() => {
-        if (!produits.data) return;
-        // function to filter the products
-        setFilteredProduits(produits.data.filter((item) => {
-            if (recherche.startsWith("!")) {
-                // ! is a search by produit nom
-                return item.nom.toLowerCase().includes(recherche.substring(1).toLowerCase().trim())
-            } else {
-                // search by raccourci
-                return item.raccourci.toLowerCase().includes(recherche.toLowerCase().trim())
-            }
-        }));
-    }, [recherche, produits.data]);
+        if (!usebucquage.isLoading && ref.current) {
+            ref.current.focus();
+        }
+    }, [usebucquage.isLoading]);
 
     const ProduitItem = forwardRef(
         ({item, raccourci, nom, prix, ...others}, itemRef) => (
@@ -80,45 +73,45 @@ function Produits({entite, length, pgData, onSubmit, ...others}, ref) {
 
     const hotkeys = [
         ["ArrowUp", () => setSelected((current) => (current > 0 ? current - 1 : 0))],
-        ["ArrowDown", () => setSelected((current) => (current < filteredProduits.length - 1 ? current + 1 : current))],
-        ["Enter", () => onItemSubmit(filteredProduits[selected])],
+        ["ArrowDown", () => setSelected((current) => (current < useproductslist.productsList.length - 1 ? current + 1 : current))],
+        ["Enter", () => onItemSubmit(useproductslist.productsList[selected])],
         ["Escape", () => {setSelected(0); setRecherche("")}] // reset selected item and search field
     ]
 
     return (
         <Input.Wrapper onKeyDown={getHotkeyHandler(hotkeys)}>
-            <Tooltip label="! pour rechercher par nom" position="right" withArrow>
-                <Input
-                    placeholder="Rechercher un produit"
-                    value={recherche}
-                    onChange={(event) => {
-                        setRecherche(event.currentTarget.value);
-                        setSelected(0)}} // reset selected item when user types
-                    ref={ref}
-                />
-            </Tooltip>
-            <Stack spacing="xxs">
-                {filteredProduits.map((item) => {
-                    itemId ++;
-                    if (itemId > length) {
-                        return null;
-                    }
-                    return (
-                        <ProduitItem
-                            item={item}
-                            raccourci={item.raccourci}
-                            nom={item.nom}
-                            prix={item.prix}
-                            key={itemId-1}
-                            className={itemId-1 === selected // if selected
-                                        ? classes.selected
-                                        : itemId % 2 === 0
-                                            ? classes.even // else, distinguish rows
-                                            : classes.odd}
-                        />
-                    )
-                })}
-            </Stack>
+            <Input
+                placeholder="Rechercher un produit"
+                value={recherche}
+                onChange={(event) => setRecherche(event.currentTarget.value)}
+                ref={ref}
+                disabled={usebucquage.isLoading}
+            />
+            <Box pos="relative" mih="3rem">
+                <LoadingOverlay visible={useproductslist.isLoading} overlayBlur={2} />
+                <Stack spacing="xxs">
+                    {useproductslist.productsList.map((item) => {
+                        itemId ++;
+                        if (itemId > length) {
+                            return null;
+                        }
+                        return (
+                            <ProduitItem
+                                item={item}
+                                raccourci={item.raccourci}
+                                nom={item.nom}
+                                prix={item.prix}
+                                key={itemId-1}
+                                className={itemId-1 === selected // if selected
+                                    ? classes.selected
+                                    : itemId % 2 === 0
+                                        ? classes.even // else, distinguish rows
+                                        : classes.odd}
+                            />
+                        )
+                    })}
+                </Stack>
+            </Box>
         </Input.Wrapper>
     );
 }
