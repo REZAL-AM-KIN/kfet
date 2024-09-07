@@ -25,7 +25,7 @@ const FinssRegisterModal = ({opened, setOpened, finss})=>{
 
 
     const userInfo = useUser()
-    const useParticipation = useUserParticipation()
+    const useParticipation = useUserParticipation(finss? finss.id:null)
     const {isLoading, productsList} = useFinssProducts((finss? finss.id:null))
 
     const [isSending, setSending] = useState(false)
@@ -39,7 +39,6 @@ const FinssRegisterModal = ({opened, setOpened, finss})=>{
 
 
 
-//TODO : Pb avec useParticipation.participations qui reste = undefined du coup pas de récupération des participations
 //on remplie la liste des produits en renommant l'attribue id en "key"
     useEffect(()=>{
         const data = productsList.map(({id, ...product}) => {
@@ -112,7 +111,7 @@ const FinssRegisterModal = ({opened, setOpened, finss})=>{
 
     return (
         <Modal opened={opened} onClose={closeModal} size="lg" title={finss && finss.titre+" - inscription"}>
-            <Box sx={{position:"relative"}}>
+            <Box pos="relative" >
                 <LoadingOverlay visible={isSending} />
 
                 <form onSubmit={form.onSubmit((values)=>sendParticipation(values))}>
@@ -138,7 +137,7 @@ const FinssRegisterModal = ({opened, setOpened, finss})=>{
                        </DataTable>
                    </Box>
 
-                    <Button sx={{width:"100%", marginTop: 10}} type="submit">Valider</Button>
+                    <Button sx={{width:"100%", marginTop: 10}} type="submit" disabled={isSending}>Valider</Button>
                 </form>
             </Box>
         </Modal>

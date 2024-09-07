@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 import useAxiosPrivate from "../useAxiosPrivate";
 import errorNotif from "../../components/ErrorNotif";
 
-export function useUserParticipation(){
+export function useUserParticipation(finssId) {
     const axiosPrivate = useAxiosPrivate()
 
     const [isLoading, setLoading] = useState(true)
@@ -13,7 +13,7 @@ export function useUserParticipation(){
 
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("bucquagevent/my_bucquages/");
+            const response = await axiosPrivate.get("bucquagevent/my_bucquages/", {params: {finss: finssId}});
             if (response.data) {
                 setParticipations(response.data);
             } else {
@@ -24,17 +24,13 @@ export function useUserParticipation(){
             console.log("Error getting Participations", error);
         }
         setLoading(false)
-    }, [axiosPrivate])
+    }, [axiosPrivate, finssId])
 
     const sendPrebucquage = useCallback(async (participations) =>{
         try {
-
             const response = await axiosPrivate.post("bucquagevent/prebucquage/",participations)
 
             if(response.status===200){
-
-                // On recharge les paramètres pour être certain de n'avoir aucune décorrélation entre le back et le front
-                retrieveParticipations()
                 return true
 
             }else{
@@ -45,19 +41,23 @@ export function useUserParticipation(){
             console.log("Error sending Participations", error);
         }
         return false
-    }, [axiosPrivate, retrieveParticipations])
+    }, [axiosPrivate])
 
-    // get Finss list
+    // get product list
     useEffect(() => {
+        //Si aucun finssId n'est passé, alors on ne récupère pas les produits
+        if(!finssId){
+            setParticipations([]);
+            return
+        }
         const controller = new AbortController();
 
-        setLoading(true)
         retrieveParticipations();
 
         return () => {
             controller.abort();
         }
-    }, [retrieveParticipations]);
+    }, [retrieveParticipations, finssId]);
 
     return {participations, isLoading, retrieveParticipations, sendPrebucquage}
 }
