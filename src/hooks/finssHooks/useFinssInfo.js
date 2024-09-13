@@ -37,6 +37,8 @@ export function useFinssInfo(finssId) {
 
     const [isLoading, setLoading] = useState(true)
     const [finssInfo, setFinssInfo] = useState([])
+    const [finssNbPrebucque, setFinssNbPrebucque] = useState(0)
+    const [finssNbBucque, setFinssNbBucque] = useState(0)
 
     const retrieveFinssInfo = useCallback(async () => {
         setLoading(true)
@@ -45,7 +47,24 @@ export function useFinssInfo(finssId) {
             if (response.data) {
                 setFinssInfo(response.data);
             } else {
-                errorNotif("Finss","Impossible de récupérer la liste des produits");
+                errorNotif("Finss","Impossible de récupérer les informations du fin'ss");
+            }
+        } catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error getting Finss", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, finssId])
+
+    const retrieveFinssProgression = useCallback(async () => {
+        setLoading(true)
+        try {
+            const response = await axiosPrivate.get("event/"+finssId+"/progression_bucquage/");
+            if (response.data) {
+                setFinssNbPrebucque(response.data.prebucquees);
+                setFinssNbBucque(response.data.bucquees);
+            } else {
+                errorNotif("Finss","Impossible de récupérer la progression du fin'ss");
             }
         } catch (error) {
             errorNotif("Finss", error.message)
@@ -157,12 +176,14 @@ export function useFinssInfo(finssId) {
         if(finssId) {
             setLoading(true)
             retrieveFinssInfo();
+            retrieveFinssProgression();
         }
         return () => {
             controller.abort();
         }
     }, [retrieveFinssInfo, finssId]);
 
-    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo, endFinss, endBucquageFinss, endPrebucquageFinss}
-
-}
+    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo,
+        finssNbPrebucque, finssNbBucque, retrieveFinssProgression,
+        endFinss, endBucquageFinss, endPrebucquageFinss}
+    }

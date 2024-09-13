@@ -13,7 +13,7 @@ import {
 import {IconAlertTriangle, IconNotes, IconUserPlus} from "@tabler/icons-react";
 import errorNotif from "../../components/ErrorNotif";
 import FinssBucquageModal from "../../components/Finss/FinssBucquageModal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
 import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
@@ -106,22 +106,10 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     //Construction de l'élément de progression des bucquages
     const BucquageProgress = () =>{
-
-        //on sélectionne tous les prébucquages
-        const prebucqueBucquage = usebucquage.bucquages.filter((bucquage) =>
-                                                            bucquage.participation_event.some((participation)=>
-                                                                participation.prebucque_quantity!==0
-                                                            ))
-        //On sélectionne tous les bucquages qui ont été d'abord prébucqué puis bucqué
-        const bucquedBucquage = prebucqueBucquage.filter((bucquage) =>
-                                                            bucquage.participation_event.some((participation)=>
-                                                                participation.prebucque_quantity!==0 &&
-                                                                participation.is_bucquee &&
-                                                                participation.quantity !==0
-                                                            ))
-
-        const value = prebucqueBucquage.length === 0 ? 100 : (bucquedBucquage.length/prebucqueBucquage.length)*100
-        const label = prebucqueBucquage.length === 0 ? "Aucune inscription" : bucquedBucquage.length+"/"+prebucqueBucquage.length
+        const prebucqueBucquage = usefinssinfo.finssNbPrebucque
+        const bucquedBucquage = usefinssinfo.finssNbBucque
+        const value = prebucqueBucquage === 0 ? 100 : (bucquedBucquage/prebucqueBucquage)*100
+        const label = prebucqueBucquage === 0 ? "Aucune inscription" : bucquedBucquage+"/"+prebucqueBucquage
 
         return (
             <Tooltip label={"Indique le nombre de personne qui se sont inscrites et qui ont été bucquées"} position={"bottom"} withArrow>
@@ -191,6 +179,13 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         (bucquage)=>bucquage.participation_event.some((participation)=>participation.is_bucquee))
         .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams}))
 
+    useEffect(()=>{
+        if (!bucquageModalOpened){
+            usefinssinfo.retrieveFinssProgression();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[bucquageModalOpened])
+
     return (
         <Box style={{display: "flex", height: "100%"}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "16px 8px 0px 8px", flex: "1 1 auto"}}>
@@ -232,7 +227,10 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
                     withReloadIcon
 
-                    reloadCallback={()=>usebucquage.retrieveBucquages()}
+                    reloadCallback={()=> {
+                        usebucquage.retrieveBucquages();
+                        usefinssinfo.retrieveFinssProgression();
+                    }}
 
                     rowExpansion={{
                           content: ({record})=>(rowExpansionContent(record))
