@@ -15,8 +15,7 @@ import {
 import {useForm} from '@mantine/form';
 import {DataTable} from "mantine-datatable";
 import {useMediaQuery} from "@mantine/hooks";
-import {showNotification} from "@mantine/notifications";
-import {IconCheck, IconX} from "@tabler/icons-react";
+import {IconX} from "@tabler/icons-react";
 import SearchPg from "../SearchPg";
 
 // Ce composant permet de faire le bucquage d'un fin'ss.
@@ -85,7 +84,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
 
                     //Si la participation est déjà bucqué, alors on récupère les quantités déjà bucquées
-                    already_bucqued_quantity = (participation && participation.participation_bucquee) ? participation.quantity : undefined
+                    already_bucqued_quantity = (participation && participation.is_bucquee) ? participation.quantity : undefined
 
 
                 }else{

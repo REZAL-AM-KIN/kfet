@@ -17,7 +17,7 @@ const FinssProductsParameters = ({usefinssproduct, usebucquage, usefinssinfo}) =
         // (ce genre de cas peut arriver en cas de réctification sur un débucquage)
         const bucquagesOnThisProduct = usebucquage.bucquages.filter((bucquage)=> (
             bucquage.participation_event.some((participation)=>
-                (participation.participation_bucquee
+                (participation.is_bucquee
                     && participation.product_participation === product.id
                     && participation.quantity!==0))
         ))

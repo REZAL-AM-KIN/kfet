@@ -21,9 +21,12 @@ Retours:
         [
             {
                 "consommateur_id": id du consommateur,
-                "consommateur_bucque": "Bucque du consommateur",
-                "consommateur_nom": "Nom du consommateur",
-                "consommateur_fams": "Fam'ss du consommateur",
+                "nom": "Nom du consommateur",
+                "prenom": "Prénom du consommateur",
+                "bucque": "Bucque du consommateur",
+                "fams": "Fam'ss du consommateur",
+                "proms": "Prom'ss du consommateur",
+                "solde": "Solde du consommateur",
                 "participation_event": liste des participations, organisées comme suit :
                     [
                         {
@@ -32,8 +35,8 @@ Retours:
                             "product_participation": id du produit,
                             "prebucque_quantity": quantité demandée à l'inscription,
                             "quantity": quantité bucqué (prise le jour du finss),
-                            "participation_bucquee": la participation est-elle bucquée ?,
-                            "participation_debucquee": la participation est-elle débucquée ?
+                            "is_bucquee": la participation est-elle bucquée ?,
+                            "is_debucquee": la participation est-elle débucquée ?
                         },
                         ....
                     ]
@@ -53,7 +56,7 @@ export function useBucquage(finssId) {
     const retrieveBucquages = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("bucquagevent/?finss="+finssId);
+            const response = await axiosPrivate.get("bucquageevent/?finss="+finssId);
             if (response.data) {
                 setBucquages(response.data.results);
             } else {
@@ -68,7 +71,7 @@ export function useBucquage(finssId) {
 
     const sendDebucquage = useCallback(async (debucquagesList)=>{
         try {
-            const response = await axiosPrivate.post("bucquagevent/debucquage/", debucquagesList)
+            const response = await axiosPrivate.post("bucquageevent/debucquage/", debucquagesList)
 
             if(response.status===200){
                 // On indique à l'utilisateur que les paramètres ont été changés
@@ -94,7 +97,7 @@ export function useBucquage(finssId) {
 
     const sendBucquage = useCallback(async (bucquagesList)=>{
         try {
-            const response = await axiosPrivate.post("bucquagevent/bucquage/", bucquagesList)
+            const response = await axiosPrivate.post("bucquageevent/bucquage/", bucquagesList)
 
             if(response.status===200){
                 // On indique à l'utilisateur que les paramètres ont été changés

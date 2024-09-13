@@ -49,15 +49,16 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 }
 
                 //Si la quantité vaut 0, que la participation n'est pas bucquée ou qu'elle est déjà débucquée, on n'affiche pas la quantité
-                if (participation.quantity === 0 || !participation.participation_bucquee || participation.participation_debucquee) {
-                    return
+                if (participation.quantity === 0 || !participation.is_bucquee || participation.is_debucquee) {
+                    return;
                 }
 
                 //On ajoute le prix au prix total dû par le PG
                 prix_total += (parseFloat(product.prix_unitaire) * participation.quantity)
             })
-
-            return {...bucquage, prix_total: parseFloat(prix_total.toFixed(2)), solde_pg: consommateur.solde}
+            return {...bucquage, prix_total: parseFloat(prix_total.toFixed(2)), solde_pg: consommateur.solde,
+                consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams
+            }
         })
         setData(completedData)
 
@@ -116,8 +117,8 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
             //On récupère la liste des participations qui sont bucquée mais pas débucquée et dont la quantité est non nulle.
             const bucquedParticipation = bucquage.participation_event.filter((participation)=>
-                                                                    participation.participation_bucquee &&
-                                                                    !participation.participation_debucquee &&
+                                                                    participation.is_bucquee &&
+                                                                    !participation.is_debucquee &&
                                                                     participation.quantity !== 0)
             bucquedParticipation.forEach((participation)=>{
                 debucquageList.push({id: participation.id, negatss: negatss})
@@ -162,7 +163,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                                 <DataTable
                                     columns={[
                                         {accessor: "consommateur_bucque_famss", title:"Bucque", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-                                        {accessor: "consommateur_nom", title:"Nom"},
+                                        {accessor: "nom", title:"Nom"},
                                         {accessor: "solde_pg", title:"Solde (€)"},
                                         {accessor: "prix_total", title:"Prix à payer (€)"}
                                     ]}
@@ -209,14 +210,14 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             }
 
             //Si la quantité vaut 0 ou que la participation n'est pas bucquée, on n'affiche pas la quantité
-            if(participation.quantity ===0 || !participation.participation_bucquee ){
+            if(participation.quantity ===0 || !participation.is_bucquee ){
                 return;
             }
 
             // On ajoute la note qui correspond aux quantités des produits
             return ( <List.Item key={participation.id}>
-                        <Tooltip label={participation.participation_debucquee ? "Participation déjà débucquée" :""} disabled={!participation.participation_debucquee}>
-                                <Text strikethrough = {participation.participation_debucquee}>
+                        <Tooltip label={participation.is_debucquee ? "Participation déjà débucquée" :""} disabled={!participation.is_debucquee}>
+                                <Text strikethrough = {participation.is_debucquee}>
                                     {participation.quantity}x {product.nom}
                                 </Text>
                         </Tooltip>
@@ -253,7 +254,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     const columnsList = () => {
         const baseColumns =[
             {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-            {accessor: "consommateur_nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+            {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
         ]
         if(displayDebucque){
             baseColumns.push({accessor: "status", title:"Débucquée ?", width: 110,render:statusColum})
@@ -264,7 +265,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     // Déclaration de la render node pour la colonne "débucquée ?"
     const statusColum = (record) =>{
         // Si dans le bucquage courant il y a des participations non débucquées dont la quantité est non nulle, alors on affiche une croix
-        if(record.participation_event.some((participation)=>(!participation.participation_debucquee && participation.quantity !==0))){
+        if(record.participation_event.some((participation)=>(!participation.is_debucquee && participation.quantity !==0))){
             return (<Center><IconCircleX color={"red"}/></Center>)
         }
 
@@ -298,9 +299,9 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
                     data={data.filter((bucquage)=>bucquage.participation_event.some(
                         (participation)=>
-                            participation.participation_bucquee &&
-                            (displayDebucque || (!participation.participation_debucquee && participation.quantity!==0)))
-                    ).map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))}
+                            participation.is_bucquee &&
+                            (displayDebucque || (!participation.is_debucquee && participation.quantity!==0)))
+                    )}
 
 
                     isLoading = {usebucquage.isLoading ||useconsommateurlist.isLoading}
@@ -324,7 +325,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     isRecordSelectable = {(record)=> {
                         return(
                             (record.solde_pg >= record.prix_total || permissions.event_debucquage_negats) &&
-                            record.participation_event.some((participation)=>!participation.participation_debucquee
+                            record.participation_event.some((participation)=>!participation.is_debucquee
                                 && participation.quantity > 0)
                         )
                     }}

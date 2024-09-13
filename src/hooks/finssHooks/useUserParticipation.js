@@ -13,7 +13,7 @@ export function useUserParticipation(finssId) {
 
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("bucquagevent/my_bucquages/", {params: {finss: finssId}});
+            const response = await axiosPrivate.get("bucquageevent/my_bucquages/", {params: {finss: finssId}});
             if (response.data) {
                 setParticipations(response.data);
             } else {
@@ -28,7 +28,7 @@ export function useUserParticipation(finssId) {
 
     const sendPrebucquage = useCallback(async (participations) =>{
         try {
-            const response = await axiosPrivate.post("bucquagevent/prebucquage/",participations)
+            const response = await axiosPrivate.post("bucquageevent/prebucquage/",participations)
 
             if(response.status===200){
                 return true

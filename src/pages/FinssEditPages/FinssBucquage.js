@@ -116,7 +116,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         const bucquedBucquage = prebucqueBucquage.filter((bucquage) =>
                                                             bucquage.participation_event.some((participation)=>
                                                                 participation.prebucque_quantity!==0 &&
-                                                                participation.participation_bucquee &&
+                                                                participation.is_bucquee &&
                                                                 participation.quantity !==0
                                                             ))
 
@@ -188,8 +188,8 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     // On sélectionne les bucquages qui ont au moins une participation qui a été bucqué
     // On ajoute un champ "consommateur_bucque_famss" qui contient le nom du consommateur et la famss pour l'affichage
     const data = usebucquage.bucquages.filter(
-        (bucquage)=>bucquage.participation_event.some((participation)=>participation.participation_bucquee))
-        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))
+        (bucquage)=>bucquage.participation_event.some((participation)=>participation.is_bucquee))
+        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams}))
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
@@ -200,9 +200,9 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
                           {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-                          {accessor: "consommateur_nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                          {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                     ]}
-                    idAccessor="consommateur_bucque"
+                    idAccessor="bucque"
                     data={data}
                     isLoading = {usebucquage.isLoading}
 

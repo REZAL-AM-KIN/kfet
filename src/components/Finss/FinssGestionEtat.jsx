@@ -8,8 +8,8 @@ function endEvent(usefinss, usebucquage) {
         // On récupère la liste des bucquages (pas participations) qui comporte des participations bucqué mais pas débucqué
         const bucquedButNotDebucquedBucquage = usebucquage.bucquages.filter((bucquage)=> (
             bucquage.participation_event.some((participation)=>
-                (participation.participation_bucquee
-                    && !participation.participation_debucquee))
+                (participation.is_bucquee
+                    && !participation.is_debucquee))
         ))
 
         // S'il reste des bucquages avec des participations non débucquées, alors on interdit la cloture

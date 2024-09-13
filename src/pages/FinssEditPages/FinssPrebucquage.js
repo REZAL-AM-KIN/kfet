@@ -84,10 +84,10 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
                                 {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-                                {accessor: "consommateur_nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                                {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
 
                             ]}
-                    idAccessor="consommateur_bucque"
+                    idAccessor="bucque"
 
                     // On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation
                     // a une quantité non nulle. Ainsi, on n'affiche pas les participations qui ont été bucqué mais pas prébucqué.
@@ -96,7 +96,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                         (bucquage.participation_event.length!==0)
                         && (bucquage.participation_event.some((participation)=>participation.prebucque_quantity!==0)))
                                                         )
-                        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.consommateur_bucque+" "+bucquage.consommateur_fams}))
+                        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams}))
                         }
 
                     isLoading = {usebucquage.isLoading}

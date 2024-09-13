@@ -23,7 +23,7 @@ const Finss = () => {
             usefinsslist.retrieveFinssList()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [modalOpened, usefinsslist.retrieveFinssList])
+    }, [modalOpened])
 
     useEffect(()=>{
         if(params.applyto){
