@@ -32,12 +32,12 @@ const SearchPg = ({onSubmit, withBorder, value, onChange, ...othersProps})=>{
 
     const theme = useMantineTheme()
 
-    const {consommateurList, retrieveConsommateurs} = useConsommateurList();
-    const [debounced, setDebounced] = useDebouncedState('', 300);
+    const {consommateurList, setSearch} = useConsommateurList();
+    const [debounced, setDebounced] = useDebouncedState("", 300);
 
     useEffect(()=>{
-        retrieveConsommateurs(debounced)
-    },[debounced])
+        setSearch(debounced)
+    },[setSearch, debounced])
 
     //Pour que l'autocomplétion fonctionne, il faut obligatoirement un champ "value". On transforme donc le champ bucque en value
     const data = consommateurList.map((pg) =>{
