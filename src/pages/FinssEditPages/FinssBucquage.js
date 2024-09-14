@@ -178,6 +178,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo, finssId}) =>
     useEffect(()=>{
         if (!bucquageModalOpened){
             usefinssinfo.retrieveFinssProgression();
+            usebucquagelist.retrieve();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[bucquageModalOpened])

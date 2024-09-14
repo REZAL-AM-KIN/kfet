@@ -10,7 +10,8 @@ import {
     Overlay,
     Group,
     ActionIcon,
-    FocusTrap
+    FocusTrap,
+    LoadingOverlay
 } from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {DataTable} from "mantine-datatable";
@@ -68,37 +69,25 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     //On rajoute les quantités pré-bucquées pour pouvoir les afficher facilement dans le tableau
     useEffect(()=>{
         const data = usefinssproduct.productsList.map(({id, ...product}) => {
-            let prebucque_quantity = null
+            // par défaut, prebucque_quantity vaut 0.
+            let prebucque_quantity = 0
             let already_bucqued_quantity = null
 
             // S'il n'y a pas de PG sélectionné, alors on ne récupère les quantités prébucquées
             if(selectedPG){
-                // TODO charger du backend les participations de ce consommateur
-                //On sélectionne l'objet bucquage (cf. useBucquage) de l'utilisateur sélectionné
-                const bucquage = usebucquage.bucquages.find(bucquage => bucquage.consommateur_id === selectedPG.id)
-
-                //Si un bucquage est trouvé, alors on récupère les participations
-                if(bucquage){
+                if(usebucquage.bucquages.length === 1 && !usebucquage.isLoading){
                     //On sélectionne la participation du bucquage qui correspond à l'id du produit.
-                    const participation = bucquage.participation_event.find(participation => participation.product_participation === id)
+                    const participation = usebucquage.bucquages[0].participation_event.find(participation => participation.product_participation === id)
+
                     prebucque_quantity = participation ? participation.prebucque_quantity : 0 // On regarde si une participation pour le produit existe, sinon on attribue la quantité de 0.
-
-
                     //Si la participation est déjà bucqué, alors on récupère les quantités déjà bucquées
                     already_bucqued_quantity = (participation && participation.is_bucquee) ? participation.quantity : undefined
 
-
-                }else{
-                    //Si pas de bucquage, on attribue la quantité de 0.
-                    prebucque_quantity=0
                 }
-
             }
-
 
             return ({key:id, ...product,
                     prebucque_quantity: prebucque_quantity,
-                    already_bucqued_quantity: already_bucqued_quantity,
                     qts: (already_bucqued_quantity ? already_bucqued_quantity : (prebucque_quantity>0 ? prebucque_quantity : (product.obligatoire ? 1: 0)))})
         })
         form.setValues({products:data, selectedPG:selectedPG})
@@ -125,11 +114,6 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
         setSending(true)
         usebucquage.sendBucquage(participations).then((success)=>{
             setSending(false)
-            if(success){
-                //On force la récupération des bucquages
-                //TODO : C'est pas très opti, il faudrait permettre de refresh seulement les participations de l'utilisateur concerné
-                usebucquage.retrieveBucquages()
-            }
             if(_event.nativeEvent.submitter.name==="Continue"){
                 clearPgSelector()
             }else{
@@ -149,6 +133,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     function onPGSelect(pg) {
         setSelectedPG(pg)
         setFocusOnPGSelector(false) // on enlève le focus du SearchPg
+        usebucquage.retrieveBucquages(pg.id)
     }
 
     function clearPgSelector() {
@@ -163,7 +148,6 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
     // On en profite pour attribuer "index" à "id" puisque le champ id sert de key pour le component Datatable.
     const tableData = form.values.products.map((item,index)=>({...item, index, id:index}))
 
-
     return (
         <Modal opened={opened} onClose={closeModal} size={isSmallDevice ? "100%":"lg"}>
             <form onSubmit={form.onSubmit((values, _event)=>{sendParticipation(values,_event)})} >
@@ -173,7 +157,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                        {/*On wrap le SearchPg dans une box pour pouvoir contrôler la width*/}
                        <Box style={{flex:"auto"}}>
 
-                                <SearchPg onSubmit={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
+                            <SearchPg onSubmit={onPGSelect} withBorder value={pgselectorValue} onChange={setPgselectorValue} data-autofocus/>
 
                        </Box>
                        </FocusTrap>
@@ -197,7 +181,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                            mt={5}
                            horizontalSpacing={2}
                            minHeight={150} //Pour l'affichage du logo "pas de produits trouvés"
-                           fetching={usefinssproduct.isLoading}
+                           fetching={usefinssproduct.isLoading || usebucquage.isLoading}
                            records={tableData}
                            columns={[
                                {accessor: "nom", title:"Nom"},
@@ -207,7 +191,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
                                {accessor: "actions", title:"Bucquage", textAlignment:"center", width:"20%",
                                    render: (product) => (
                                        <QtsInput item={product} qts={form.values.products[product.index].qts}
-                                           {...form.getInputProps(`products.${product.index}.qts`, {type: 'number'})}/>
+                                                 {...form.getInputProps(`products.${product.index}.qts`, {type: 'number'})}/>
                                    )
                                }
                            ]}
@@ -218,9 +202,9 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
                 <Group spacing="0">
                     <Button style={{flex: "auto", marginTop: 10, marginLeft: "3px", order:2}}
-                            type="submit" name="Continue" disabled={!selectedPG || error !== "" || isSending} color="green">Bucquage suivant</Button>
+                            type="submit" name="Continue" disabled={!selectedPG || error !== "" || isSending || usefinssproduct.isLoading || usebucquage.isLoading} color="green">Bucquage suivant</Button>
                     <Button style={{flex:"auto", marginTop: 10, marginRight: "3px", order:1}}
-                            type="submit" disabled={!selectedPG || error !== "" || isSending}>Valider</Button>
+                            type="submit" disabled={!selectedPG || error !== "" || isSending || usefinssproduct.isLoading || usebucquage.isLoading}>Valider</Button>
                 </Group>
             </form>
         </Modal>

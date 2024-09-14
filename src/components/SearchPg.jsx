@@ -36,6 +36,8 @@ const SearchPg = ({onSubmit, withBorder, value, onChange, ...othersProps})=>{
     const [debounced, setDebounced] = useDebouncedState("", 300);
 
     useEffect(()=>{
+        // TODO? ne pas faire de recherche quand la valeur est changée parce qu'on a sélectionné un pg (sert pour la
+        // modal de bucquage des finss, puisque la bar de cherche pg existe encore une fois le pg sélectionné)
         setSearch(debounced)
     },[setSearch, debounced])
 

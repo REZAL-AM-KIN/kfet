@@ -53,14 +53,18 @@ export function useBucquage(finssId) {
     const [isLoading, setLoading] = useState(true)
     const [bucquages, setBucquages] = useState([])
     
-    const retrieveBucquages = useCallback(async () => {
+    const retrieveBucquages = useCallback(async (consommateur_id) => {
+        if (!consommateur_id || !finssId) {
+            return
+        }
         setLoading(true)
         try {
-            const response = await axiosPrivate.get("bucquageevent/?finss="+finssId);
+            const response = await axiosPrivate.get("bucquageevent/", {params:
+                    {finss: finssId, consommateur_id: consommateur_id}});
             if (response.data) {
                 setBucquages(response.data.results);
             } else {
-                errorNotif("Bucquage","Impossible de récupérer les bucquage du Fin'ss");
+                errorNotif("Bucquage","Impossible de récupérer les bucquages du PG");
             }
         } catch (error) {
             errorNotif("Bucquage", error.message)
@@ -120,18 +124,6 @@ export function useBucquage(finssId) {
             return false
         }
     },[axiosPrivate])
-
-    // get Bucquage list
-    useEffect(() => {
-        const controller = new AbortController();
-
-        setLoading(true)
-        retrieveBucquages();
-
-        return () => {
-            controller.abort();
-        }
-    }, [retrieveBucquages, finssId]);
 
     return {bucquages, isLoading, retrieveBucquages, sendDebucquage, sendBucquage}
 
