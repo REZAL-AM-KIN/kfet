@@ -73,6 +73,7 @@ const FinssBucquageModal = ({opened, setOpened, usefinssproduct, usebucquage})=>
 
             // S'il n'y a pas de PG sélectionné, alors on ne récupère les quantités prébucquées
             if(selectedPG){
+                // TODO charger du backend les participations de ce consommateur
                 //On sélectionne l'objet bucquage (cf. useBucquage) de l'utilisateur sélectionné
                 const bucquage = usebucquage.bucquages.find(bucquage => bucquage.consommateur_id === selectedPG.id)
 

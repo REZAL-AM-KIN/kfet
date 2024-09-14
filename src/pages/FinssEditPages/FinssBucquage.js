@@ -1,4 +1,4 @@
-import SearchableDataTable from "../../components/SearchableDataTable";
+import BackendSearchableDataTable from "../../components/BackendSearchableDataTable";
 import {
     Paper,
     Box,
@@ -18,17 +18,19 @@ import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
 import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
+import {useBucquageList} from "../../hooks/finssHooks/useBucquageList";
 
 
 
 //TODO : Modification des bucquages dans le tableau
 //TODO : Bloquer la diminution des quantités si pas la permission
-const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
+const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo, finssId}) => {
 
     const [bucquageModalOpened, setBucquageModalOpened] = useState(false);
     const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false);
     const theme = useMantineTheme();
     const isSmallDevice = useMediaQuery('(max-width: '+theme.breakpoints.sm+')')
+    const usebucquagelist = useBucquageList(finssId)
 
     //Construction du déroulant au clic sur une ligne du tableau
     //Cette fonction est appelé à chaque ligne par la mantine datatable et le record
@@ -173,12 +175,6 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
 
     }
 
-    // On sélectionne les bucquages qui ont au moins une participation qui a été bucqué
-    // On ajoute un champ "consommateur_bucque_famss" qui contient le nom du consommateur et la famss pour l'affichage
-    const data = usebucquage.bucquages.filter(
-        (bucquage)=>bucquage.participation_event.some((participation)=>participation.is_bucquee))
-        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams}))
-
     useEffect(()=>{
         if (!bucquageModalOpened){
             usefinssinfo.retrieveFinssProgression();
@@ -191,18 +187,30 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "16px 8px 0px 8px", flex: "1 1 auto"}}>
                 <BucquageProgress/>
 
-                <SearchableDataTable
+                <BackendSearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
-                          {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-                          {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "bucque", title:"Bucque", sortable: true},
+                        {accessor: "fams", title:"Fam'ss", sortable: true},
+                        {accessor: "proms", title:"Prom'ss", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "prenom", title:"Prénom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                     ]}
                     idAccessor="bucque"
-                    data={data}
-                    isLoading = {usebucquage.isLoading}
+                    data={usebucquagelist.bucquages}
+                    isLoading = {usebucquagelist.isLoading}
+                    defaultSortedColumn="bucque"
+                    setSearch={usebucquagelist.setSearch}
+                    setSort={usebucquagelist.setOrdering}
+                    page={usebucquagelist.page}
+                    onPageChange={usebucquagelist.setPage}
+                    totalRecords={usebucquagelist.numberRecords}
+                    recordsPerPage={usebucquagelist.limit}
+                    setPageSize={usebucquagelist.setLimit}
+                    recordsPerPageOptions={[10, 25, 50]}
+                    recordsPerPageLabel={"PG par page"}
 
                     elementSpacing={"xs"}
-
                     styles={{
                           input: {flex: "auto"}
                     }}
@@ -228,7 +236,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     withReloadIcon
 
                     reloadCallback={()=> {
-                        usebucquage.retrieveBucquages();
+                        usebucquagelist.retrieve();
                         usefinssinfo.retrieveFinssProgression();
                     }}
 

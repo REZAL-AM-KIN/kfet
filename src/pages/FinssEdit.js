@@ -43,7 +43,7 @@ const FinssEdit = () => {
                 </Tabs.Panel>
 
                 <Tabs.Panel style={{flex: "1 1 auto"}} value="bucquage">
-                    <FinssBucquage usefinssinfo={usefinssinfo} usebucquage={usebucquage} usefinssproduct={usefinssproduct}/>
+                    <FinssBucquage usefinssinfo={usefinssinfo} usebucquage={usebucquage} usefinssproduct={usefinssproduct} finssId={finssId}/>
                 </Tabs.Panel>
 
                 <Tabs.Panel style={{flex: "1 1 auto"}} value="debucquage">
