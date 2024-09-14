@@ -1,4 +1,4 @@
-import {Paper, Tabs, Text} from "@mantine/core";
+import {Stack, Paper, Tabs, Text} from "@mantine/core";
 import FinssGeneralParameters from "../../components/Finss/FinssGeneralParameters";
 import FinssProductsParameters from "../../components/Finss/FinssProductsParameters";
 import GestionEtatEvent from "../../components/Finss/FinssGestionEtat";
@@ -16,17 +16,19 @@ const FinssParameters = ({usefinssinfo, usefinssproduct, usebucquage})=>{
             </Tabs.List>
 
             <Tabs.Panel value="general">
-                {usefinssinfo.finssInfo.etat_event < etatEventValues.TERMINE ?
-                    <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
-                        <GestionEtatEvent usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
-                    </Paper>
-                    : null
-                }
+                <Stack align="center" >
+                    {usefinssinfo.finssInfo.etat_event < etatEventValues.TERMINE ?
+                        <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
+                            <GestionEtatEvent usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
+                        </Paper>
+                        : null
+                    }
 
-                <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
-                    <Text ta="center">Paramètres généraux</Text>
-                    <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
-                </Paper>
+                    <Paper shadow="md" radius="lg" p="md" withBorder style={{position:'relative', margin:"16px 8px 0px 8px", maxWidth:"fit-content"}}>
+                        <Text ta="center">Paramètres généraux</Text>
+                        <FinssGeneralParameters usefinssinfo={usefinssinfo} usebucquage={usebucquage}/>
+                    </Paper>
+                </Stack>
             </Tabs.Panel>
 
             <Tabs.Panel value="products">
