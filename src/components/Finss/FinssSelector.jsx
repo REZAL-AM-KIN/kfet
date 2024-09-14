@@ -142,6 +142,7 @@ const FinssSelector = ({usefinsslist, setFinss, setModalOpened}) => {
                     recordsPerPage={usefinsslist.limit}
                     setPageSize={usefinsslist.setLimit}
                     recordsPerPageOptions={[10, 25, 50]}
+                    recordsPerPageLabel={"Fin'ss par page"}
 
 
                     elementSpacing={"xs"}

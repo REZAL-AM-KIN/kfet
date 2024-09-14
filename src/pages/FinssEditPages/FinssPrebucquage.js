@@ -1,14 +1,16 @@
 import {Paper, SimpleGrid, Text, Center, Title, Stack, LoadingOverlay, Space, Box, useMantineTheme} from "@mantine/core";
-import SearchableDataTable from "../../components/SearchableDataTable";
+import BackendSearchableDataTable from "../../components/BackendSearchableDataTable";
 import errorNotif from "../../components/ErrorNotif";
 import {useMediaQuery} from "@mantine/hooks";
+import {usePrebucquageList} from "../../hooks/finssHooks/usePrebucquageList";
 
 
 
-const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
+const FinssPrebucquage = ({usefinssproduct, finssId}) =>{
 
     const theme = useMantineTheme()
     const isSmallDevice = useMediaQuery('(max-width: ' + theme.breakpoints.sm + ')')
+    const useprebucquagelist = usePrebucquageList(finssId)
     //Construction des informations des quantités de bucquages pour chaque produit
     const quantite_prebucque_info = usefinssproduct.productsList.map((product)=> (
 
@@ -80,29 +82,35 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
                 <Center><Title order={4}>Liste des prébucqués</Title></Center>
                 <Space h="sm" />
 
-                <SearchableDataTable
+                <BackendSearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={[
-                                {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-                                {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
-
-                            ]}
+                        {accessor: "bucque", title:"Bucque", sortable: true},
+                        {accessor: "fams", title:"Fam'ss", sortable: true},
+                        {accessor: "proms", title:"Prom'ss", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                        {accessor: "prenom", title:"Prénom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                    ]}
                     idAccessor="bucque"
 
                     // On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation
                     // a une quantité non nulle. Ainsi, on n'affiche pas les participations qui ont été bucqué mais pas prébucqué.
                     // On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
-                    data={usebucquage.bucquages.filter((bucquage)=>(
-                        (bucquage.participation_event.length!==0)
-                        && (bucquage.participation_event.some((participation)=>participation.prebucque_quantity!==0)))
-                                                        )
-                        .map((bucquage)=> ({...bucquage, consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams}))
-                        }
+                    data={useprebucquagelist.prebucquages}
+                    isLoading = {useprebucquagelist.isLoading}
+                    defaultSortedColumn="bucque"
+                    setSearch={useprebucquagelist.setSearch}
+                    setSort={useprebucquagelist.setOrdering}
+                    page={useprebucquagelist.page}
+                    onPageChange={useprebucquagelist.setPage}
+                    totalRecords={useprebucquagelist.numberRecords}
+                    recordsPerPage={useprebucquagelist.limit}
+                    setPageSize={useprebucquagelist.setLimit}
+                    recordsPerPageOptions={[10, 25, 50]}
+                    recordsPerPageLabel={"PG par page"}
 
-                    isLoading = {usebucquage.isLoading}
 
                     elementSpacing={"xs"}
-
                     styles={{
                         input: {flex: "auto"}
                     }}
@@ -113,7 +121,7 @@ const FinssPrebucquage = ({usebucquage, usefinssproduct}) =>{
 
                     withReloadIcon
                     reloadCallback={()=>{
-                                        usebucquage.retrieveBucquages();
+                                        useprebucquagelist.retrieve();
                                         usefinssproduct.retrieveProducts();
                                     }}
                 />

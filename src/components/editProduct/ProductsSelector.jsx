@@ -143,6 +143,7 @@ const ProductsSelector = ({useproductslist, category, setProductId, setModalOpen
                     recordsPerPage={useproductslist.limit}
                     setPageSize={useproductslist.setLimit}
                     recordsPerPageOptions={[10, 25, 50]}
+                    recordsPerPageLabel={"Produits par page"}
 
                     elementSpacing={"xs"}
                     styles={{

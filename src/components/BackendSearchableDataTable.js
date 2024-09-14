@@ -25,9 +25,9 @@ secondBarNodes: Liste de Nodes qui seront ajouter sous la barre principale (cham
  */
 const BackendSearchableDataTable = ({searchPlaceHolder, columns, data, isLoading, defaultSortedColumn, defaultSortedDir="asc",
                                     styles, elementSpacing="xs", searchBarPosition = "apart",
-                                    withAddIcon, withReloadIcon, addCallback, reloadCallback,
-                                    extraButtons, setSearch, setSort,
-                                    page, onPageChange, totalRecords, recordsPerPage, setPageSize, pageSizeOptions,
+                                    withAddIcon, withReloadIcon, addCallback, reloadCallback, extraButtons,
+                                    setSearch, setSort,
+                                    page, pageSizeOptions, onPageChange, recordsPerPageLabel, totalRecords, recordsPerPage, setPageSize,
                                     secondBarNodes, ...othersProps})=>{
     const [sortStatus, setSortStatus] = useState({ columnAccessor: (defaultSortedColumn ? defaultSortedColumn : columns[0].accessor), direction: defaultSortedDir });
     const [debounced, setDebounced] = useDebouncedState('', 300);
@@ -113,7 +113,7 @@ const BackendSearchableDataTable = ({searchPlaceHolder, columns, data, isLoading
                     recordsPerPage={recordsPerPage}
                     recordsPerPageOptions={pageSizeOptions}
                     onRecordsPerPageChange={setPageSize}
-                    recordsPerPageLabel="Produits par page"
+                    recordsPerPageLabel={recordsPerPageLabel}
 
                     style = {styles.datatable}
 
