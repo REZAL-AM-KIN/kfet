@@ -197,7 +197,7 @@ const FinssBucquage = ({usebucquage, usefinssproduct, usefinssinfo, finssId}) =>
                         {accessor: "nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                         {accessor: "prenom", title:"Prénom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                     ]}
-                    idAccessor="bucque"
+                    idAccessor="consommateur_id"
                     data={usebucquagelist.bucquages}
                     isLoading = {usebucquagelist.isLoading}
                     defaultSortedColumn="bucque"

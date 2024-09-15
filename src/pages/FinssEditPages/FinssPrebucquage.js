@@ -91,7 +91,7 @@ const FinssPrebucquage = ({usefinssproduct, finssId}) =>{
                         {accessor: "nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                         {accessor: "prenom", title:"Prénom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                     ]}
-                    idAccessor="bucque"
+                    idAccessor="consommateur_id"
 
                     // On récupère les bucquages dont les participations ne sont pas vide et dont au moins une participation
                     // a une quantité non nulle. Ainsi, on n'affiche pas les participations qui ont été bucqué mais pas prébucqué.

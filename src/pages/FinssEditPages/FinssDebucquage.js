@@ -1,70 +1,23 @@
-import SearchableDataTable from "../../components/SearchableDataTable";
+import BackendSearchableDataTable from "../../components/BackendSearchableDataTable";
 import {Paper, Box, Center, Switch, Stack, Group, Text, Button, List, Tooltip} from "@mantine/core"
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {IconAlertTriangle, IconCircleCheck, IconCircleX} from "@tabler/icons-react";
 import errorNotif from "../../components/ErrorNotif";
-import {useConsommateursList} from "../../hooks/useConsommateursList";
 import {closeAllModals, openConfirmModal, openModal} from "@mantine/modals";
 import {DataTable} from "mantine-datatable";
 import FinssProductRecapModal from "../../components/Finss/FinssProductRecapModal";
 import {etatEventValues} from "../../hooks/finssHooks/EtatEventConst";
 import {usePermissions} from "../../hooks/useUser";
+import {useDebucquageList} from "../../hooks/finssHooks/useDebucquageList";
 
 
-const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
-    const useconsommateurlist = useConsommateursList();
+const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo, finssId}) => {
     const permissions = usePermissions();
 
     const [finssProductRecapModalOpened, setFinssProductRecapModalOpened] = useState(false);
     const [selectedRecords, setSelectedRecords] = useState([]);
-    const [displayDebucque, setDisplayDebucque] = useState(false);
-    const [data, setData] = useState([]);
 
-    //On va remplir la liste data avec les bucquages issues de usebucquage.bucquages
-    // mais en ajoutant le solde du pg et le montant total de ses participations
-    useEffect(()=>{
-        //Si la liste des conso n'est pas chargé, alors on ne va pas plus loin
-        if(useconsommateurlist.isLoading){
-            return
-        }
-
-        //On va ajouter le prix total (prix_total) des participations du PG et le solde du pg (solde_pg).
-        const completedData = usebucquage.bucquages.map((bucquage)=>{
-            let prix_total = 0
-
-            //On récupère le consommateur
-            const consommateur = useconsommateurlist.consommateurs.find((consommateur)=>consommateur.id===bucquage.consommateur_id)
-            if(!consommateur){
-                errorNotif("Débucquage","Correspondance consommateur manquante\n consommateur id: "+bucquage.consommateur_id)
-                return;
-            }
-
-
-            bucquage.participation_event.forEach((participation) => {
-                //Récupération des infos des produits depuis le hook useFinssProducts
-                const product = usefinssproduct.productsList.find((product) => (product.id === participation.product_participation))
-                if (!product) {
-                    errorNotif("Débucquage", "Correspondance produit manquante\n participation id: " + participation.id)
-                    return;
-                }
-
-                //Si la quantité vaut 0, que la participation n'est pas bucquée ou qu'elle est déjà débucquée, on n'affiche pas la quantité
-                if (participation.quantity === 0 || !participation.is_bucquee || participation.is_debucquee) {
-                    return;
-                }
-
-                //On ajoute le prix au prix total dû par le PG
-                prix_total += (parseFloat(product.prix_unitaire) * participation.quantity)
-            })
-            return {...bucquage, prix_total: parseFloat(prix_total.toFixed(2)), solde_pg: consommateur.solde,
-                consommateur_bucque_famss: bucquage.bucque+" "+bucquage.fams
-            }
-        })
-        setData(completedData)
-
-    }, [usebucquage.bucquages, useconsommateurlist.isLoading, useconsommateurlist.consommateurs, usefinssproduct.productsList]);
-    
-    
+    const usebucquagelist = useDebucquageList(finssId)
 
 
     //Est appelé au clic sur le bouton débucquer
@@ -110,7 +63,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         selectedRecords.forEach((bucquage) => {
             //On regarde si le pg va être débucquée en négat'ss
             // Si oui, on l'ajoute à une liste qui permettra de faire un recap des PG débucquée en négat'ss
-            const negatss = bucquage.solde_pg<bucquage.prix_total
+            const negatss = parseFloat(bucquage.solde)<parseFloat(bucquage.prix_total)
             if(negatss){
                 negatssList.push({...bucquage, id:bucquage.consommateur_id})
             }
@@ -162,9 +115,9 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                             <Box style={{maxHeight:"300px"}}>
                                 <DataTable
                                     columns={[
-                                        {accessor: "consommateur_bucque_famss", title:"Bucque", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+                                        {accessor: "bucque", title:"Bucque", visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
                                         {accessor: "nom", title:"Nom"},
-                                        {accessor: "solde_pg", title:"Solde (€)"},
+                                        {accessor: "solde", title:"Solde (€)"},
                                         {accessor: "prix_total", title:"Prix à payer (€)"}
                                     ]}
 
@@ -185,8 +138,7 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
         function debucquer() {
             usebucquage.sendDebucquage(debucquageList).then((success)=> {
                     if (success) {
-                        useconsommateurlist.retrieveConsommateurs();
-                        usebucquage.retrieveBucquages();
+                        usebucquagelist.retrieve();
                     }
                 }
             )
@@ -240,9 +192,9 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                     </Group>
 
                     <Center>
-                        {record.solde_pg>=record.prix_total ?
+                        {parseFloat(record.solde)>=parseFloat(record.prix_total) ?
                             <Text color="green"> Consommateur débucquable</Text> :
-                            <Text color="red"> Solde insuffisant (Solde : {record.solde_pg}€)</Text>
+                            <Text color="red"> Solde insuffisant (Solde : {record.solde}€)</Text>
                         }
                     </Center>
                 </Stack>
@@ -253,18 +205,22 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
     //Fonction qui permet d'ajouter la colonne débucquée ? si l'affichage de tous les bucquages (y compris ceux déjà débucqué) est activé
     const columnsList = () => {
         const baseColumns =[
-            {accessor: "consommateur_bucque_famss", title:"Bucque", searchable: true, sortable: true},
-            {accessor: "nom", title:"Nom", searchable: true, sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+            {accessor: "bucque", title:"Bucque", sortable: true},
+            {accessor: "fams", title:"Fam'ss", sortable: true},
+            {accessor: "proms", title:"Prom'ss", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+            {accessor: "nom", title:"Nom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
+            {accessor: "prenom", title:"Prénom", sortable: true, visibleMediaQuery: (theme)=>('(min-width: '+theme.breakpoints.sm+')')},
         ]
-        if(displayDebucque){
-            baseColumns.push({accessor: "status", title:"Débucquée ?", width: 110,render:statusColum})
+        if(usebucquagelist.displayDebucque){
+            baseColumns.push({accessor: "status", title:"Débucquée ?", sortable: false, width: 110, render:statusColumn})
         }
         return baseColumns
     }
 
     // Déclaration de la render node pour la colonne "débucquée ?"
-    const statusColum = (record) =>{
+    const statusColumn = (record) =>{
         // Si dans le bucquage courant il y a des participations non débucquées dont la quantité est non nulle, alors on affiche une croix
+        // TODO calculer ça dans le backend, au moins on pourra aussi trier sur cette colonne
         if(record.participation_event.some((participation)=>(!participation.is_debucquee && participation.quantity !==0))){
             return (<Center><IconCircleX color={"red"}/></Center>)
         }
@@ -279,58 +235,49 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                 styles={{body:{alignItems:"center"}}}
                 labelPosition="left"
                 label="Afficher les participations déjà débucquée ?"
-                checked={displayDebucque}
-                onChange={(event)=>setDisplayDebucque(event.currentTarget.checked)}
+                checked={usebucquagelist.displayDebucque}
+                onChange={(event)=>usebucquagelist.setDisplayDebucque(event.currentTarget.checked)}
             />
         )
 
     return (
         <Box style={{display: "flex", height: "100%"}}>
             <Paper shadow="md" radius="lg" p="md" withBorder style={{margin: "16px 8px 0px 8px", flex: "1 1 auto"}}>
-                <SearchableDataTable
+                <BackendSearchableDataTable
                     searchPlaceHolder={"Rechercher un PG"}
                     columns={columnsList()}
-                    idAccessor="consommateur_bucque_famss"
+                    idAccessor="consommateur_id"
 
+                    data={usebucquagelist.bucquages}
+                    isLoading = {usebucquagelist.isLoading}
+                    defaultSortedColumn="bucque"
+                    setSearch={usebucquagelist.setSearch}
+                    setSort={usebucquagelist.setOrdering}
+                    page={usebucquagelist.page}
+                    onPageChange={usebucquagelist.setPage}
+                    totalRecords={usebucquagelist.numberRecords}
+                    recordsPerPage={usebucquagelist.limit}
+                    setPageSize={usebucquagelist.setLimit}
+                    recordsPerPageOptions={[10, 25, 50]}
+                    recordsPerPageLabel={"PG par page"}
 
-                    //On récupère les bucquages dont au moins une participation est bucquee
-                    // et si on n'affiche pas les débucquée, on sélectionne seulement les bucquages
-                    // qui ont au moins une participation non débucquee dont la quantité n'est pas nulle.
-                    //On ajoute aussi la bucque et la famss du consommateur dans une colonne pour faciliter la recherche
-                    data={data.filter((bucquage)=>bucquage.participation_event.some(
-                        (participation)=>
-                            participation.is_bucquee &&
-                            (displayDebucque || (!participation.is_debucquee && participation.quantity!==0)))
-                    )}
-
-
-                    isLoading = {usebucquage.isLoading ||useconsommateurlist.isLoading}
 
                     elementSpacing={"xs"}
-
                     styles={{
                         input: {flex: "auto"}
                     }}
-
                     searchBarPosition="apart"
 
                     rowExpansion={{
                         content: ({record})=>(rowExpansionContent(record))
                     }}
 
-                    selectedRecords = {selectedRecords}
-                    onSelectedRecordsChange = {setSelectedRecords}
-
-                    //On regarde si le pg est débucquable et pas débucqué sur tous ses produits
-                    isRecordSelectable = {(record)=> {
-                        return(
-                            (record.solde_pg >= record.prix_total || permissions.event_debucquage_negats) &&
-                            record.participation_event.some((participation)=>!participation.is_debucquee
-                                && participation.quantity > 0)
-                        )
+                    withReloadIcon
+                    reloadCallback={()=> {
+                        usebucquagelist.retrieve();
                     }}
-                    
-                    categoriesSelector={CategorieFilter}
+
+                    extraButtons={CategorieFilter}
 
                     secondBarNodes={
                         <Group spacing="0" position = "apart">
@@ -352,10 +299,15 @@ const FinssDebucquage = ({usebucquage, usefinssproduct, usefinssinfo}) => {
                         </Group>
                     }
 
-                    withReloadIcon
-                    reloadCallback={()=> {
-                        useconsommateurlist.retrieveConsommateurs();
-                        usebucquage.retrieveBucquages();
+                    selectedRecords = {selectedRecords}
+                    onSelectedRecordsChange = {setSelectedRecords}
+                    //On regarde si le pg est débucquable et pas débucqué sur tous ses produits
+                    isRecordSelectable = {(record)=> {
+                        return(
+                            (record.solde_pg >= record.prix_total || permissions.event_debucquage_negats) &&
+                            record.participation_event.some((participation)=>!participation.is_debucquee
+                                && participation.quantity > 0)
+                        )
                     }}
 
                 />

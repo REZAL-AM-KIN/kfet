@@ -1,5 +1,5 @@
 import useAxiosPrivate from "../useAxiosPrivate";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import errorNotif from "../../components/ErrorNotif";
 import {showNotification} from "@mantine/notifications";
 import {IconCheck} from "@tabler/icons-react";
@@ -50,11 +50,12 @@ Retours:
 export function useBucquage(finssId) {
     const axiosPrivate = useAxiosPrivate()
 
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
     const [bucquages, setBucquages] = useState([])
     
     const retrieveBucquages = useCallback(async (consommateur_id) => {
         if (!consommateur_id || !finssId) {
+            setLoading(false)
             return
         }
         setLoading(true)
@@ -78,16 +79,22 @@ export function useBucquage(finssId) {
             const response = await axiosPrivate.post("bucquageevent/debucquage/", debucquagesList)
 
             if(response.status===200){
-                // On indique à l'utilisateur que les paramètres ont été changés
-                showNotification( {
-                    icon: <IconCheck size={18} />,
-                    color: "green",
-                    autoClose: true,
-                    title: 'Débucquages envoyés avec succès',
-                    message: debucquagesList.length+' débucquages envoyés avec succès'
-                })
+                if(response.data.errors_count>0){
+                    errorNotif("Débucquage", response.data.errors_count+" débucquages n'ont pas été effectué (sur "+debucquagesList.length+")")
+                    console.log("Error sending débucquages", response.data);
+                }
+                else {
+                    showNotification( {
+                        icon: <IconCheck size={18} />,
+                        color: "green",
+                        autoClose: true,
+                        title: 'Débucquages envoyés avec succès',
+                        message: response.data.success_count+' débucquages envoyés avec succès'
+                    })
+                }
                 return true
-            }else{
+            }
+            else{
                 errorNotif("Débucquage", "Une erreur inconnue est survenue lors de l'envoi des débucquages")
                 console.log("Error sending débucquages", response);
                 return false

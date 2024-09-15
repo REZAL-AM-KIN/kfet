@@ -25,13 +25,16 @@ const SelectItem = forwardRef(
 
 
 const ManagersSelector = ({...props})=>{
-    const {consommateurList, retrieveConsommateurs} = useConsommateurList()
+    const {consommateurList, setSearch} = useConsommateurList()
     const [debounced, setDebounced] = useDebouncedState('', 300);
     const [selectorData, setSelectorData] = useState([])
+    //TODO fix cette merde
+    //la recherche côté backend fonctionne, mais quand un/des consommateur déjà sélectionné ne sont plus dans la liste
+    //ils sont retirés de la liste des consommateurs sélectionnés
 
     useEffect(()=>{
-        retrieveConsommateurs(debounced)
-    },[debounced])
+        setSearch(debounced)
+    },[setSearch, debounced])
 
     useEffect(()=>{
         const data = consommateurList.map(({...consommateur})=>({
@@ -44,7 +47,7 @@ const ManagersSelector = ({...props})=>{
     }, [consommateurList])
 
     return (
-      <MultiSelect
+        <MultiSelect
           data={selectorData}
           label="Managers"
           itemComponent={SelectItem}
@@ -55,8 +58,9 @@ const ManagersSelector = ({...props})=>{
           clearable
           limit={5}
           onSearchChange={setDebounced}
+
           {...props}
-      />
+        />
     );
 }
 

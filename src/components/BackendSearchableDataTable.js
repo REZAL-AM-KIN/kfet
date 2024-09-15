@@ -19,7 +19,6 @@ Il est possible d'ajouter un bouton d'ajout et un bouton de reload. Dans ce cas,
    withReloadicon -> reloadCallback
 Les logiques d'ajout et de reload sont à implémenter dans leur callback.
 Il est possible d'ajouter des boutons grâce à la props "extraButtons".
-categoriesSelector : Doit contenir un noeud react qui sera affiché contre la barre de recherche (Permet de mettre un sélecteur de categorie par exemple).
 secondBarNodes: Liste de Nodes qui seront ajouter sous la barre principale (champ de recherche, boutons, ect).
 
  */
