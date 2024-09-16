@@ -25,7 +25,7 @@ Retours :
         ]
  */
 
-export function useConsommateurList(){
+export function useConsommateurList(limit=10){
 
     const axiosPrivate = useAxiosPrivate();
 
@@ -36,7 +36,8 @@ export function useConsommateurList(){
     const retrieveConsommateurs = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axiosPrivate.get("consommateurs/", {params: {search:search}});
+            const response = await axiosPrivate.get("consommateurs/", {params:
+                    {search:search, limit:limit}});
             if (response.data) {
                 setConsommateurList(response.data.results);
             } else {

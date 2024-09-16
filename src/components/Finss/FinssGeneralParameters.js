@@ -100,6 +100,7 @@ const FinssGeneralParameters = ({usefinssinfo, usebucquage, useFinssList})=>{
                         />
 
                         <ManagersSelector
+                            initial_managers={usefinssinfo.managers}
                             {...form.getInputProps('managers')}
                         />
 

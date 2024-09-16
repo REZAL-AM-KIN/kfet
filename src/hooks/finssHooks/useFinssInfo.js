@@ -39,6 +39,7 @@ export function useFinssInfo(finssId) {
     const [finssInfo, setFinssInfo] = useState([])
     const [finssNbPrebucque, setFinssNbPrebucque] = useState(0)
     const [finssNbBucque, setFinssNbBucque] = useState(0)
+    const [managers, setManagers] = useState([])
 
     const retrieveFinssInfo = useCallback(async () => {
         setLoading(true)
@@ -65,6 +66,22 @@ export function useFinssInfo(finssId) {
                 setFinssNbBucque(response.data.bucquees);
             } else {
                 errorNotif("Finss","Impossible de récupérer la progression du fin'ss");
+            }
+        } catch (error) {
+            errorNotif("Finss", error.message)
+            console.log("Error getting Finss", error);
+        }
+        setLoading(false)
+    }, [axiosPrivate, finssId])
+
+    const retrieveManagers = useCallback(async () => {
+        setLoading(true)
+        try {
+            const response = await axiosPrivate.get("event/"+finssId+"/managers_details/");
+            if (response.data) {
+                setManagers(response.data);
+            } else {
+                errorNotif("Finss","Impossible de récupérer les managers du fin'ss");
             }
         } catch (error) {
             errorNotif("Finss", error.message)
@@ -181,9 +198,19 @@ export function useFinssInfo(finssId) {
         return () => {
             controller.abort();
         }
-    }, [retrieveFinssInfo, finssId]);
+    }, [retrieveFinssInfo, retrieveFinssProgression, finssId]);
 
-    return {isLoading, finssInfo, retrieveFinssInfo, changeInfo,
+    useEffect(() => {
+        const controller = new AbortController();
+
+        retrieveManagers();
+
+        return () => {
+            controller.abort();
+        }
+    }, [retrieveManagers, finssInfo.managers]);
+
+    return {isLoading, finssInfo, managers, retrieveFinssInfo, changeInfo,
         finssNbPrebucque, finssNbBucque, retrieveFinssProgression,
         endFinss, endBucquageFinss, endPrebucquageFinss}
     }
