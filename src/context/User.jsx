@@ -7,6 +7,8 @@ const UserContext = createContext({});
 export const UserProvider = ({children}) => {
     const axiosPrivate = useAxiosPrivate();
     const [isLogged, setIsLogged] = useState(false);
+    const [isActivated, setIsActivated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [pgData, setPgData] = useState({});
     const [permissions, setPermissions] = useState({});
 
@@ -21,8 +23,7 @@ export const UserProvider = ({children}) => {
         // the isLogged state changed so we need to update the rest accordingly
         if (isLogged) {
             const controller = new AbortController();
-            getUser();
-            getPermissions();
+            loadData();
             return () => {
                 controller.abort();
             }
@@ -30,6 +31,7 @@ export const UserProvider = ({children}) => {
             // clear the context
             setPgData({});
             setPermissions({});
+            setIsActivated(false);
             // clear the sessionStorage (and the tokens)
             sessionStorage.clear();
         }
@@ -62,8 +64,36 @@ export const UserProvider = ({children}) => {
         }
     }
 
+    const getIsConsommateurActivated = async () => {
+        try {
+            const response = await axiosPrivate.get("is_activated/");
+            setIsActivated(response.data.is_activated);
+            return response.data.is_activated
+        } catch (error) {
+            console.log(error)
+            setIsActivated(false);
+            if (error?.response?.status !== 403) {
+                errorNotif("Permissions", error.message);
+            }
+        }
+        return false
+    }
+
+    const loadData = async () => {
+        setIsLoading(true);
+        const activated = await getIsConsommateurActivated();
+        if (activated) {
+            // fetch user et permissions en parallèle
+            await Promise.allSettled([
+                getUser(),
+                getPermissions()
+            ]);
+        }
+        setIsLoading(false);
+    };
+
     return (
-        <UserContext.Provider value={{pgData, permissions, isLogged, setIsLogged}}>
+        <UserContext.Provider value={{pgData, permissions, isLogged, setIsLogged, isActivated, isLoading}}>
             {children}
         </UserContext.Provider>
     )
