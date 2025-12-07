@@ -12,3 +12,11 @@ export function usePermissions() {
 export function useIsLogged() {
     return [useContext(UserContext)["isLogged"], useContext(UserContext)["setIsLogged"]];
 }
+
+export function useIsActivated() {
+    return useContext(UserContext)["isActivated"];
+}
+
+export function useIsUserLoading() {
+    return useContext(UserContext)["isLoading"];
+}
